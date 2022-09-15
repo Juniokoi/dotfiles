@@ -163,13 +163,13 @@ function M.on_attach(client, bufnr)
   end
 
   -- Configure key mappings
-  require("juniokoi.lsp.keymaps").setup(client, bufnr)
+  require("core.lisp.lsp.keymaps").setup(client, bufnr)
 
   -- Configure highlighting
-  require("juniokoi.lsp.highlighter").setup(client, bufnr)
+  require("core.lisp.lsp.highlighter").setup(client, bufnr)
 
   -- Configure formatting
-  require("juniokoi.lsp.null-ls.formatters").setup(client, bufnr)
+  require("core.lisp.lsp.null-ls.formatters").setup(client, bufnr)
 
   -- tagfunc
   if caps.definitionProvider then
@@ -242,14 +242,14 @@ local opts = {
 }
 
 -- Setup LSP handlers
-require("juniokoi.lsp.handlers").setup()
+require("core.lisp.lsp.handlers").setup()
 
 function M.setup()
   -- null-ls
-  require("juniokoi.lsp.null-ls").setup(opts)
+  require("core.lisp.lsp.null-ls").setup(opts)
 
   -- Installer
-  require("juniokoi.lsp.installer").setup(servers, opts)
+  require("core.lisp.lsp.installer").setup(servers, opts)
 
   -- Inlay hints
   -- require("config.lsp.inlay-hints").setup()
