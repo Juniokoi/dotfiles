@@ -4,25 +4,19 @@ if not status_ok then
 end
 
 local mappings = {
-    b = {
-        name = "Buffers",
-        f = { "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>", "Buffers", },
-        c = { "<cmd>Bdelete!<CR>", "Close Buffer", },
-        q = { "<cmd>%bdelete | :Alpha<CR>", "Close everything", },
-    },
     ["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
     ["d"] = { "<cmd>Alpha<CR>", "Dashboard" },
     c = {
         name = "Configuration",
         c = {"<cmd>edit $HOME/.config/nvim/after/plugin/color.lua<cr>", "Colorscheme" },
         C = {"<cmd>edit $HOME/.config/nvim/init.lua<cr>", "Configs" },
-        w = {"<cmd>edit $HOME/.config/nvim/lua/juniokoi/whichkey.lua<cr>", "Which Key" },
-        p = {"<cmd>edit $HOME/.config/nvim/lua/juniokoi/packer.lua<cr>", "Plugins" },
+        w = {"<cmd>edit $HOME/.config/nvim/lua/keymaps/whichkey.lua<cr>", "Which Key" },
+        p = {"<cmd>edit $HOME/.config/nvim/lua/core/packer.lua<cr>", "Plugins" },
     },
     ["j"] = {"<cmd>w! | so<CR>", "Source file" },
     f = {
         name = "File",
-
+        s = { "<cmd>w!<CR>", "Save" },
     },
     ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
     g = {
@@ -68,7 +62,7 @@ local mappings = {
     o = {
         name = "Open",
         f = { "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>", "Open file", },
-    }
+    },
     ["p"] = { ":Telescope projects <CR>", "Projects" },
     ["r"] = { ":Telescope oldfiles <CR>", "Recent files" },
     s = {
@@ -90,7 +84,21 @@ local mappings = {
         h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
         v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
     },
-    ["w"] = { "<cmd>w!<CR>", "Save" },
+    w = {
+        name = "Window", 
+        f = { "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>", "Buffers", },
+        c = { "<cmd>Bdelete!<CR>", "Close Buffer", },
+        q = { "<cmd>%bdelete | :Alpha<CR>", "Close everything", },
+    }
+}
+
+local opts = {
+    mode = "n", -- NORMAL mode
+    prefix = "<leader>",
+    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+    silent = true, -- use `silent` when creating keymaps
+    noremap = true, -- use `noremap` when creating keymaps
+    nowait = true, -- use `nowait` when creating keymaps
 }
 
 which_key.register(mappings, opts)

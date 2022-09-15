@@ -1,6 +1,7 @@
 local M = {}
 
 -- local util = require "lspconfig.util"
+local local_path = "core.lisp.lsp."
 
 local servers = {
   gopls = {
@@ -163,13 +164,13 @@ function M.on_attach(client, bufnr)
   end
 
   -- Configure key mappings
-  require("core.lisp.lsp.keymaps").setup(client, bufnr)
+  require(local_path .. "keymaps").setup(client, bufnr)
 
   -- Configure highlighting
-  require("core.lisp.lsp.highlighter").setup(client, bufnr)
+  require(local_path .. "highlighter").setup(client, bufnr)
 
   -- Configure formatting
-  require("core.lisp.lsp.null-ls.formatters").setup(client, bufnr)
+  require(local_path .. "null-ls.formatters").setup(client, bufnr)
 
   -- tagfunc
   if caps.definitionProvider then
@@ -242,14 +243,14 @@ local opts = {
 }
 
 -- Setup LSP handlers
-require("core.lisp.lsp.handlers").setup()
+require(local_path .. "handlers").setup()
 
 function M.setup()
   -- null-ls
-  require("core.lisp.lsp.null-ls").setup(opts)
+  require(local_path .. "null-ls").setup(opts)
 
   -- Installer
-  require("core.lisp.lsp.installer").setup(servers, opts)
+  require(local_path .. "installer").setup(servers, opts)
 
   -- Inlay hints
   -- require("config.lsp.inlay-hints").setup()

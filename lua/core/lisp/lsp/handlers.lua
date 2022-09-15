@@ -1,6 +1,6 @@
 local M = {}
 
-local icons = require "utils.icons"
+local icons = require "misc.icons"
 
 function M.setup()
   local signs = {

@@ -65,7 +65,7 @@ dapui.setup {
   },
 }
 
-local icons = require "juniokoi.icons"
+local icons = require("misc.icons")
 
 vim.fn.sign_define("DapBreakpoint", { text = icons.ui.Bug, texthl = "DiagnosticSignError", linehl = "", numhl = "" })
 

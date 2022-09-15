@@ -15,7 +15,7 @@ local options = {
     splitbelow = true, -- force all horizontal splits to go below current window
     splitright = true, -- force all vertical splits to go to the right of current window
     swapfile = false, -- creates a swapfile
-    termguicolors = true, -- set term gui colors (most terminals support this)
+    tgc = true,
     timeoutlen = 100, -- time to wait for a mapped sequence to complete (in milliseconds)
     undofile = true, -- enable persistent undo
     updatetime = 300, -- faster completion (4000ms default)
@@ -46,8 +46,5 @@ for k, v in pairs(options) do
 end
 vim.opt.shortmess:append "c" -- Enables to use >> or << easier
 
-vim.cmd [[ highlight CursorColumn guibg=#171717 blend=10 ]]
-vim.cmd [[ highlight CursorLine guibg=#171717 blend=50 ]]
-
 -- vim.o.list = true -- Set special formatting charactor to on.
--- vim.o.listchars = 'eol:↲'
+vim.o.listchars = 'eol:↲'
