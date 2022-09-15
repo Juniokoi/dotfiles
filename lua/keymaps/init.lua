@@ -1,1 +1,7 @@
-require("keymaps.whichkey")          -- Main plugin manager
+require("load").packages {
+    path = "keymaps",
+    packages = {
+        "keymaps",
+        "whichkey"
+    }
+}

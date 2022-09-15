@@ -1,5 +1,7 @@
-require("core.packer")  -- Plugins managment
-require("core.settings")  -- Plugins managment
-require("core.lisp")  -- Plugins managment
-require("core.snip")
+require("load").packages { path = "core", packages = {
+    "settings",
+    "packer",
+    "lisp",
+    "snip",
+}}
 

@@ -1,4 +1,4 @@
-load_packages({
+require("load").packages({
     path = "core.lisp.",
     packages = {
         "lsp",

@@ -1,14 +1,16 @@
-function load_packages(opts)
+local M = {}
+M.packages = function(opts)
     local path = opts.path
-    local packages = opts.packages
+    local packages = opts.packages or {}
 
-    for k, v in pairs(packages) do
-        require(path .. v)
+    if packages then
+        for key, value in pairs(packages) do
+            require(path .. "." .. value)
+        end
     end
 end
 
-
-function req(package) 
+M.req = function(package) 
     local status_ok, name =
         pcall(require, package)
     if not status_ok then
@@ -17,3 +19,5 @@ function req(package)
     end
     return name
 end
+
+return M
