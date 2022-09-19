@@ -1,8 +1,6 @@
 [user]
 	email = 53125029+Juniokoi@users.noreply.github.com
 	name = Junio Koi
-	; signingkey = 845064C271F17166
-	; signingkey = 55E406DA57DE43CA!
 [init]
 	defaultBranch = main
 [color]
@@ -19,13 +17,14 @@
 [color "status"]
 	added = yellow
 	changed = green
-	[alias]
+
+[alias]
 	spush = push --recurse-submodules=on-demand
 	supdate = submodule update --remote --merge
 	sdiff = !"git diff && git submodule foreach 'git diff'"
-lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
-lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
-lg = !"git lg1"
+	lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+	lg = !"git lg1"
 
 [commit]
 	gpgsign = false
