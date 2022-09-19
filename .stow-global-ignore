@@ -1,0 +1,8 @@
+\.git
+misc
+^ /.*\.org
+LICENSE
+README.md
+^/Anki/*
+^/anki/*
+\.bin
