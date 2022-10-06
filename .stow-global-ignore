@@ -1,8 +1,11 @@
-\.git
 misc
 ^ /.*\.org
-LICENSE
-README.md
-^/Anki/*
-^/anki/*
-\.bin
+
+\.git
+\.gitignore
+.+~          # emacs backup files
+\#.*\#       # emacs autosave files
+
+^/LICENSE.*
+^/COPYING
+^/README.*
