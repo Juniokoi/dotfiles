@@ -1,4 +1,3 @@
-right_format = """$time"""
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
