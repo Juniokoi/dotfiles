@@ -54,7 +54,7 @@ bindkey -M menuselect '\r' .accept-line
 [ -f $ZDOTDIR/completion/_fnm ] && fpath+="$ZDOTDIR/completion/"
 
 
-	# Normal files to source
+  # Files to source
 zsh_add_file "zsh-aliases" 
 zsh_add_file "zsh-exports"
 ## zsh_add_file "zsh-prompt
