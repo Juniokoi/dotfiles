@@ -1,3 +1,5 @@
+add_newline = false
+
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
@@ -11,7 +13,7 @@ format = '\[[$symbol($version(-$name))]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 
 [cmd_duration]
-format = '\[[⏱ $duration]($style)\]'
+format = '\[[took $duration]($style)\]'
 
 [cobol]
 format = '\[[$symbol($version)]($style)\]'
@@ -50,10 +52,10 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
 
 [git_branch]
-format = '\[[$symbol$branch]($style)\]'
+format = '[$symbol$branch]($style)'
 
 [git_status]
-format = '([\[$all_status$ahead_behind\]]($style))'
+format = '([$all_status$ahead_behind]($style))'
 
 [golang]
 format = '\[[$symbol($version)]($style)\]'
@@ -70,6 +72,11 @@ format = '\[[$symbol$branch]($style)\]'
 [java]
 format = '\[[$symbol($version)]($style)\]'
 
+[jobs]
+symbol = "✦"
+symbol_threshold = 1
+number_threshold = 2
+
 [julia]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -80,7 +87,7 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol$context( \($namespace\))]($style)\]'
 
 [lua]
-format = '\[[$symbol($version)]($style)\]'
+format = '\[[🌕($version)](bold blue)\]'
 
 [memory_usage]
 format = '\[$symbol[$ram( | $swap)]($style)\]'
@@ -149,7 +156,8 @@ format = '\[[$symbol$workspace]($style)\]'
 format = '\[[$time]($style)\]'
 
 [username]
-format = '\[[$user]($style)\]'
+format = '[$user]($style) on '
+show_always = true
 
 [vagrant]
 format = '\[[$symbol($version)]($style)\]'
