@@ -1,4 +1,4 @@
 export EDITOR="nvim"
-export BROWSER="brave"
-export TERMINAL="kitty"
-export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$PATH"
+export BROWSER="microsoft-edge"
+export TERMINAL="wezterm"
+export PATH="$PATH:$HOME/.bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.emacs.d/bin"
