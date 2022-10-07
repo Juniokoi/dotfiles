@@ -21,6 +21,7 @@ alias {c,cl,cle,clea}="clear"
 alias {zc,cv}="$EDITORR $HOME/.config/zsh/.zshrc"
 alias za="$EDITORR $HOME/.config/zsh/zsh-aliases"
 alias ze="$EDITORR $HOME/.config/zsh/zsh-exports"
+alias za="$EDITORR $HOME/.config/wezterm/wezterm.lua"
 alias cdot="cd $HOME/.dotfiles"
 
  ## GIT
