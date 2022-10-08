@@ -1,9 +1,11 @@
+
 	# Load main functions
 export ZDOTDIR="$HOME/.config/zsh"
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
-zstyle ':autocomplete:*' menu select
-zmodload zsh/complist
+# zstyle ':autocomplete:*' menu select
+# zmodload zsh/complist
+autoload -U compinit
 
 # Tmux config
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
@@ -32,18 +34,18 @@ zsh_add_plugin "zsh-users/zsh-syntax-highlighting"
 	#Bindkeys
 bindkey -s '^e' 'ranger^M'
  # Up arrow:
-bindkey -M menuselect '\e[A' up-line-or-search
-bindkey -M menuselect '\eOA' up-line-or-search
+# bindkey -M menuselect '\e[A' up-line-or-search
+# bindkey -M menuselect '\eOA' up-line-or-search
 
  # Down arrow:
-bindkey -M menuselect '\e[B' down-line-or-select
-bindkey -M menuselect '\eOB' down-line-or-select
+# bindkey -M menuselect '\e[B' down-line-or-select
+# bindkey -M menuselect '\eOB' down-line-or-select
 
  # Control-Space:
 bindkey '\0' list-expand
 
  # Return key in completion menu & history menu:
-bindkey -M menuselect '\r' .accept-line
+# bindkey -M menuselect '\r' .accept-line
 
  #FZF
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
