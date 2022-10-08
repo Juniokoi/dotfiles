@@ -1,19 +1,26 @@
-require("juniokoi.packer")
+-- Plugin Manager
+require("juniokoi.packer")    -- Main plugin manager
 
-require("juniokoi.keymaps")
-require("juniokoi.set")
+-- Options
+require("juniokoi.set")       -- NeoVim Settings
+require("juniokoi.keymaps")   -- Shortcuts
 
-require("juniokoi.cmp") -- Autocompletion
-require("juniokoi.lsp") -- Lisp Server
+-- Tools
+require("juniokoi.cmp")       -- Autocompletion
+require("juniokoi.lsp")       -- Lisp Server
 
-require("juniokoi.telescope")
-require("juniokoi.autopairs")
+-- Helpers
+require("juniokoi.telescope") -- Find everything within a second
+require("juniokoi.toggleterm")-- Generates a terminal as a popup
+require("juniokoi.autopairs") -- Make easier to code
 
-require("juniokoi.comment")
-require("juniokoi.treesitter")
-require("juniokoi.gitsigns")
-require("juniokoi.nvim-tree")
-require("juniokoi.toggleterm")
+-- Essential
+require("juniokoi.comment")   -- Enable commenting code way easier
+require("juniokoi.treesitter")-- Prettify the code, giving colors
+require("juniokoi.nvim-tree") -- Because the stardand one sucks
 
-require("juniokoi.lualine")
-require("juniokoi.bufferline")
+-- Theme related
+require("juniokoi.lualine")   -- Manages the underbar info
+require("juniokoi.bufferline")-- Manages tabs and buffers
+require("juniokoi.gitsigns")  -- Show the user what lines and files did change with Git
+
