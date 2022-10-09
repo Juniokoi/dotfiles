@@ -24,7 +24,7 @@ if status is-interactive
     alias logoff "sudo pkill -KILL -u $USER"
 
     alias ls "exa --icons --color=always --color-scale --sort type "
-    alias la "ls -@lah"
+    alias la "ls -@lah --git"
     alias lt "ls -T"
     alias cat "bat --style full --theme Dracula"
 
