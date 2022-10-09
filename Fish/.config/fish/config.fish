@@ -12,6 +12,7 @@ if status is-interactive
     alias wc "vim $CONFIG/wezterm/wezterm.lua"
     alias vc "vim $CONFIG/nvim/init.lua"
     alias pc "vim $CONFIG/picom.conf"
+    alias kc "vim $CONFIG/kitty/kitty.conf"
     alias wmc "vim $WM_CONFIG"
     alias cdot "cd $DOT"
     alias cfg "cd $CONFIG"
@@ -37,10 +38,8 @@ if status is-interactive
     alias ga "git add"
     alias lg "lazygit"
 
-    set PATH "$PATH:$HOME/.config/rofi/scripts:$HOME/.bin"
+    set PATH "$PATH:$HOME/.config/rofi/scripts:$HOME/.bin:$HOME/.emacs.d/bin"
     starship init fish | source
-    set fish_tmux_autostart true
-    set fish_tmux_unicode true
     set fish_tmux_default_session_name "JunioKOI"
 
 
