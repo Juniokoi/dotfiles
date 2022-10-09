@@ -37,7 +37,7 @@ format = ' [$symbol($version)]($style)'
 format = ' [$symbol($version)]($style)'
 
 [dart]
-format = ' [($version) ]($style)'
+format = ' [🎯($version) ]($style)'
 
 [deno]
 format = ' [$symbol($version)]($style)'
