@@ -15,6 +15,17 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
+for_window [class="^.*"] border pixel 2
+for_window [floating] border pixel 3
+
+#               sla  border. text
+client.focused  #F9FAF9 #bd93f9 #292F34
+client.focused_inactive #000000  #282a36 #484e50 
+
+gaps inner 10
+gaps outer 2
+smart_borders on
+# border_radius 2
 # use these keys for focus, movement, and resize directions when reaching for
 # the arrows is not convenient
 set $up l
