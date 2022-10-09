@@ -1,7 +1,7 @@
 set fish_greeting
 if status is-interactive
-    set XDG_CONFIG_HOME "$HOME/.config"
-    set CONFIG "$XDG_CONFIG_HOME"
+    set XDG_HOME_CONFIG "$HOME/.config"
+    set CONFIG "$XDG_HOME_CONFIG"
     set WM_CONFIG "$CONFIG/i3/config"
     set DOT "$HOME/.dotfiles"
 
@@ -14,8 +14,9 @@ if status is-interactive
     alias pc "vim $CONFIG/picom.conf"
     alias kc "vim $CONFIG/kitty/kitty.conf"
     alias wmc "vim $WM_CONFIG"
-    alias cdot "cd $DOT"
     alias cfg "cd $CONFIG"
+    alias www "cd $HOME/www/"
+    alias cdot "cd $DOT"
     alias supersudo "sudo --preserve-env=PATH env"
     alias c clear
     alias cl clear
