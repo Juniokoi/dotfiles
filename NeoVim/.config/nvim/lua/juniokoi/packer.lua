@@ -49,7 +49,7 @@ return packer.startup(function(use)
     use 'nvim-lua/plenary.nvim'
     use 'nvim-lua/popup.nvim'
     use "numToStr/Comment.nvim" -- Easily comment stuff
-
+    use "lukas-reineke/virt-column.nvim"
 
     -- Themes
     use 'folke/tokyonight.nvim' --TOKYOOOOOOOOOOO
@@ -69,18 +69,26 @@ return packer.startup(function(use)
     use "hrsh7th/cmp-nvim-lua"
     use "hrsh7th/cmp-nvim-lsp"
     use "moll/vim-bbye" -- Confirm if want to quit
+    use({
+        "folke/noice.nvim",
+        event = "VimEnter",
+        requires = {
+            -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+            "muniftanjim/nui.nvim",
+            "rcarriga/nvim-notify",
+        }
+    })
 
-
-    -- Nvim Tree
+    -- nvim tree
     use 'kyazdani42/nvim-web-devicons'
     use 'kyazdani42/nvim-tree.lua'
 
     -- snippets
-    use "L3MON4D3/LuaSnip" --snippet engine
+    use "l3mon4d3/luasnip" --snippet engine
     use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 
-    -- LSP
-    use "neovim/nvim-lspconfig" -- enable LSP
+    -- lsp
+    use "neovim/nvim-lspconfig" -- enable lsp
     use "williamboman/nvim-lsp-installer" -- simple to use language server installer
     use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
 
@@ -104,8 +112,25 @@ return packer.startup(function(use)
 
     use 'akinsho/toggleterm.nvim'
 
+    use 'lukas-reineke/indent-blankline.nvim' -- Make code prettier
+    use 'ahmedkhalf/project.nvim' -- Handles projects
+    use 'goolord/alpha-nvim' -- Creates the dashboard
+    use 'lewis6991/impatient.nvim' -- Makes vim start faster
+    use 'https://github.com/folke/which-key.nvim'
     -- Git
     use "lewis6991/gitsigns.nvim"
+
+    -- Java
+    use 'mfussenegger/nvim-jdtls'
+    use 'mfussenegger/nvim-dap'
+    use 'rcarriga/nvim-dap-ui'
+
+
+
+
+
+
+
     -- Don't touch, it's art!
     --
     -- Automatically set up your configuration after cloning packer.nvim

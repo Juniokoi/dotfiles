@@ -5,3 +5,4 @@ end
 
 require("juniokoi.lsp.lsp-installer")
 require("juniokoi.lsp.handlers").setup()
+-- require("juniokoi.lsp.null-ls")

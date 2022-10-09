@@ -23,4 +23,11 @@ require("juniokoi.nvim-tree")       -- Because the stardand one sucks
 require("juniokoi.lualine")         -- Manages the underbar info
 require("juniokoi.bufferline")      -- Manages tabs and buffers
 require("juniokoi.gitsigns")        -- Show the user what lines and files did change with Git
+require("juniokoi.noice")
+require("juniokoi.whichkey")
+require("juniokoi.impatient")
+require("juniokoi.alpha")
+require("juniokoi.project")
+require("juniokoi.indent")
+require("juniokoi.dap")
 
