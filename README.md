@@ -26,7 +26,7 @@ or if is a boilerplate created by the app itself, you can force to remove the en
 > NOTE :: Instead of Kitty you insert the config file you want.  
 > and remember: this dotfiles **is not** focused on being universal, the settings  were created to fit **MY** preferences so use it if you know what you are doing  
 
->Inside each folder there is an README file showing how to use it properly
+>Inside each folder there is an README file showing how to use it properly (W.I.P)
 
 
 
