@@ -1,15 +1,17 @@
 font pango:ubuntu-mono 8
+
+# Monitor
 set $primary HDMI-A-0
 set $secondary DisplayPort-0
 
-
-
-exec --no-startup-id dex --autostart --environment i3
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-exec --no-startup-id nm-applet
+# Main key
+set $Mod Mod4
 
 for_window [class="Bitwarden"] floating enable
-for_window [class="Spotify"] floating enable
+ 
+for_window [class="kitty"] floating enable
+for_window [class="notion-app"] floating enable
+for_window [class="gedit"] floating enable
 for_window [window_role="About"] floating enable
 
 # Use pactl to adjust volume in PulseAudio.
@@ -30,15 +32,7 @@ gaps inner 10
 gaps outer 2
 smart_borders on
 # border_radius 2
-# use these keys for focus, movement, and resize directions when reaching for
-# the arrows is not convenient
-set $up l
-set $down k
-set $left j
-set $right semicolon
 
-set $Mod Mod4
-floating_modifier $Mod
 
 bindsym $Mod+Return exec kitty
 bindsym $Mod+Shift+Return exec "bash $HOME/.bin/i3-float-runner kitty"
@@ -63,11 +57,14 @@ bindsym $Mod+Down focus down
 bindsym $Mod+Up focus up
 bindsym $Mod+Right focus right
 
-# move focused window
+# move focused window {{{
+## Inverse control
+bindsym $Mod+Shift+$down move up
+bindsym $Mod+Shift+$up move down 
+
 bindsym $Mod+Shift+$left move left
-bindsym $Mod+Shift+$down move down
-bindsym $Mod+Shift+$up move up
 bindsym $Mod+Shift+$right move right
+# }}}
 
 # alternatively, you can use the cursor keys:
 bindsym $Mod+Shift+Left move left
@@ -85,7 +82,7 @@ bindsym $Mod+f fullscreen toggle
 # change container layout (stacked, tabbed, toggle split)
 bindsym $Mod+s layout stacking
 bindsym $Mod+t layout tabbed
-bindsym $Mod+Shift+e layout toggle split
+bindsym $Mod+Shift+d layout toggle split
 
 # toggle tiling / floating
 bindsym $Mod+Shift+q floating toggle
@@ -98,10 +95,18 @@ bindsym $Mod+a focus parent
 bindsym $Mod+minus scratchpad show
 bindsym $Mod+Shift+minus move scratchpad
 
-bindsym $Mod+shift+w focus output $primary
-bindsym $Mod+shift+d focus output $secondary
+# Switch monitor focus
+bindsym $Mod+shift+e focus output $primary
+bindsym $Mod+shift+w focus output $secondary
 
-# We use variables to avoid repeating the names in multiple places.
+
+# Navigation keys (Vim like)
+set $up j
+set $down k
+set $left h
+set $right l
+
+floating_modifier $Mod
 set $ws1 "1"
 set $ws2 "2"
 set $ws3 "3"
@@ -142,14 +147,15 @@ bindsym $Mod+Shift+c move container to workspace number $ws7
 bindsym $Mod+Shift+v move container to workspace number $ws8
 
 
+# We use variables to avoid repeating the names in multiple places.
 bindsym $Mod+Shift+t reload
 bindsym $Mod+Shift+r restart
 
 mode "resize" {
-        bindsym $left       resize shrink width 10 px or 10 ppt
-        bindsym $down       resize grow height 10 px or 10 ppt
-        bindsym $up         resize shrink height 10 px or 10 ppt
-        bindsym $right      resize grow width 10 px or 10 ppt
+        bindsym $left       resize shrink width 20 px or 20 ppt
+        bindsym $down       resize grow height 20 px or 20 ppt
+        bindsym $up         resize shrink height 20 px or 20 ppt
+        bindsym $right      resize grow width 20 px or 20 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left        resize shrink width 10 px or 10 ppt
@@ -169,8 +175,18 @@ bindsym $Mod+r mode "resize"
 #         status_command i3status
 # }
 
-
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh 
+# Startup
+exec --no-startup-id dex --autostart --environment i3
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id nm-applet
 exec --no-startup-id xrandr --output $primary --right-of $secondary
+
+# Doesn't work
+# using localectl instead
+# exec --no-startup-id setxkbmap -model pc104 -layout us,br -variant qwerty -option grp:alt_shift_toggle
+
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpapers/PinkGirl.png
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh 
 exec_always --no-startup-id picom --experimental-backends --config $HOME/.config/picom.conf &
+
+
