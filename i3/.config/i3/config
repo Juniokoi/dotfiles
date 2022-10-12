@@ -183,12 +183,12 @@ exec --no-startup-id xborders -c $HOME/.config/xborders/config.json
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id $HOME/.config/xborders/launch.sh
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-exec --no-startup-id xrandr --output $primary --right-of $secondary
+exec --no-startup-id xrandr --output $primary --primary --right-of $secondary
 
 # Doesn't work
 # using localectl instead
 # exec --no-startup-id setxkbmap -model pc104 -layout us,br -variant qwerty -option grp:alt_shift_toggle
 
+exec_always --no-startup-id $HOME/.config/eww/launch.sh 
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpapers/PinkGirl.png
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh 
 exec_always --no-startup-id picom --experimental-backends --config $HOME/.config/picom.conf &
