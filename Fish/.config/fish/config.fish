@@ -17,16 +17,18 @@ if status is-interactive
     alias cfg "cd $CONFIG"
     alias www "cd $HOME/www/"
     alias cdot "cd $DOT"
+    alias downloads "cd $HOME/Downloads/"
     alias supersudo "sudo --preserve-env=PATH env"
     alias c clear
     alias cl clear
     alias f fish
-    alias sayonara "sudo shutdown -h now"
+    alias sayonara "shutdown -h now"
     alias logoff "sudo pkill -KILL -u $USER"
 
     alias ls "exa --icons --color=always --color-scale --sort type "
     alias la "ls -@lah --git"
     alias lt "ls -T"
+    alias lta "ls -Ta"
     alias cat "bat --style full --theme Dracula"
 
     alias au "yay -Syyuu --noconfirm"
