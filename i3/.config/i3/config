@@ -12,7 +12,9 @@ for_window [class="Bitwarden"] floating enable
 for_window [class="kitty"] floating enable
 for_window [class="notion-app"] floating enable
 for_window [class="gedit"] floating enable
+for_window [class="gnome-*"] floating enable
 for_window [window_role="About"] floating enable
+for_window [window_role="pop-up"] floating enable
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -21,12 +23,12 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
-for_window [class="^.*"] border pixel 2
-for_window [floating] border pixel 3
+for_window [class="^.*"] border pixel 3
+for_window [floating] border pixel 0
 
 #               sla  border. text
 client.focused  #F9FAF9 #bd93f9 #292F34
-client.focused_inactive #000000  #282a36 #484e50 
+client.focused_inactive #000000  #002a36 #484e50 
 
 gaps inner 10
 gaps outer 2
@@ -176,9 +178,11 @@ bindsym $Mod+r mode "resize"
 # }
 
 # Startup
-exec --no-startup-id dex --autostart --environment i3
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id nm-applet
+exec --no-startup-id xborders -c $HOME/.config/xborders/config.json
+exec --no-startup-id dex --autostart --environment i3
+exec --no-startup-id $HOME/.config/xborders/launch.sh
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id xrandr --output $primary --right-of $secondary
 
 # Doesn't work
@@ -188,5 +192,3 @@ exec --no-startup-id xrandr --output $primary --right-of $secondary
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpapers/PinkGirl.png
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh 
 exec_always --no-startup-id picom --experimental-backends --config $HOME/.config/picom.conf &
-
-
