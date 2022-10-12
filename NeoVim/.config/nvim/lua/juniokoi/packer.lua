@@ -126,7 +126,9 @@ return packer.startup(function(use)
     use 'rcarriga/nvim-dap-ui'
 
 
-
+    -- Yuck
+    use 'elkowar/yuck.vim'
+    use 'gpanders/nvim-parinfer'
 
 
 
