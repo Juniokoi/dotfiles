@@ -12,9 +12,15 @@
     (greeter :nhoim "Say Hello"
         :name "Koi"))
 
+(defvar time-visible false)
+(defpoll time :interval "5s"
+              :initial "initial-value"
+              :run-while time-visible
+    `date +%H:%M`)
+
 (defwidget greeter [nhoim name]
     (box :orientation "horizontal"
          :halign "center"
-    nhoim
+      (label :text time)
       (button :onclick "notify-send 'Hello' 'Hello, ${name}'"
         "Greet")))
