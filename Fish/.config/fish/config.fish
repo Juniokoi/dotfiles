@@ -5,7 +5,10 @@ if status is-interactive
     set WM_CONFIG "$CONFIG/i3/config"
     set DOT "$HOME/.dotfiles"
 
-    alias vim nvim
+    set BROWSER "/usr/bin/microsoft-edge-stable"
+    set TERMINAL "/usr/bin/kitty"
+
+    # alias vim nvim
     alias fc "vim $CONFIG/fish/config.fish"
     alias bc "vim $CONFIG/bspwm/bspwmrc"
     alias sc "vim $CONFIG/sxhkd/sxhkdrc"
