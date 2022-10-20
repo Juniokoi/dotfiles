@@ -189,6 +189,6 @@ exec --no-startup-id xrandr --output $primary --primary --right-of $secondary
 # using localectl instead
 # exec --no-startup-id setxkbmap -model pc104 -layout us,br -variant qwerty -option grp:alt_shift_toggle
 
-exec_always --no-startup-id $HOME/.config/eww/launch.sh 
+exec_always --no-startup-id $HOME/.config/eww/bar/launch_bar
 exec_always --no-startup-id feh --bg-fill $HOME/Pictures/Wallpapers/PinkGirl.png
 exec_always --no-startup-id picom --experimental-backends --config $HOME/.config/picom.conf &
