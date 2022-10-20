@@ -8,7 +8,7 @@ if status is-interactive
     set BROWSER "/usr/bin/microsoft-edge-stable"
     set TERMINAL "/usr/bin/kitty"
 
-    # alias vim nvim
+    alias vim nvim
     alias fc "vim $CONFIG/fish/config.fish"
     alias bc "vim $CONFIG/bspwm/bspwmrc"
     alias sc "vim $CONFIG/sxhkd/sxhkdrc"
@@ -26,7 +26,7 @@ if status is-interactive
     alias cl clear
     alias f fish
     alias sayonara "shutdown -h now"
-    alias logoff "sudo pkill -KILL -u $USER"
+    alias logoff "pkill -KILL -u $USER"
 
     alias ls "exa --icons --color=always --color-scale --sort type "
     alias la "ls -@lah --git"
