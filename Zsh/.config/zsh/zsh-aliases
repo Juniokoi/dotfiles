@@ -1,48 +1,62 @@
-local EDITORR="nvim"
+local EDITOR="nvim"
 
+# Shortcuts
 alias b="bash"
-alias vim="nvim"
-alias e="ranger"
-alias sayonara="shutdown -h now"
-alias bc="$EDITORR $HOME/.bashrc"
-alias logoff="sudo pkill -KILL -u $USER"
-alias supersudo="sudo --preserve-env=PATH env"
-alias ac="$EDITORR $HOME/.config/awesome/rc.lua"
-alias kc="$EDITORR $HOME/.config/kitty/kitty.conf"
-
- ## Confirm before overwriting something
-alias cp="cp -i"
-alias mv="mv -i"
-alias rm="rm -i"
-
- ## Laziness
+alias e="ranger ."
 alias {zz,s,f}="zsh"
 alias {c,cl,cle,clea}="clear"
-alias {zc,cv}="$EDITORR $HOME/.config/zsh/.zshrc"
-alias za="$EDITORR $HOME/.config/zsh/zsh-aliases"
-alias ze="$EDITORR $HOME/.config/zsh/zsh-exports"
-alias za="$EDITORR $HOME/.config/wezterm/wezterm.lua"
-alias cdot="cd $HOME/.dotfiles"
 
- ## GIT
+# Configuration
+alias bc="$EDITOR $HOME/.bashrc"                    # Bash 
+alias ac="$EDITOR $HOME/.config/awesome/rc.lua"     # Awesome 
+alias kc="$EDITOR $HOME/.config/kitty/kitty.conf"   # Kitty
+
+
+# GNU
+alias cp="cp -i" # Confirm before overwriting
+alias mv="mv -i" #      --/--     moving/renaming
+alias rm="rm -i" #      --/--     deleting
+
+# ZSH 
+alias {zc,cv}="$EDITOR $HOME/.config/zsh/.zshrc"    # Main file
+alias za="$EDITOR $HOME/.config/zsh/zsh-aliases"    # Alises
+alias ze="$EDITOR $HOME/.config/zsh/zsh-exports"    # Exports
+alias zf="$EDITOR $HOME/.config/zsh/zsh-functions"  # Functions
+
+# System commands
+alias logoff="pkill -KILL -u $USER"
+alias sayonara="shutdown -h now"
+alias supersudo="sudo --preserve-env=PATH env"
+
+# Tools and applications
+# 
+## exa & bat & zoxide
+alias ls="exa --icons --color=always --color-scale --sort type "
+alias la="ls -@lah --git"
+alias lt="ls -T"
+alias lta="ls -Ta"
+alias cat="bat --style full --theme Dracula"
+alias cd=z
+
+## Terminals
+#
+### Kitty
+alias kc="$EDITOR $HOME/.config/kitty/kitty.conf"
+### Wezterm
+alias wc="$EDITOR $HOME/.config/wezterm/wezterm.lua"
+
+# GIT
 alias gs="git-st"
 alias gc="git commit -m"
 alias gl="git lg"
 alias glo="git log --oneline"
 alias ga="git add"
+alias lg="lazygit"
 
- ## External tools
-alias exa="exa --color=always --group-directories-first"          # Make exa always birdiful
-alias ls="exa -lh --icons"                                        # Substitute default ls
-alias la="exa -lah --icons"                                       # All files and dirs
-alias lt="exa -Ta"                                                # Tree listing
-alias lh=exa -la $* | grep "^\."                                  # List hidden files only
-alias cat="bat --style=numbers"                                   # Substitute defaul cat
-
- ## Emacs runner
+## Emacs
 alias emacs="emacsclient -c -a 'emacs'"
 
- # Docker
+## Docker
 alias di="docker image"
 alias dv="docker volume"
 alias dc="docker container"

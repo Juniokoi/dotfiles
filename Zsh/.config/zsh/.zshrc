@@ -1,10 +1,8 @@
+# Load main functions
+local ZDOTDIR="$HOME/.config/zsh"
 
-	# Load main functions
-export ZDOTDIR="$HOME/.config/zsh"
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
-# zstyle ':autocomplete:*' menu select
-# zmodload zsh/complist
 autoload -U compinit
 
 # Tmux config
@@ -20,34 +18,26 @@ stty stop undef # Disable ctrl-s to freeze terminal
 zle_highlight=('paste:none') # Remove text's highilight when pasted 
 unsetopt BEEP # Remove annoying boop
 
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
-setopt appendhistory
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=1000000
+SAVEHIST=1000000
+setopt APPEND_HISTORY
 
-	#Useful plugins
-zsh_add_plugin "hlissner/zsh-autopair" # Adds autopair, really useful 
+# Useful plugins
+zsh_add_plugin "hlissner/zsh-autopair"
 zsh_add_plugin "zsh-users/zsh-autosuggestions"
 zsh_add_plugin "zsh-users/zsh-syntax-highlighting"
-# zsh_add_plugin "marlonrichert/zsh-autocomplete" # May lag your zshell, but is wonderful || Even being great, it goes crazy (really crazy)
 
-	#Bindkeys
+# Bindkeys
 bindkey -s '^e' 'ranger^M'
- # Up arrow:
-# bindkey -M menuselect '\e[A' up-line-or-search
-# bindkey -M menuselect '\eOA' up-line-or-search
 
- # Down arrow:
-# bindkey -M menuselect '\e[B' down-line-or-select
-# bindkey -M menuselect '\eOB' down-line-or-select
-
- # Control-Space:
+# Control-Space:
 bindkey '\0' list-expand
 
- # Return key in completion menu & history menu:
+# Return key in completion menu & history menu:
 # bindkey -M menuselect '\r' .accept-line
 
- #FZF
+#FZF
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
@@ -56,7 +46,6 @@ bindkey '\0' list-expand
 [ -f $ZDOTDIR/completion/_fnm ] && fpath+="$ZDOTDIR/completion/"
 
 
-  # Files to source
+# Files to source
 zsh_add_file "zsh-aliases" 
 zsh_add_file "zsh-exports"
-## zsh_add_file "zsh-prompt
