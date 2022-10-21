@@ -12,16 +12,14 @@ fi
 
 ## Open widgets 
 run_eww() {
-	${EWW} open-many \
+	${EWW} open \
          bar
-        
 }
 
 ## Launch or close widgets accordingly
-if [[ ! -f "$FILE" ]]; then
-	touch "$FILE"
-	run_eww && bspc config -m LVDS-1 top_padding 49
-else
+if [[ `pgrep eww` ]]; then
 	${EWW} close-all && killall eww
-	rm "$FILE"
+    run_eww
+else
+    run_eww
 fi
