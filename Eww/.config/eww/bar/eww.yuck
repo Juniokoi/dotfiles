@@ -18,7 +18,7 @@
 (defvar time_rev false)
 (deflisten workspace "scripts/workspace")
 
-(defvar eww "$HOME/.local/bin/eww/eww -c $HOME/.config/eww/bar")
+(defvar eww "/usr/bin/eww -c $HOME/.config/eww/bar")
 
 
 (defpoll COL_WLAN :interval "1m" "~/.config/eww/bar/scripts/wifi --COL")
@@ -191,13 +191,16 @@
     
 
 (defwindow bar
-          :geometry (geometry :x "0%"
+           :monitor 1
+          :geometry (geometry  :x "0%"
                        :y "10px"
                        :width "90%"
-                       :height "30px"
+                       :height "35px"
                        :anchor "top center")
-          :stacking "fg"
+          :stacking "overlay"
+          :exclusive true
           :windowtype "dock"
+
   (bar_1))
   
 (defwidget system []
