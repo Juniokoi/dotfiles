@@ -197,7 +197,7 @@
                        :width "90%"
                        :height "35px"
                        :anchor "top center")
-          :stacking "overlay"
+          :stacking "bg"
           :exclusive true
           :windowtype "dock"
 

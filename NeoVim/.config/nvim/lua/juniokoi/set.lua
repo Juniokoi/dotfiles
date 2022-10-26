@@ -41,16 +41,13 @@ local options = {
     sidescrolloff = 8, -- Don't make the cursor reach the side edge
     incsearch = true, -- Enables a better search, don't causing conflict if result doesn't exist
 }
-
-vim.opt.shortmess:append "c" -- Enables to use >> or << easier
-
-
 for k, v in pairs(options) do
     vim.opt[k] = v
 end
+vim.opt.shortmess:append "c" -- Enables to use >> or << easier
 
-vim.cmd[[highlight ColorColumn ctermbg=0 guibg=12]]
-vim.cmd[[highlight ColorLine ctermbg=10 guibg=21]]
+vim.cmd [[ highlight CursorColumn guibg=#171717 blend=10 ]]
+vim.cmd [[ highlight CursorLine guibg=#171717 blend=50 ]]
 
 -- vim.o.list = true -- Set special formatting charactor to on.
 -- vim.o.listchars = 'eol:↲'

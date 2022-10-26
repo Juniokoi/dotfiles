@@ -7,7 +7,7 @@ configs.setup {
   sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
   ignore_install = { "" }, -- List of parsers to ignore installing
   autopairs = {
-    enable = true,
+    enable = false,
   },
   highlight = {
     enable = true, -- false will disable the whole extension
@@ -17,6 +17,6 @@ configs.setup {
   indent = { enable = true, disable = { "yaml" } },
   context_commentstring = {
     enable = true,
-    enable_autocmd = false,
+    enable_autocmd = true,
   },
 }

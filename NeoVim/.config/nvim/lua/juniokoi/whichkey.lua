@@ -88,22 +88,22 @@ local mappings = {
   ["w"] = { "<cmd>w!<CR>", "Save" },
   ["q"] = { "<cmd>q!<CR>", "Quit" },
   ["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
-  ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
+  ["H"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
+  h = {
+    name = "Harpoon",
+    h = {"<cmd>lua require 'harpoon.ui'.toggle_quick_menu()<cr>", "List" },
+    a = {"<cmd>lua require 'harpoon.mark'.add_file()<cr>", "Add" },
+    },
+  ["1"] = { "<cmd>lua require 'harpoon.ui'.nav_file(1)<cr>", "Harpoon 1" },
+  ["2"] = { "<cmd>lua require 'harpoon.ui'.nav_file(2)<cr>", "Harpoon 2" },
+  ["3"] = { "<cmd>lua require 'harpoon.ui'.nav_file(3)<cr>", "Harpoon 3" },
+
   ["f"] = {
     "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",
     "Find files",
   },
   ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
-  ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
-
-  p = {
-    name = "Packer",
-    c = { "<cmd>PackerCompile<cr>", "Compile" },
-    i = { "<cmd>PackerInstall<cr>", "Install" },
-    s = { "<cmd>PackerSync<cr>", "Sync" },
-    S = { "<cmd>PackerStatus<cr>", "Status" },
-    u = { "<cmd>PackerUpdate<cr>", "Update" },
-  },
+  ["p"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
 
   g = {
     name = "Git",
