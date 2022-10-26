@@ -49,10 +49,14 @@ return packer.startup(function(use)
     use 'nvim-lua/plenary.nvim'
     use 'nvim-lua/popup.nvim'
     use "numToStr/Comment.nvim" -- Easily comment stuff
-    use "lukas-reineke/virt-column.nvim"
+    use "ThePrimeagen/harpoon"
 
     -- Themes
     use 'folke/tokyonight.nvim' --TOKYOOOOOOOOOOO
+    use {
+        "catppuccin/nvim",
+        as = "catppuccin"
+    }
     use {
         'nvim-lualine/lualine.nvim',
         requires = { 'kyazdani42/nvim-web-devicons', opt = true }
@@ -68,16 +72,6 @@ return packer.startup(function(use)
     use "David-Kunz/cmp-npm" -- npm completions
     use "hrsh7th/cmp-nvim-lua"
     use "hrsh7th/cmp-nvim-lsp"
-    use "moll/vim-bbye" -- Confirm if want to quit
-    use({
-        "folke/noice.nvim",
-        event = "VimEnter",
-        requires = {
-            -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-            "muniftanjim/nui.nvim",
-            "rcarriga/nvim-notify",
-        }
-    })
 
     -- nvim tree
     use 'kyazdani42/nvim-web-devicons'
@@ -91,6 +85,8 @@ return packer.startup(function(use)
     use "neovim/nvim-lspconfig" -- enable lsp
     use "williamboman/nvim-lsp-installer" -- simple to use language server installer
     use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
+    use { "williamboman/mason.nvim" }
+    use { "williamboman/mason-lspconfig.nvim" }
 
     -- Telescope
     use "nvim-telescope/telescope.nvim"
@@ -117,22 +113,34 @@ return packer.startup(function(use)
     use 'goolord/alpha-nvim' -- Creates the dashboard
     use 'lewis6991/impatient.nvim' -- Makes vim start faster
     use 'https://github.com/folke/which-key.nvim'
+
     -- Git
     use "lewis6991/gitsigns.nvim"
+    use "f-person/git-blame.nvim"
+    use "mattn/vim-gist"
+    use "mattn/webapi-vim"
+    use "ruifm/gitlinker.nvim"
+
+    -- Github
+    use "pwntester/octo.nvim"
 
     -- Java
     use 'mfussenegger/nvim-jdtls'
     use 'mfussenegger/nvim-dap'
     use 'rcarriga/nvim-dap-ui'
 
+    -- Typescript
+    use "windwp/nvim-ts-autotag"
+
 
     -- Yuck
     use 'elkowar/yuck.vim'
     use 'gpanders/nvim-parinfer'
 
+    use "folke/zen-mode.nvim"
+    use 'norcalli/nvim-colorizer.lua'
 
-
-
+    use "moll/vim-bbye" -- Confirm if want to quit
     -- Don't touch, it's art!
     --
     -- Automatically set up your configuration after cloning packer.nvim

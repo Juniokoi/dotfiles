@@ -3,7 +3,9 @@ local ZDOTDIR="$HOME/.config/zsh"
 
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
-autoload -U compinit
+autoload -Uz compinit && compinit
+
+source <(ng completion script)
 
 # Tmux config
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
@@ -11,7 +13,11 @@ if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
 fi
 
 
+# Files to source
 source "$ZDOTDIR/zsh-functions"
+zsh_add_file "zsh-aliases" 
+zsh_add_file "zsh-exports"
+
 fpath=(~/newdir $fpath)
 # setopt autocd extendedglob nomatch menucomplete
 stty stop undef # Disable ctrl-s to freeze terminal 
@@ -22,6 +28,8 @@ HISTFILE="$HOME/.zsh_history"
 HISTSIZE=1000000
 SAVEHIST=1000000
 setopt APPEND_HISTORY
+
+source "$ZDOTDIR/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh"
 
 # Useful plugins
 zsh_add_plugin "hlissner/zsh-autopair"
@@ -46,6 +54,4 @@ bindkey '\0' list-expand
 [ -f $ZDOTDIR/completion/_fnm ] && fpath+="$ZDOTDIR/completion/"
 
 
-# Files to source
-zsh_add_file "zsh-aliases" 
-zsh_add_file "zsh-exports"
+

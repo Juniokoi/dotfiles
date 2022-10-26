@@ -1,4 +1,5 @@
 local EDITOR="nvim"
+local CONFIG="$HOME/.config"
 
 # Shortcuts
 alias b="bash"
@@ -6,10 +7,12 @@ alias e="ranger ."
 alias {zz,s,f}="zsh"
 alias {c,cl,cle,clea}="clear"
 
-# Configuration
+# Config
 alias bc="$EDITOR $HOME/.bashrc"                    # Bash 
+alias vc="$EDITOR $HOME/.config/nvim/init.lua"      # Vim
 alias ac="$EDITOR $HOME/.config/awesome/rc.lua"     # Awesome 
-alias kc="$EDITOR $HOME/.config/kitty/kitty.conf"   # Kitty
+alias hc="$EDITOR $HOME/.config/hypr/hyprland.conf" # Hyprland
+alias tc="$EDITOR $HOME/.tmux.conf"                 # Tmux
 
 
 # GNU
@@ -18,15 +21,16 @@ alias mv="mv -i" #      --/--     moving/renaming
 alias rm="rm -i" #      --/--     deleting
 
 # ZSH 
-alias {zc,cv}="$EDITOR $HOME/.config/zsh/.zshrc"    # Main file
-alias za="$EDITOR $HOME/.config/zsh/zsh-aliases"    # Alises
-alias ze="$EDITOR $HOME/.config/zsh/zsh-exports"    # Exports
-alias zf="$EDITOR $HOME/.config/zsh/zsh-functions"  # Functions
+alias {zc,cv}="$EDITOR $CONFIG/zsh/.zshrc"    # Main file
+alias za="$EDITOR $CONFIG/zsh/zsh-aliases"    # Alises
+alias ze="$EDITOR $CONFIG/zsh/zsh-exports"    # Exports
+alias zf="$EDITOR $CONFIG/zsh/zsh-functions"  # Functions
 
 # System commands
 alias logoff="pkill -KILL -u $USER"
 alias sayonara="shutdown -h now"
 alias supersudo="sudo --preserve-env=PATH env"
+alias {au,aupdate}="yay -Syyuu --noconfirm"
 
 # Tools and applications
 # 

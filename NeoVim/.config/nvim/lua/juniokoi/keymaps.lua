@@ -66,11 +66,14 @@ keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
 keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
 
 
+keymap("n", "<C-s>", ":w<cr>", term_opts)
+keymap("n", "<S-l>", ":BufferLineCycleNext<CR>", opts)
+keymap("n", "<S-h>", ":BufferLineCyclePrev<CR>", opts)
+
+
 -- keymap("n", "<leader>f", "<cmd>Telescope find_files<cr>", opts)
-keymap("n", "<leader>f",
-    "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>"
-    , opts)
-keymap("n", "<c-t>", "<cmd>Telescope live_grep<cr>", opts)
+keymap("n", "<leader>f", "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = true }))<cr>" , opts)
+keymap("n", "<C-t>", "<cmd>Telescope live_grep<cr>", opts)
 keymap("n", "<leader>lf", "<cmd>Format<cr>", opts) -- Uses LSP in handler.lua to format current folder
 keymap("n", "<leader>g", "<cmd>lua _LAZYGIT_TOGGLE()<cr>", opts) -- Uses LSP in handler.lua to format current folder
 

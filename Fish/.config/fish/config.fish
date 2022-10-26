@@ -1,5 +1,8 @@
 set fish_greeting
 if status is-interactive
+    zoxide init fish | source
+    starship init fish | source
+
     set XDG_HOME_CONFIG "$HOME/.config"
     set CONFIG "$XDG_HOME_CONFIG"
     set WM_CONFIG "$CONFIG/i3/config"
@@ -17,6 +20,9 @@ if status is-interactive
     alias pc "vim $CONFIG/picom.conf"
     alias kc "vim $CONFIG/kitty/kitty.conf"
     alias tc "vim $HOME/.tmux.conf"
+    alias hc "vim $CONFIG/hypr/hyprland.conf"
+
+    alias cd z
     alias wmc "vim $WM_CONFIG"
     alias cfg "cd $CONFIG"
     alias www "cd $HOME/www/"
@@ -46,7 +52,6 @@ if status is-interactive
     alias lg "lazygit"
 
     set PATH "$PATH:$HOME/.local/bin:$HOME/.config/rofi/scripts:$HOME/.bin:$HOME/.emacs.d/bin"
-    starship init fish | source
     set fish_tmux_default_session_name "JunioKOI"
 
 
