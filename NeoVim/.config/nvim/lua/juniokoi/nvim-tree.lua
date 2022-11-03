@@ -97,7 +97,7 @@ nvim_tree.setup {
                 border = "rounded",
                 anchor = "NW",
                 width = 30,
-                height = 36,
+                height = 30,
                 row = 1,
                 col = 300,
             },

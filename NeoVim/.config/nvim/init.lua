@@ -33,3 +33,6 @@ require("juniokoi.indent")
 require("juniokoi.colorizer")       -- Show hashcolors
 require("juniokoi.git")       -- Show hashcolors
 
+if not vim.g.vscode then
+    require("core")
+end

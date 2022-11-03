@@ -87,7 +87,7 @@ return packer.startup(function(use)
     use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
     use { "williamboman/mason.nvim" }
     use { "williamboman/mason-lspconfig.nvim" }
-
+    use 'b0o/SchemaStore.nvim'
     -- Telescope
     use "nvim-telescope/telescope.nvim"
     use 'nvim-telescope/telescope-media-files.nvim'
