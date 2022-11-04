@@ -51,7 +51,7 @@ if status is-interactive
     alias ga "git add"
     alias lg "lazygit"
 
-    set PATH "$PATH:$HOME/.local/bin:$HOME/.config/rofi/scripts:$HOME/.bin:$HOME/.emacs.d/bin"
+    set PATH "$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$HOME/.local/bin:$HOME/.config/rofi/scripts:$HOME/.bin:$HOME/.emacs.d/bin:$HOME/.yarn/bin:$HOME/.cargo/bin"
     set fish_tmux_default_session_name "JunioKOI"
 
 
