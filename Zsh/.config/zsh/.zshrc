@@ -3,9 +3,9 @@ local ZDOTDIR="$HOME/.config/zsh"
 
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
-autoload -Uz compinit && compinit
+autoload -Uz compinit && compinit -i
 
-source <(ng completion script)
+# source <(ng completion script)
 
 # Tmux config
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
@@ -53,5 +53,10 @@ bindkey '\0' list-expand
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f $ZDOTDIR/completion/_fnm ] && fpath+="$ZDOTDIR/completion/"
 
+# Enables using gpg with wsl
+export GPG_TTY=$(tty)
 
+# Java resources
+source /etc/profile.d/jre.sh
+eval "$(jenv init -)"
 
