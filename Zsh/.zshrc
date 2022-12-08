@@ -1,4 +1,4 @@
-autoload -Uz compinit 
+autoload -Uz compinit
 compinit
 
 # Load main functions
@@ -12,17 +12,8 @@ eval "$(starship init zsh)"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-function load_angular_completion {
-    local APP="ANGULAR"
-    echo "$APP: Loading autocomplete ..."
-
-
-    source <(ng completion script)
-    echo "$APP: ... done!"
-}
-
-load_angular_completion
+# Java
+eval "$(jenv init -)"
 
 # Tmux config
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
@@ -57,16 +48,13 @@ source "$ZDOTDIR/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh"
 zsh_add_plugin "hlissner/zsh-autopair"
 zsh_add_plugin "zsh-users/zsh-autosuggestions"
 zsh_add_plugin "zsh-users/zsh-syntax-highlighting"
-zsh_add_plugin "marlonrichert/zsh-autocomplete"
+#zsh_add_plugin "marlonrichert/zsh-autocomplete"
 
 # Bindkeys
 bindkey -s '^e' 'ranger^M'
 
 # Control-Space:
 bindkey '\0' list-expand
-
-# Return key in completion menu & history menu:
-bindkey -M menuselect '\r' .accept-line
 
 #FZF
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
@@ -87,12 +75,7 @@ export FZF_DEFAULT_OPTS=" \
 #       --height=50% --layout=reverse
 
 # Enables using gpg with wsl
-export GPG_TTY=$(tty)
+# export GPG_TTY=$(tty)
 
-# Java resources
-echo "Java: Initialize ..."
-source /etc/profile.d/jre.sh
-eval "$(jenv init -)"
-echo "Java: ...Finished!"
 
 

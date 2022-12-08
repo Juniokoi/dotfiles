@@ -6,6 +6,7 @@ alias b="bash"
 alias e="ranger ."
 alias {zz,s,f}="zsh"
 alias {c,cl,cle,clea}="clear"
+alias cdot="cd $HOME/.dotfiles"
 
 # Config
 alias bc="$EDITOR $HOME/.bashrc"                    # Bash 
@@ -14,14 +15,13 @@ alias ac="$EDITOR $HOME/.config/awesome/rc.lua"     # Awesome
 alias hc="$EDITOR $HOME/.config/hypr/hyprland.conf" # Hyprland
 alias tc="$EDITOR $HOME/.tmux.conf"                 # Tmux
 
-
 # GNU
 alias cp="cp -i" # Confirm before overwriting
 alias mv="mv -i" #      --/--     moving/renaming
 alias rm="rm -i" #      --/--     deleting
 
 # ZSH 
-alias {zc,cv}="$EDITOR $CONFIG/zsh/.zshrc"    # Main file
+alias zc="$EDITOR $HOME/.zshrc" 	      # Main file
 alias za="$EDITOR $CONFIG/zsh/zsh-aliases"    # Alises
 alias ze="$EDITOR $CONFIG/zsh/zsh-exports"    # Exports
 alias zf="$EDITOR $CONFIG/zsh/zsh-functions"  # Functions
@@ -36,7 +36,7 @@ alias {au,aupdate}="yay -Syyuu --noconfirm"
 # 
 ## exa & bat & zoxide
 alias ls="exa --icons --color=always --color-scale --sort type "
-alias la="ls -@lah --git"
+alias la="ls -@lah"
 alias lt="ls -T"
 alias lta="ls -Ta"
 alias cat="bat --style full --theme Dracula"
