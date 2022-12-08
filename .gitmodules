@@ -1,0 +1,3 @@
+[submodule "NeoVim"]
+	path = NeoVim
+	url = https://github.com/Juniokoi/NeoVim
