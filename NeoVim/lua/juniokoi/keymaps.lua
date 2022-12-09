@@ -67,8 +67,8 @@ keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
 
 
 keymap("n", "<C-s>", ":w<cr>", term_opts)
-keymap("n", "<S-l>", ":BufferLineCycleNext<CR>", opts)
-keymap("n", "<S-h>", ":BufferLineCyclePrev<CR>", opts)
+keymap("n", "<A-l>", ":BufferLineCycleNext<CR>", opts)
+keymap("n", "<A-h>", ":BufferLineCyclePrev<CR>", opts)
 
 
 -- keymap("n", "<leader>f", "<cmd>Telescope find_files<cr>", opts)
@@ -76,6 +76,11 @@ keymap("n", "<leader>f", "<cmd>lua require'telescope.builtin'.find_files(require
 keymap("n", "<C-t>", "<cmd>Telescope live_grep<cr>", opts)
 keymap("n", "<leader>lf", "<cmd>Format<cr>", opts) -- Uses LSP in handler.lua to format current folder
 keymap("n", "<leader>g", "<cmd>lua _LAZYGIT_TOGGLE()<cr>", opts) -- Uses LSP in handler.lua to format current folder
+
+-- Harpoon 
+keymap("n", "<leader>1b", "<cmd>lua require 'harpoon.ui'.nav_file(1)<cr>", opts)
+keymap("n", "<leader>2b", "<cmd>lua require 'harpoon.ui'.nav_file(2)<cr>", opts)
+keymap("n", "<leader>3b", "<cmd>lua require 'harpoon.ui'.nav_file(3)<cr>", opts)
 
 -- Nvimtree
 keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)

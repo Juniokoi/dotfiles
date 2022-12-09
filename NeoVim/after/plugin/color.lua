@@ -1,12 +1,21 @@
+local status_ok, colorscheme = pcall(require, "catppuccin")
+if not status_ok then
+    vim.notify("colorscheme " .. colorscheme .. " not found!")
+    vim.cmd("colorscheme default")
+    return
+end
+local ok, ucolors = pcall(require, "catppuccin.utils.colors")
+if not ok then
+    return
+end
+
+vim.cmd("colorscheme catppuccin")
+
 vim.g.catppuccin_flavour = "mocha"
 vim.opt.background = "dark"
 
-vim.cmd("colorscheme default")
-local colorscheme = "catppuccin"
-local status_ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
-local ucolors = require "catppuccin.utils.colors"
 
-require("catppuccin").setup {
+colorscheme.setup {
     flavour = "mocha", -- mocha, macchiato, frappe, latte
     transparent_background = true,
     integrations = {
@@ -41,7 +50,3 @@ require("catppuccin").setup {
     },
 }
 
-if not status_ok then
-    vim.notify("colorscheme " .. colorscheme .. " not found!")
-    return
-end
