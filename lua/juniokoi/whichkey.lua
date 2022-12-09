@@ -3,6 +3,8 @@ if not status_ok then
   return
 end
 
+
+local NvimPath = "$HOME/.config/nvim/"
 local setup = {
   plugins = {
     marks = true, -- shows a list of your marks on ' and `
@@ -53,7 +55,7 @@ local setup = {
     height = { min = 4, max = 25 }, -- min and max height of the columns
     width = { min = 20, max = 50 }, -- min and max width of the columns
     spacing = 3, -- spacing between columns
-    align = "left", -- align columns left, center or right
+    align = "center", -- align columns left, center or right
   },
   ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
   hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " }, -- hide mapping boilerplate
@@ -79,32 +81,29 @@ local opts = {
 }
 
 local mappings = {
-  ["a"] = { "<cmd>Alpha<cr>", "Alpha" },
   ["b"] = {
     "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
     "Buffers",
   },
   ["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
-  ["w"] = { "<cmd>w!<CR>", "Save" },
-  ["q"] = { "<cmd>q!<CR>", "Quit" },
-  ["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
-  ["H"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
-  h = {
-    name = "Harpoon",
-    h = {"<cmd>lua require 'harpoon.ui'.toggle_quick_menu()<cr>", "List" },
-    a = {"<cmd>lua require 'harpoon.mark'.add_file()<cr>", "Add" },
-    },
-  ["1"] = { "<cmd>lua require 'harpoon.ui'.nav_file(1)<cr>", "Harpoon 1" },
-  ["2"] = { "<cmd>lua require 'harpoon.ui'.nav_file(2)<cr>", "Harpoon 2" },
-  ["3"] = { "<cmd>lua require 'harpoon.ui'.nav_file(3)<cr>", "Harpoon 3" },
-
+  ["q"] = { "<cmd>Bdelete!<CR>", "Close Buffer", },
+  ["Q"] = { "<cmd>%bdelete | :Alpha<CR>", "Close everything", },
+  ["d"] = { "<cmd>Alpha<CR>", "Dashboard" },
+  c = {
+    name = "Configuration",
+    c = {"<cmd>edit $HOME/.config/nvim/after/plugin/color.lua<cr>", "Colorscheme" },
+    C = {"<cmd>edit $HOME/.config/nvim/init.lua<cr>", "Configs" },
+    w = {"<cmd>edit $HOME/.config/nvim/lua/juniokoi/whichkey.lua<cr>", "Which Key" },
+    p = {"<cmd>edit $HOME/.config/nvim/lua/juniokoi/packer.lua<cr>", "Plugins" },
+    o = {"<cmd>lua require'telescope.builtin'.find_files({ find_files = 'fd * $HOME/.config/nvim/ '})<CR>", "Options" },
+         
+  },
+  ["j"] = {"<cmd>w! | so<CR>", "Source file" },
   ["f"] = {
     "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",
     "Find files",
   },
   ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
-  ["p"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
-
   g = {
     name = "Git",
     g = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "Lazygit" },
@@ -127,38 +126,30 @@ local mappings = {
       "Diff",
     },
   },
-
+  h = {
+    name = "Harpoon",
+    h = {"<cmd>lua require 'harpoon.ui'.toggle_quick_menu()<cr>", "List" },
+    a = {"<cmd>lua require 'harpoon.mark'.add_file()<cr>", "Add" },
+  },
+  ["H"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
   l = {
     name = "LSP",
     a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
-    d = {
-      "<cmd>Telescope lsp_document_diagnostics<cr>",
-      "Document Diagnostics",
-    },
-    w = {
-      "<cmd>Telescope lsp_workspace_diagnostics<cr>",
-      "Workspace Diagnostics",
-    },
+    d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics", },
+    w = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics", },
     f = { "<cmd>lua vim.lsp.buf.format{async=true}<cr>", "Format" },
     i = { "<cmd>LspInfo<cr>", "Info" },
     I = { "<cmd>LspInstallInfo<cr>", "Installer Info" },
-    j = {
-      "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
-      "Next Diagnostic",
-    },
-    k = {
-      "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>",
-      "Prev Diagnostic",
-    },
+    j = { "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", "Next Diagnostic", },
+    k = { "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>", "Prev Diagnostic", },
     l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
     q = { "<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>", "Quickfix" },
     r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
     s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
-    S = {
-      "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
-      "Workspace Symbols",
-    },
+    S = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace Symbols" },
   },
+  ["p"] = { ":Telescope projects <CR>", "Projects" },
+  ["r"] = { ":Telescope oldfiles <CR>", "Recent files" },
   s = {
     name = "Search",
     b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
@@ -170,17 +161,14 @@ local mappings = {
     k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
     C = { "<cmd>Telescope commands<cr>", "Commands" },
   },
-
   t = {
     name = "Terminal",
-    n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
-    u = { "<cmd>lua _NCDU_TOGGLE()<cr>", "NCDU" },
     t = { "<cmd>lua _HTOP_TOGGLE()<cr>", "Htop" },
-    p = { "<cmd>lua _PYTHON_TOGGLE()<cr>", "Python" },
     f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
     h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
     v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
   },
+  ["w"] = { "<cmd>w!<CR>", "Save" },
 }
 
 which_key.setup(setup)

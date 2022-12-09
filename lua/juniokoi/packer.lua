@@ -49,6 +49,10 @@ return packer.startup(function(use)
     use 'nvim-lua/plenary.nvim'
     use 'nvim-lua/popup.nvim'
     use "numToStr/Comment.nvim" -- Easily comment stuff
+    use {
+        "mg979/vim-visual-multi",
+        as = "multicursor"
+    }
     use "ThePrimeagen/harpoon"
 
     -- Themes
@@ -73,21 +77,22 @@ return packer.startup(function(use)
     use "hrsh7th/cmp-nvim-lua"
     use "hrsh7th/cmp-nvim-lsp"
 
-    -- nvim tree
+    -- Nvim tree
     use 'kyazdani42/nvim-web-devicons'
     use 'kyazdani42/nvim-tree.lua'
 
-    -- snippets
+    -- Snippets
     use "l3mon4d3/luasnip" --snippet engine
     use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 
-    -- lsp
+    -- LSP
     use "neovim/nvim-lspconfig" -- enable lsp
     use "williamboman/nvim-lsp-installer" -- simple to use language server installer
     use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
-    use { "williamboman/mason.nvim" }
-    use { "williamboman/mason-lspconfig.nvim" }
+    use "williamboman/mason.nvim"
+    use "williamboman/mason-lspconfig.nvim"
     use 'b0o/SchemaStore.nvim'
+    --
     -- Telescope
     use "nvim-telescope/telescope.nvim"
     use 'nvim-telescope/telescope-media-files.nvim'
@@ -97,7 +102,7 @@ return packer.startup(function(use)
         "nvim-treesitter/nvim-treesitter",
         run = ":TSUpdate",
     }
-    use "p00f/nvim-ts-rainbow"
+    --use "p00f/nvim-ts-rainbow"
     use "nvim-treesitter/playground"
 
     -- Autopairs
@@ -107,6 +112,7 @@ return packer.startup(function(use)
     use 'JoosepAlviste/nvim-ts-context-commentstring' -- Comment on .TS Files
 
     use 'akinsho/toggleterm.nvim'
+
 
     use 'lukas-reineke/indent-blankline.nvim' -- Make code prettier
     use 'ahmedkhalf/project.nvim' -- Handles projects
