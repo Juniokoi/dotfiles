@@ -6,9 +6,6 @@ local term_opts = { silent = true }
 local keymap = vim.api.nvim_set_keymap
 
 --Remap space as leader key
-keymap("", "<Space>", "<Nop>", opts)
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
 
 -- Modes
 --   normal_mode = "n",
@@ -31,15 +28,25 @@ keymap("n", "<C-Down>", ":resize -2<CR>", opts)
 keymap("n", "<C-Left>", ":vertical resize -2<CR>", opts)
 keymap("n", "<C-Right>", ":vertical resize +2<CR>", opts)
 
+--
 -- Navigate buffers
+keymap("n", "<C-c>", "<Esc>", opts)
 keymap("n", "<S-l>", ":bnext<CR>", opts)
 keymap("n", "<S-h>", ":bprevious<CR>", opts)
+keymap("n", "J", "mzJ`z", opts)
+keymap("n", "<C-d>", "<C-d>zz", opts)
+keymap("n", "<C-u>", "<C-u>zz", opts)
+keymap("n", "n", "nzzzv", opts)
+keymap("n", "N", "Nzzzv", opts)
 
+keymap("n", "\\e", "<cmd>edit $HOME/.config/nvim/init.lua<cr>", opts)
+
+vim.keymap.set("x", "<leader>p", [["_dP]])
+vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
+keymap("n", "<leader>Y", [["+Y]], opts)
 -- Insert --
 -- Press jk fast to enter
-keymap("i", "jk", "<ESC>", opts)
-keymap("v", "jk", "<ESC>", opts)
-keymap("x", "jk", "<ESC>", opts)
+vim.keymap.set({"v","x","i"}, "jk", "<ESC>")
 
 -- Visual --
 -- Stay in indent mode
@@ -47,12 +54,8 @@ keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
 
 -- Move text up and down
-keymap("v", "<A-j>", ":m .+1<CR>==", opts)
-keymap("v", "<A-k>", ":m .-2<CR>==", opts)
-keymap("v", "p", '"_dP', opts)
-
-keymap("n", "<A-j>", ":m .+1<CR>==", opts)
-keymap("n", "<A-k>", ":m .-2<CR>==", opts)
+vim.keymap.set({"v","n"}, "<A-j>", ":m .+1<CR>==")
+vim.keymap.set({"v","n"}, "<A-k>", ":m .-2<CR>==")
 
 -- Visual Block --
 -- Move text up and down
@@ -79,11 +82,6 @@ keymap("n", "<leader>f", "<cmd>lua require'telescope.builtin'.find_files(require
 keymap("n", "<C-t>", "<cmd>Telescope live_grep<cr>", opts)
 keymap("n", "<leader>lf", "<cmd>Format<cr>", opts) -- Uses LSP in handler.lua to format current folder
 keymap("n", "<leader>g", "<cmd>lua _LAZYGIT_TOGGLE()<cr>", opts) -- Uses LSP in handler.lua to format current folder
-
--- Harpoon 
-keymap("n", "<leader>1b", "<cmd>lua require 'harpoon.ui'.nav_file(1)<cr>", opts)
-keymap("n", "<leader>2b", "<cmd>lua require 'harpoon.ui'.nav_file(2)<cr>", opts)
-keymap("n", "<leader>3b", "<cmd>lua require 'harpoon.ui'.nav_file(3)<cr>", opts)
-
+--
 -- Nvimtree
-keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
+keymap("n", "<leader>e", ":Ex<cr>", opts)

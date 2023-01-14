@@ -4,8 +4,6 @@ if not status_ok then
 end
 
 local mappings = {
-    ["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
-    ["d"] = { "<cmd>Alpha<CR>", "Dashboard" },
     c = {
         name = "Configuration",
         c = {"<cmd>edit $HOME/.config/nvim/after/plugin/color.lua<cr>", "Colorscheme" },
@@ -87,8 +85,6 @@ local mappings = {
     w = {
         name = "Window", 
         f = { "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>", "Buffers", },
-        c = { "<cmd>Bdelete!<CR>", "Close Buffer", },
-        q = { "<cmd>%bdelete | :Alpha<CR>", "Close everything", },
     }
 }
 
