@@ -1,7 +1,6 @@
-require("load").packages {
+ vim.g.load_packages {
     path = "ui",
     packages = {
-        "alpha",
         "indent",
         "lualine",
         "whichkey",
