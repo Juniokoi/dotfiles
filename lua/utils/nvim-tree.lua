@@ -20,8 +20,8 @@ nvim_tree.setup {
         update_cwd = true,
     },
     renderer = {
-        add_trailing = false,
-        indent_width = 2,
+        add_trailing = true,
+        indent_width = 1,
         root_folder_modifier = ":t",
         indent_markers = {
           enable = true,
@@ -79,7 +79,7 @@ nvim_tree.setup {
     },
     view = {
         width = 30,
-        side = "right",
+        side = "left",
         signcolumn = "yes",
         adaptive_size = true,
         mappings = {
@@ -91,7 +91,7 @@ nvim_tree.setup {
             },
         },
         float = {
-            enable = true,
+            enable = false,
             quit_on_focus_loss = false,
             open_win_config = {
                 relative = "win",
