@@ -1,6 +1,4 @@
-local l = require("load")
-l.req("core")
-l.req("ui")
-l.req("misc")
-l.req("utils")
-l.req("keymaps")
+if not vim.g.vscode then
+    require("core")
+end
+
