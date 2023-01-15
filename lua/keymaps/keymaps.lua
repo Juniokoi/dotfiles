@@ -2,8 +2,10 @@ local opts = { noremap = true, silent = true }
 
 local term_opts = { silent = true }
 
+
 -- Shorten function name
 local keymap = vim.api.nvim_set_keymap
+
 
 --Remap space as leader key
 
@@ -84,4 +86,4 @@ keymap("n", "<leader>lf", "<cmd>Format<cr>", opts) -- Uses LSP in handler.lua to
 keymap("n", "<leader>g", "<cmd>lua _LAZYGIT_TOGGLE()<cr>", opts) -- Uses LSP in handler.lua to format current folder
 --
 -- Nvimtree
-keymap("n", "<leader>e", ":Ex<cr>", opts)
+keymap("n", "<leader>e", ":Neotree toggle<cr>", opts)

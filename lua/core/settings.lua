@@ -17,6 +17,7 @@ local options = {
 	swapfile = false, -- creates a swapfile
 	tgc = true,
 	timeoutlen = 100, -- time to wait for a mapped sequence to complete (in milliseconds)
+	foldcolumn = "2",
 	undofile = true, -- enable persistent undo
 	updatetime = 300, -- faster completion (4000ms default)
 	writebackup = false, -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
@@ -30,7 +31,6 @@ local options = {
 
 	-- Tabs
 	numberwidth = 4, -- set number column width to 2 {default 4}
-	loadplugins = true,
 	softtabstop = 4,
 	showtabline = 4, -- always show tabs
 	shiftwidth = 4, -- the number of spaces inserted for each indentation

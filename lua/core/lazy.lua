@@ -16,14 +16,14 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
     {
-      import = "core.plugins",
+      import = "plugins",
       opts = {},
     },
     --{ import = "lazyvim.plugins.extras.lang.typescript" },
     --{ import = "lazyvim.plugins.extras.lang.json" },
   },
-  defaults = { lazy = true },
-  install = { colorscheme = { "catppuccin", "tokyonight" } },
+  defaults = { lazy = false },
+  install = { colorscheme = { "kanagawa" } },
   checker = { enabled = true },
   diff = {
     cmd = "terminal_git",
@@ -32,18 +32,6 @@ require("lazy").setup({
     cache = {
       enabled = true,
       -- disable_events = {},
-    },
-    rtp = {
-      disabled_plugins = {
-        "gzip",
-        "matchit",
-        "matchparen",
-        "netrwPlugin",
-        "tarPlugin",
-        "tohtml",
-        "tutor",
-        "zipPlugin",
-      },
     },
   }
   --ui = {
