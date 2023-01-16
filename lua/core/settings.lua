@@ -34,7 +34,7 @@ local options = {
 	softtabstop = 4,
 	showtabline = 4, -- always show tabs
 	shiftwidth = 4, -- the number of spaces inserted for each indentation
-	tabstop = 4, -- insert 2 spaces for a table
+	tabstop = 2, -- insert 2 spaces for a table
 
 	signcolumn = "yes", -- always show the sign column, otherwise it would shift the text each time
 	wrap = true, -- display lines as one long line
@@ -51,4 +51,4 @@ for k, v in pairs(options) do
 end
 vim.opt.shortmess:append "c" -- Enables to use >> or << easier
 
-vim.o.listchars = "trail:·,tab:⸳⸳│,extends:⤦,precedes:«,conceal:↳,nbsp:%"
+vim.o.listchars = "trail:·,tab:│ ,extends:⤦,precedes:«,conceal:↳,nbsp:%"

@@ -1,6 +1,4 @@
-bufferline = require("load").req("bufferline")
-
-bufferline.setup {
+return {
     options = {
         numbers = function(opts)
             return string.format('%s', opts.lower(opts.ordinal))
