@@ -1,126 +1,78 @@
--- completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
+local cfgs = require'modules.completion.formatter'
+local servers = {
+	-- clangd = {},
+	-- gopls = {},
+	-- pyright = {},
+	-- rust_analyzer = {},
+	-- tsserver = {},
 
--- [[ Basic Keymaps ]]
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-
--- Keymaps for better default experience
--- See `:help vim.keymap.set()`
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-
--- [[ Highlight on yank ]]
--- See `:help vim.highlight.on_yank()`
-local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
-vim.api.nvim_create_autocmd('TextYankPost', {
-	callback = function()
-		vim.highlight.on_yank()
-	end,
-	group = highlight_group,
-	pattern = '*',
-})
-
--- Set lualine as statusline
--- See `:help lualine.txt`
-
--- Enable Comment.nvim
-require('Comment').setup()
-
--- Enable `lukas-reineke/indent-blankline.nvim`
--- See `:help indent_blankline.txt`
-require('indent_blankline').setup {
-	char = '┊',
-	show_trailing_blankline_indent = false,
-}
-
--- Gitsigns
--- See `:help gitsigns.txt`
-require('gitsigns').setup {
-	signs = {
-		add = { text = '+' },
-		change = { text = '~' },
-		delete = { text = '_' },
-		topdelete = { text = '‾' },
-		changedelete = { text = '~' },
-	},
-}
-
--- [[ Configure Telescope ]]
--- See `:help telescope` and `help telescope.setup()`
-
-
--- [[ Configure Treesitter ]]
--- See `:help nvim-treesitter`
-local keymaps = require('keymaps').treesitter
-require('nvim-treesitter.configs').setup {
-	-- Add languages to be installed here that you want installed for treesitter
-	ensure_installed = { 'c_sharp', 'c', 'cpp', 'go', 'lua', 'javascript', 'rust', 'typescript', 'help', 'vim' },
-
-	highlight = { enable = true },
-	indent = { enable = true, disable = { 'python' } },
-	incremental_selection = {
-		enable = true,
-		keymaps = {
-			keymaps.incremental_keymaps
-		},
-	},
-	textobjects = {
-		select = {
-			enable = true,
-			lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-			keymaps = {
-				keymaps.select -- You can use the capture groups defined in textobjects.scm
+	sumneko_lua = {
+		Lua = {
+			workspace = { checkThirdParty = false },
+			telemetry = { enable = false },
+			diagnostics = {
+				globals = { "vim" }
 			},
 		},
-		move = {
-			enable = true,
-			set_jumps = true, -- whether to set jumps in the jumplist
-			keymaps.move()
-		},
-		swap = {
-			enable = true,
-			keymaps.swap()
-		},
 	},
 }
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 
+local function on_attach(_, bufnr)
+	-- NOTE: Remember that lua is a real programming language, and as such it is possible
+	-- to define small helper and utility functions so you don't have to repeat yourself
+	-- many times.
+	--
+	-- In this case, we create a function that lets us more easily define mappings specific
+	-- for LSP related items. It sets the mode, buffer and description for us each time.
+	local nmap = function(keys, func, desc)
+		if desc then
+			desc = 'LSP: ' .. desc
+		end
 
+		vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+	end
 
-require('fidget').setup()
+	nmap('<leader>rn',vim.lsp.buf.rename,'[R]e[n]ame')
+	nmap('<leader>ca',vim.lsp.buf.code_action,'[C]ode [A]ction')
+	nmap('gd',vim.lsp.buf.definition,'[G]oto [D]efinition')
+	nmap('gr',require('telescope.builtin').lsp_references,'[G]oto [R]eferences')
+	nmap('gI',vim.lsp.buf.implementation,'[G]oto [I]mplementation')
+	nmap('<leader>D',vim.lsp.buf.type_definition,'Type [D]efinition')
+	nmap('<leader>ds',require('telescope.builtin').lsp_document_symbols,'[D]ocument [S]ymbols')
+	nmap('<leader>ws',require('telescope.builtin').lsp_dynamic_workspace_symbols,'[W]orkspace [S]ymbols')
+	nmap('K',vim.lsp.buf.hover, 'Hover Documentation')
+	nmap('<C-k>',vim.lsp.buf.signature_help, 'Signature Documentation')
+	nmap('gD',vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+	nmap('<leader>wa',vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+	nmap('<leader>wr',vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+	nmap('<leader>wl',function()
+		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+	end, '[W]orkspace [L]ist Folders')
 
-
-
-
-
--- Debug tools
-local dap, dapui = require("dap"), require("dapui")
-dap.listeners.after.event_initialized["dapui_config"] = function()
-	dapui.open()
+	-- Create a command `:Format` local to the LSP buffer
+	vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+		vim.lsp.buf.format()
+	end, { desc = 'Format current buffer with LSP' })
+	vim.keymap.set('n', '<space>fa', function() vim.lsp.buf.format { async = true } end, bufopts)
 end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-	dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-	dapui.close()
-end
 
-dap.adapters.coreclr = {
-	type = 'executable',
-	command = '/path/to/dotnet/netcoredbg/netcoredbg',
-	args = { '--interpreter=vscode' }
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+require("mason").setup()
+
+local mason_lspconfig = require 'mason-lspconfig'
+
+mason_lspconfig.setup {
+	ensure_installed = vim.tbl_keys(servers),
 }
 
-dap.configurations.cs = {
-	{
-		type = "coreclr",
-		name = "launch - netcoredbg",
-		request = "launch",
-		program = function()
-			return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
-		end,
-	},
+mason_lspconfig.setup_handlers {
+	function(server_name)
+		require('lspconfig')[server_name].setup {
+			capabilities = capabilities,
+			on_attach = on_attach,
+			settings = servers[server_name],
+		}
+	end,
 }

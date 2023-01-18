@@ -10,12 +10,14 @@ return {
 
 	{ "stevearc/dressing.nvim", event = "VeryLazy" },
 
-	{ "goolord/alpha-nvim", opts = conf.alpha },
+	{ "goolord/alpha-nvim", config = conf.alpha },
 
 	{
 		"echasnovski/mini.animate",
 		event = "BufRead",
-		opts = require'modules.ui.config'.animate()
+		config = function()
+				return require('modules.ui.config').animate
+		end
 	},
 
 	{

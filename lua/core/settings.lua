@@ -16,7 +16,6 @@ local options = {
 	splitright = true, -- force all vertical splits to go to the right of current window
 	swapfile = false, -- creates a swapfile
 	tgc = true,
-	timeoutlen = 100, -- time to wait for a mapped sequence to complete (in milliseconds)
 	foldcolumn = "2",
 	undofile = true, -- enable persistent undo
 	updatetime = 300, -- faster completion (4000ms default)
@@ -41,9 +40,12 @@ local options = {
 	linebreak = true,
 	scrolloff = 8, -- Don't make the cursor reach the bottom edge
 	sidescrolloff = 8, -- Don't make the cursor reach the side edge
+
+	tgc = true,
 	showbreak = "⤥ ",
 	incsearch = true, -- Enables a better search, don't causing conflict if result doesn't exist
 	list = true,
+	completeopt = 'menuone,noselect',
 }
 
 for k, v in pairs(options) do

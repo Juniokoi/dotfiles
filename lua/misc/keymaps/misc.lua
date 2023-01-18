@@ -1,5 +1,3 @@
-local config = {}
-
 local opts = { noremap = true, silent = true }
 
 local term_opts = { silent = true }
@@ -36,10 +34,10 @@ keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
 --
 -- Resize with arrows
-keymap("n", "<C-Up>", ":resize +2<CR>", opts)
-keymap("n", "<C-Down>", ":resize -2<CR>", opts)
-keymap("n", "<C-Left>", ":vertical resize -2<CR>", opts)
-keymap("n", "<C-Right>", ":vertical resize +2<CR>", opts)
+keymap("n", "<C-A-k>", ":resize +2<CR>", opts)
+keymap("n", "<C-A-j>", ":resize -2<CR>", opts)
+keymap("n", "<C-A-h>", ":vertical resize -2<CR>", opts)
+keymap("n", "<C-A-l>", ":vertical resize +2<CR>", opts)
 
 --
 -- Navigate buffers
@@ -84,8 +82,6 @@ keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
 keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
 
 keymap("n", "<C-s>", ":w<cr>", term_opts)
-keymap("n", "<A-l>", ":BufferLineCycleNext<CR>", opts)
-keymap("n", "<A-h>", ":BufferLineCyclePrev<CR>", opts)
 
 -- Nvimtree
 keymap("n", "<leader>e", ":Neotree toggle<cr>", opts)
@@ -113,48 +109,3 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').git_files, { desc = '[S]earch (inside) [G]it_files' })
 vim.keymap.set('n', '<leader>sk', require('telescope.builtin').keymaps, { desc = '[S]earch [M]appings' })
-
--- LSP
-function config.on_attach(_, bufnr)
-	-- NOTE: Remember that lua is a real programming language, and as such it is possible
-	-- to define small helper and utility functions so you don't have to repeat yourself
-	-- many times.
-	--
-	-- In this case, we create a function that lets us more easily define mappings specific
-	-- for LSP related items. It sets the mode, buffer and description for us each time.
-	local nmap = function(keys, func, desc)
-		if desc then
-			desc = 'LSP: ' .. desc
-		end
-
-		vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-	end
-
-nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
--- See `:help K` for why this keymap
-nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
--- Lesser used LSP functionality
-nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-nmap('<leader>wl', function()
-	print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-end, '[W]orkspace [L]ist Folders')
-
-	-- Create a command `:Format` local to the LSP buffer
-	vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-		vim.lsp.buf.format()
-	end, { desc = 'Format current buffer with LSP' })
-	vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
-end
-
-config.on_attach()
-return config

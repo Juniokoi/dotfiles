@@ -4,13 +4,11 @@ function Set_Leader_Key()
 	vim.g.maplocalleader = " "
 end
 
-local function load_core()
+function load_core()
 	Set_Leader_Key()
 	require("core.lazy")
 	require("core.settings")
-	require("modules.completions.lisp")
-	require("modules.ui.config")
-	require("keymaps.keymaps")
+	require'misc.keymaps'
 end
 
 load_core()

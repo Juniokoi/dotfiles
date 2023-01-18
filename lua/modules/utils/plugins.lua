@@ -1,4 +1,3 @@
-local keymaps = require('misc.keymaps').telescope
 local opts = {
 	neotree = require('modules.utils.nvimtree')
 }
@@ -29,6 +28,8 @@ return {
 			"kkharji/sqlite.lua"
 		},
 		config = function()
+			local actions = require 'telescope.actions'
+
 			require('telescope').setup {
 
 				extensions = {
@@ -36,12 +37,42 @@ return {
 						theme = "ivy",
 						hijack_netrw = true,
 						mappings = {
-							keymaps.file_browser
+							i = {
+								["<esc>"] = false
+							}
 						}
 					}
 				},
 				defaults = {
-					keymaps.defaults
+					mappings = {
+						i = {
+							--['<C-u>'] = true,
+							--['<C-d>'] = true,
+							["<esc>"] = "close",
+							["<C-j>"] = {
+								actions.move_selection_next, type = "action",
+								opts = { nowait = true, silent = true },
+
+							},
+							["<C-k>"] = {
+								actions.move_selection_previous, type = "action",
+								opts = { nowait = true, silent = true }
+							},
+						},
+						n = {
+
+							["<esc>"] = "close",
+							["<C-j>"] = {
+								actions.move_selection_next, type = "action",
+								opts = { nowait = true, silent = true },
+
+							},
+							["<C-k>"] = {
+								actions.move_selection_previous, type = "action",
+								opts = { nowait = true, silent = true }
+							},
+						},
+					},
 				}
 			}
 
