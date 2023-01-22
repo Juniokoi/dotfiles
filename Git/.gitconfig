@@ -31,3 +31,5 @@ lg = !"git lg1"
 	gpgsign = false
 [gpg]
 	program = gpg
+[submodule]
+	summary = short
