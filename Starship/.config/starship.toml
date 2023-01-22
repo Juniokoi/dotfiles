@@ -11,13 +11,13 @@ format = ' [$symbol($version)]($style)'
 format = ' [$symbol($version(-$name))]($style)'
 
 [character]
-format = "[ ➜](green) "
-success_symbol = "[➜](bold green) "
-error_symbol = "[✗➜](bold red) "
-vimcmd_symbol = "[❮](bold green)"
-vimcmd_replace_one_symbol = "[❮](bold purple)"
-vimcmd_replace_symbol = "[❮](bold purple)"
-vimcmd_visual_symbol = "[❮](bold yellow)"
+#"format = "[  ➜](green) "
+success_symbol = "[ I  ➜](bold green) "
+error_symbol = "[ I  ✖](bold red) "
+vimcmd_symbol = "[ N  ❮ ](bold yellow)"
+vimcmd_replace_one_symbol = "[ R  ❮ ](bold purple)"
+vimcmd_replace_symbol = "[ R  ❮ ](bold purple)"
+vimcmd_visual_symbol = "[ V  ❮ ](bold blue)"
 
 [cmake]
 format = ' [$symbol($version)]($style)'
@@ -167,7 +167,7 @@ format = ' [$symbol$workspace]($style)'
 format = ' [$time]($style)'
 
 [username]
-format = '[ ]($style) '
+format = '[  ]($style) '
 show_always = true
 
 [vagrant]
