@@ -1,4 +1,3 @@
-local cfgs = require'modules.completion.formatter'
 local servers = {
 	-- clangd = {},
 	-- gopls = {},
@@ -53,7 +52,7 @@ local function on_attach(_, bufnr)
 	vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
 		vim.lsp.buf.format()
 	end, { desc = 'Format current buffer with LSP' })
-	vim.keymap.set('n', '<space>fa', function() vim.lsp.buf.format { async = true } end, bufopts)
+	vim.keymap.set('n', '<space>fa', function() vim.lsp.buf.format { async = true } end)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()

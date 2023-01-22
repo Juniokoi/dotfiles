@@ -1,13 +1,13 @@
-function Set_Leader_Key()
+local function set_leader_key()
 	vim.keymap.set("", "<Space>", "<Nop>")
 	vim.g.mapleader = " "
 	vim.g.maplocalleader = " "
 end
 
-function load_core()
-	Set_Leader_Key()
-	require("core.lazy")
+local function load_core()
+	set_leader_key()
 	require("core.settings")
+	require("core.lazy")
 	require'misc.keymaps'
 end
 

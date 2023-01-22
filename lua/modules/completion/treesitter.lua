@@ -1,4 +1,3 @@
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 require('nvim-treesitter.configs').setup {
 	-- Add languages to be installed here that you want installed for treesitter
 	ensure_installed = { 'c_sharp', 'c', 'cpp', 'go', 'lua', 'javascript', 'rust', 'typescript', 'help', 'vim' },
@@ -55,13 +54,13 @@ require('nvim-treesitter.configs').setup {
 			['[M'] = '@function.outer',
 			['[]'] = '@class.outer',
 		},
+	},
+	swap = {
+		enable = true, swap_next = {
+			['<leader>a'] = '@parameter.inner',
+		},
+		swap_previous = {
+			['<leader>A'] = '@parameter.inner',
+		},
 	}
-}
-swap = {
-	enable = true, swap_next = {
-		['<leader>a'] = '@parameter.inner',
-	},
-	swap_previous = {
-		['<leader>A'] = '@parameter.inner',
-	},
 }

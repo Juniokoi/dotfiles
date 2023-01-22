@@ -5,9 +5,30 @@ return {
 	{ "karb94/neoscroll.nvim", config = config.neoscroll },
 	{ "windwp/nvim-autopairs", config = config.npairs }, -- Autopairs, integrates with both cmp and treesitter
 	{ "numToStr/Comment.nvim", config = true }, -- Easily comment stuff
-	{ "phaazon/hop.nvim" ,
+	{ "phaazon/hop.nvim",
 		version = 'v2', -- optional but strongly recommended
-		config = config.hop
+		config = function()
+			require('hop').setup(
+				{ keys = 'etovxqpdygfblzhckisuran' }
+			)
+		end,
+		opts = function()
+			local hop = require('hop')
+			local directions = require('hop.hint').HintDirection
+
+			vim.keymap.set('', 'f', function()
+				hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
+			end, { remap = true })
+			vim.keymap.set('', 'F', function()
+				hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
+			end, { remap = true })
+			vim.keymap.set('', 't', function()
+				hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
+			end, { remap = true })
+			vim.keymap.set('', 'T', function()
+				hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })
+			end, { remap = true })
+		end
 	},
 	{ "kylechui/nvim-surround", config = true },
 	{ "ThePrimeagen/harpoon" },

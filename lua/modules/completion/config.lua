@@ -6,6 +6,8 @@ end
 
 function config.cmp()
 	local cmp_status_ok, cmp, cmp_autopairs, luasnip = pcall(require, "cmp", "nvim-autopairs.completion.cmp", "luasnip")
+	local cmp_select = { behavior = cmp.SelectBehavior.Select }
+
 	cmp.setup {
 		snippet = {
 			expand = function(args)
@@ -13,7 +15,16 @@ function config.cmp()
 			end,
 		},
 		mapping = cmp.mapping.preset.insert({
-			require "misc.keymaps".cmp()
+		['<C-u>'] = cmp.mapping.scroll_docs(-4),
+		['<C-d>'] = cmp.mapping.scroll_docs(4),
+		['<CR>'] = cmp.mapping.confirm {
+			behavior = cmp.ConfirmBehavior.Replace,
+			select = true,
+		},
+		['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+		['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+		['<C-y>'] = cmp.mapping.confirm({ select = true }),
+		["<C-Space>"] = cmp.mapping.complete({ select = false }),
 		}),
 		sources = {
 			{ name = 'nvim_lsp' },

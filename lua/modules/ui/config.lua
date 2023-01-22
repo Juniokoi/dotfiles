@@ -122,6 +122,7 @@ end
 		button("space f f", " File find", leader, "<cmd>Telescope find_files<cr>"),
 		button("space f n", " File new", leader, "<cmd>enew<cr>"),
 		button("space f w", " Word find", leader, "<cmd>Telescope live_grep<cr>"),
+		button("q", " Quit", leader, "<cmd>quit<cr>"),
 	}
 	dashboard.section.buttons.opts.hl = "String"
 

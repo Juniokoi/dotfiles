@@ -10,7 +10,7 @@ return {
 			"MunifTanjim/nui.nvim",
 		},
 		cmd = "Neotree",
-		config = opts.neotree.config()
+		opts = opts.neotree.config()
 	},
 	{ "nvim-lua/plenary.nvim" },
 	{ "tpope/vim-rhubarb" },
