@@ -1,6 +1,6 @@
-[submodule "NeoVim"]
-	path = NeoVim
-	url = git@github.com:Juniokoi/NeoVim.git
+[submodule "Neovim"]
+	path = Neovim
+	url = git@github.com:Juniokoi/NeovimDots.git
 [submodule "personal"]
 	path = personal
 	url = git@github.com:Juniokoi/personal.git
