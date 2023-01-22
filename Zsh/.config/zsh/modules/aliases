@@ -1,20 +1,36 @@
+#!/usr/bin/env bash
+echo "Loading aliases ..."
+
 local EDITOR="nvim"
 local CONFIG="$HOME/.config"
 
 # Shortcuts
 alias b="bash"
 alias e="ranger ."
-alias {zz,s,f}="zsh"
 alias {c,cl,cle,clea}="clear"
 alias cdot="cd $HOME/.dotfiles"
 alias vim="nvim"
 
-# Config
-alias bc="$EDITOR $HOME/.bashrc"                    # Bash 
-alias vc="$EDITOR $HOME/.config/nvim/init.lua"      # Vim
-alias ac="$EDITOR $HOME/.config/awesome/rc.lua"     # Awesome 
-alias hc="$EDITOR $HOME/.config/hypr/hyprland.conf" # Hyprland
-alias tc="$EDITOR $HOME/.tmux.conf"                 # Tmux
+function editconfig() {
+    if [[ $1 -eq "e" ]]; then
+	$EDITOR $2
+    elif [[ $1 -eq "cd" ]]; then
+	if [[ $# -eq 2 ]]; then
+	    cd $2 && nvim $2
+	else
+	    cd $2 && nvim $3
+	fi
+    else
+        echo "Invalid number of arguments passed"
+    fi
+}
+
+alias bc="editconfig e $HOME/.bashrc"                    # Bash 
+alias cvim="cd $HOME/.config/nvim && nvim ."
+alias vc="editconfig cd $CONFIG/nvim"
+alias ac="editconfig e $CONFIG/awesome/rc.lua"     # Awesome 
+alias hc="editconfig e $CONFIG/hypr/hyprland.conf" # Hyprland
+alias tc="editconfig e $HOME/tmux.conf"                 # Tmux
 
 # GNU
 alias cp="cp -i" # Confirm before overwriting
@@ -22,10 +38,10 @@ alias mv="mv -i" #      --/--     moving/renaming
 alias rm="rm -i" #      --/--     deleting
 
 # ZSH 
-alias zc="$EDITOR $HOME/.zshrc" 	      # Main file
-alias za="$EDITOR $CONFIG/zsh/zsh-aliases"    # Alises
-alias ze="$EDITOR $CONFIG/zsh/zsh-exports"    # Exports
-alias zf="$EDITOR $CONFIG/zsh/zsh-functions"  # Functions
+alias {zr,zsh}="source $HOME/.zshrc"
+alias zc="editconfig cd $CONFIG/zsh $HOME/.zshrc" 	      # Main file
+alias za="editconfig e $CONFIG/zsh/modules/aliases"    # Alises
+alias ze="editconfig e $CONFIG/zsh/modules/exports"    # Exports
 
 # System commands
 alias logoff="pkill -KILL -u $USER"
@@ -41,7 +57,6 @@ alias la="ls -@lah"
 alias lt="ls -T"
 alias lta="ls -Ta"
 alias cat="bat --style full --theme Dracula"
-alias cd=z
 
 ## Terminals
 #
@@ -65,3 +80,5 @@ alias emacs="emacsclient -c -a 'emacs'"
 alias di="docker image"
 alias dv="docker volume"
 alias dc="docker container"
+
+echo "Aliases loaded"

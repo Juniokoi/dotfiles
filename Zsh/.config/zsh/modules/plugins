@@ -1,0 +1,3 @@
+plugin "hlissner/zsh-autopair"
+plugin "zsh-users/zsh-autosuggestions"
+plugin "zsh-users/zsh-syntax-highlighting"

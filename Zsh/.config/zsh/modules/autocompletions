@@ -1,0 +1,32 @@
+#!/bin/sh
+
+autoload -Uz compinit
+compinit
+
+eval "$(zoxide init zsh)"
+eval "$(starship init zsh)"
+
+# Node Version Manager
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+zmodload zsh/complist
+zstyle ':completion:*' menu select
+zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+
+
+_dotnet_zsh_complete()
+{
+	local dotnetPath=$words[1]
+
+	local completions=("$(dotnet complete "$words")")
+
+	reply=( "${(ps:\n:)completions}" )
+}
+compctl -K _dotnet_zsh_complete dotnet
+
+# eval "$(jenv init zsh)"
+
+eval "$(jenv init -)"

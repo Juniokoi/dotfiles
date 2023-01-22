@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export EDITOR="nvim"
+export BROWSER="brave"
+export TERMINAL="kitty"
+export ZDOTDIR="$HOME/.config/zsh"
+export GOPATH="/usr/local/go"
+export PATH="$PATH:$HOME/.bin:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$HOME/.jenv/bin:/usr/loca/go/bin"

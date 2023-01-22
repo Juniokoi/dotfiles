@@ -1,0 +1,23 @@
+#!/bin/sh
+
+bindkey -s '^e' 'ranger^M'
+bindkey -s '^f' 'zi^M'
+
+bindkey '^l' autosuggest-accept
+
+# Control-Space:
+# bindkey '^ ' list-expand
+
+
+
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+
+
+bindkey '\C-\177' backward-kill-word
+bindkey '^?' backward-delete-char
+bindkey '^h' backward-delete-char
+bindkey '^P' history-beginning-search-backward-end
+bindkey '^N' history-beginning-search-forward-end
+
+export KEYTIMEOUT=1
