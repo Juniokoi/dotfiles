@@ -8,8 +8,6 @@ bindkey '^l' autosuggest-accept
 # Control-Space:
 # bindkey '^ ' list-expand
 
-
-
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 

@@ -270,6 +270,8 @@ globalkeys = gears.table.join(
     { description = "Print a section of the screen", group = "launcher" }),
   awful.key({},"Print",  function() awful.util.spawn("flameshot screen",false) end,
     { description = "Print the whole Screen", group = "launcher" }),
+  awful.key({ modkey },"v",  function() awful.util.spawn("copyq toggle",false) end,
+    { description = "Print the whole Screen", group = "launcher" }),
 
 
   -- 
@@ -472,7 +474,7 @@ clientbuttons = gears.table.join(
 -- Set keys
 root.keys(globalkeys)
 -- }}}
-beautiful.border_width = 2
+beautiful.border_width = 0
 beautiful.border_normal = "#44475a"
 beautiful.border_focus = "#ff79c6"
 -- {{{ Rules
@@ -592,7 +594,7 @@ end)
 -- Windows round corner
 client.connect_signal("manage", function(c)
   c.shape = function(cr, w, h)
-    gears.shape.rounded_rect(cr, w, h, 10)
+    gears.shape.rounded_rect(cr, w, h, 0)
   end
 end)
 --

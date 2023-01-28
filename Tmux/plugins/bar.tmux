@@ -21,8 +21,8 @@ tmux_set() {
 # Options
 right_arrow_icon=$(tmux_get '@tmux_power_right_arrow_icon' '')
 left_arrow_icon=$(tmux_get '@tmux_power_right_arrow_icon' '')
-left_slash=$(tmux_get '@tmux_power_left_arrow_icon' '')
-right_slash=$(tmux_get '@tmux_power_left_arrow_icon' '')
+left_slash=''
+right_slash=''
 upload_speed_icon=$(tmux_get '@tmux_power_upload_speed_icon' '')
 download_speed_icon=$(tmux_get '@tmux_power_download_speed_icon' '')
 session_icon="$(tmux_get '@tmux_power_session_icon' '')"
@@ -63,7 +63,7 @@ case $TC in
         TC='#87ceeb'
         ;;
     'default' ) # Useful when your term changes colour dynamically (e.g. pywal)
-        TC='colour3'
+        TC="#cba6f7"
         ;;
 esac
 
@@ -81,10 +81,12 @@ G11=#6c6c6c #242
 G12=#767676 #243
 
 
+BG=#181825 #232
+FG=#232634 #232
 
 # tmux-prefix-highlight
-tmux_set @prefix_highlight_fg "$BG"
-tmux_set @prefix_highlight_bg "$FG"
+tmux_set @prefix_highlight_fg "$FG"
+tmux_set @prefix_highlight_bg "$BG"
 tmux_set @prefix_highlight_show_copy_mode 'on'
 tmux_set @prefix_highlight_copy_mode_attr "fg=$TC,bg=$BG,bold"
 tmux_set @prefix_highlight_output_prefix "#[fg=$TC]#[bg=$BG]$left_arrow_icon#[bg=$TC]#[fg=$BG]"
@@ -92,11 +94,11 @@ tmux_set @prefix_highlight_output_suffix "#[fg=$TC]#[bg=$BG]$right_arrow_icon"
 
 #     
 # Left side of status bar
-tmux_set status-left-bg "$G04"
+tmux_set status-left-bg "$BG"
 tmux_set status-left-fg "G12"
 tmux_set status-left-length 150
 user=$(whoami)
-middle_color="#b4befe"
+middle_color="$BG"
 ## User and host
 LS="#[fg=#94e2d5,bg=$BG,bold]$left_arrow_icon#[fg=$G06,bg=#94e2d5,bold]  @$user#h #[fg=#94e2d5,bg=$middle_color,bold]#[bg=$BG]"
 ## Session name
@@ -147,24 +149,13 @@ tmux_set status-justify centre
 tmux_set window-status-current-statys "fg=$TC,bg=$BG"
 
 # Pane border
-tmux_set pane-border-style "fg=#181825,bg=#181825"
-
-# Active pane border
-tmux_set pane-active-border-style "fg=$TC,bg=$BG"
+tmux_set pane-border-style "fg=#181825,bg=$BG"
 
 # Pane number indicator
-tmux_set display-panes-colour "$G07"
+tmux_set display-panes-colour "$BG"
 tmux_set display-panes-active-colour "$TC"
 
 # Clock mode
 tmux_set clock-mode-colour "$TC"
 tmux_set clock-mode-style 24
 
-# Message
-tmux_set message-style "fg=$TC,bg=$BG"
-
-# Command message
-tmux_set message-command-style "fg=$TC,bg=$BG"
-
-# Copy mode highlight
-tmux_set mode-style "bg=$TC,fg=$FG"

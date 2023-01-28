@@ -17,9 +17,6 @@ setopt HIST_IGNORE_ALL_DUPS
 
 autoload -U history-search-end
 ## Vim mode
-bindkey -v
-export KEYTIMEOUT=1
-
 autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd v edit-command-line
@@ -36,12 +33,27 @@ bindkey -M visual S add-surround
 autoload -Uz select-bracketed select-quoted
 zle -N select-quoted
 zle -N select-bracketed
-for km in viopp visual; do
-  bindkey -M $km -- '-' vi-up-line-or-history
+for m in viopp visual; do
+  bindkey -M $m -- '-' vi-up-line-or-history
   for c in {a,i}${(s..)^:-\'\"\`\|,./:;=+@}; do
-    bindkey -M $km $c select-quoted
+    bindkey -M $m $c select-quoted
   done
   for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
-    bindkey -M $km $c select-bracketed
+    bindkey -M $m $c select-bracketed
   done
 done
+
+function tmux_init {
+    # list all tmux sessions
+    sessions=$(tmux list-sessions)
+    # check if there are any sessions
+    if [ -n "$sessions" ]; then
+        # use awk to get the name of the first session
+        session_name=$(echo "$sessions" | awk 'NR==1{print $1}')
+        # initialize the first session
+        tmux attach-session -t "$session_name"
+    else
+        # create a new session if there are no existing sessions
+        tmux
+    fi
+}

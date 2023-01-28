@@ -8,6 +8,7 @@ use "settings"
 use "fzf"
 use "keybindings"
 use "plugins"
+tmux_init
 
 
 echo "Finished setting up zsh"

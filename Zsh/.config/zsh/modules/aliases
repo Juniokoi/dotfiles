@@ -16,7 +16,7 @@ function editconfig() {
 	$EDITOR $2
     elif [[ $1 -eq "cd" ]]; then
 	if [[ $# -eq 2 ]]; then
-	    cd $2 && nvim $2
+	    "cd $2 && nvim"
 	else
 	    cd $2 && nvim $3
 	fi
@@ -27,7 +27,7 @@ function editconfig() {
 
 alias bc="editconfig e $HOME/.bashrc"                    # Bash 
 alias cvim="cd $HOME/.config/nvim && nvim ."
-alias vc="editconfig cd $CONFIG/nvim"
+alias vc="cd $CONFIG/nvim && nvim"
 alias ac="editconfig e $CONFIG/awesome/rc.lua"     # Awesome 
 alias hc="editconfig e $CONFIG/hypr/hyprland.conf" # Hyprland
 alias tc="editconfig e $HOME/tmux.conf"                 # Tmux
@@ -72,6 +72,8 @@ alias gl="git lg"
 alias glo="git log --oneline"
 alias ga="git add"
 alias lg="lazygit"
+
+alias ip="curl -s https://api.ipify.org; echo"
 
 ## Emacs
 alias emacs="emacsclient -c -a 'emacs'"

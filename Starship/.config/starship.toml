@@ -1,5 +1,8 @@
 add_newline = true
 command_timeout = 1000
+format = """$character"""
+right_format = """$all"""
+continuation_prompt = "▶▶"
 
 [aws]
 format = ' [$symbol($profile)(\($region\))( $duration)]($style)'
@@ -66,6 +69,7 @@ format = '[$symbol$branch]($style)'
 
 [git_status]
 format = '([$all_status$ahead_behind]($style))'
+ignore_submodules = true
 
 [golang]
 format = ' [$symbol($version)]($style)'
