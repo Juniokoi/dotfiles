@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-if [[ ! `pidof swww` ]]; then
-	swww init
-	sleep 2
-fi
-
-swww img $HOME/Pictures/Wallpapers/Axel.gif
