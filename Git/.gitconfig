@@ -33,3 +33,5 @@ lg = !"git lg1"
 	program = gpg
 [submodule]
 	summary = short
+[pull]
+	rebase = true

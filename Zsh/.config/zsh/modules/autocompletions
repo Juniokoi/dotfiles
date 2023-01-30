@@ -16,6 +16,7 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
 zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
 
+$ZDOTDIR/modules/completions/_cargo
 
 _dotnet_zsh_complete()
 {

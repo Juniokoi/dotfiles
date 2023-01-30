@@ -4,6 +4,13 @@ echo "Loading aliases ..."
 local EDITOR="nvim"
 local CONFIG="$HOME/.config"
 
+
+hash -d config="$HOME/.config/"
+
+
+
+
+
 # Shortcuts
 alias b="bash"
 alias e="ranger ."
