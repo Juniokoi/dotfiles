@@ -81,7 +81,7 @@ G11=#6c6c6c #242
 G12=#767676 #243
 
 
-BG=#181825 #232
+BG=default
 FG=#232634 #232
 
 # tmux-prefix-highlight
