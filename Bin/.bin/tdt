@@ -1,0 +1,19 @@
+#!/bin/sh
+
+TERMINAL="$TERM"
+
+set_default_terminal() {
+  tmux setenv -g default-terminal "$1"
+}
+
+case $TERMINAL in
+    'xterm-kitty' )
+  set_default_terminal "xterm-kitty"
+        ;;
+    'xterm' )
+  set_default_terminal "xterm"
+        ;;
+    'default' )
+  set_default_terminal "screen-256color"
+        ;;
+esac
