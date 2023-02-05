@@ -605,15 +605,23 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
--- }}}
 
 -- Function to execute files inside $HOME/.config/awesome/autorun.sh
-awful.spawn.with_shell(
-  'if (xrdb -query | grep -q "^awesome\\.started:\\s*true$"); then exit; fi;' ..
-  'xrdb -merge <<< "awesome.started:true";' ..
-  --'dex --environment Awesome --autostart --search-paths "$XDG_CONFIG_DIRS/autostart:$XDG_CONFIG_HOME/autostart" ' ..
-  '~/.config/awesome/autorun.sh'
-)
+function run_once(cmd)
+		local findme = cmd
+		local firstspace = cmd:find(" ")
+		if firstspace then
+				findme = cmd:sub(0, firstspace-1)
+		end
+		awful.spawn.with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
+end
+
+run_once("numlockx on")
+run_once("xrandr --output HDMI-A-0 --primary --mode 2560x1080 --pos 0x0 --output DisplayPort-0 --mode 1920x1080 --pos 0x1080")
+run_once("$HOME/.bin/keyboard.sh")
+run_once("/usr/lib/polkit-kde-authentication-agent-1")
+run_once("picom --config $HOME/.config/picom.conf")
+run_once("feh --randomize --bg-fill $HOME/Pictures/.wallpapers/*")
 
 -- Add gap between windows
 beautiful.gap_single_client = true
