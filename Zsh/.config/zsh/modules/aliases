@@ -4,12 +4,9 @@ echo "Loading aliases ..."
 local EDITOR="nvim"
 local CONFIG="$HOME/.config"
 
+hash -d c="$HOME/.config/"
 
-hash -d config="$HOME/.config/"
-
-
-
-
+xset r rate 300 30
 
 # Shortcuts
 alias b="bash"
@@ -37,7 +34,7 @@ alias cvim="cd $HOME/.config/nvim && nvim ."
 alias vc="cd $CONFIG/nvim && nvim"
 alias ac="editconfig e $CONFIG/awesome/rc.lua"     # Awesome 
 alias hc="editconfig e $CONFIG/hypr/hyprland.conf" # Hyprland
-alias tc="editconfig e $HOME/tmux.conf"                 # Tmux
+alias tc="editconfig e $HOME/.tmux.conf"                 # Tmux
 
 # GNU
 alias cp="cp -i" # Confirm before overwriting
@@ -91,3 +88,5 @@ alias dv="docker volume"
 alias dc="docker container"
 
 echo "Aliases loaded"
+
+alias obs="~/.bin/obs-launcher.sh &"
