@@ -6,6 +6,7 @@ local CONFIG="$HOME/.config"
 
 hash -d c="$HOME/.config/"
 
+alias hc="nvim $HOME/.config/hypr/hyprland.conf"
 xset r rate 300 30
 
 # Shortcuts

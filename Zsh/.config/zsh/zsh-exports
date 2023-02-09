@@ -1,4 +1,0 @@
-export EDITOR="nvim"
-export BROWSER="brave"
-export TERMINAL="kitty"
-export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$PATH"
