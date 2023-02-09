@@ -1,8 +1,5 @@
 -- If LuaRocks is installed, make sure that packages installed through it are
--- found (e.g. lgi). If LuaRocks is not installed, do nothing.
-pcall(require, "luarocks.loader")
-
--- Standard awesome library
+-- found (e.g. lgi). If LuaRocks is not installed, do nothing. pcall(require, "luarocks.loader") Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
 require("awful.autofocus")
@@ -620,7 +617,7 @@ run_once("numlockx on")
 run_once("xrandr --output HDMI-A-0 --primary --mode 2560x1080 --pos 0x0 --output DisplayPort-0 --mode 1920x1080 --pos 0x1080")
 run_once("$HOME/.bin/keyboard.sh")
 run_once("/usr/lib/polkit-kde-authentication-agent-1")
-run_once("picom --config $HOME/.config/picom.conf")
+run_once("picom --config $HOME/.config/picom.conf --experimental-backends")
 run_once("feh --randomize --bg-fill $HOME/Pictures/.wallpapers/*")
 
 -- Add gap between windows
