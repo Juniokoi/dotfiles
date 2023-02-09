@@ -1,26 +1,44 @@
-(defwindow example
-    :monitor 1
-    :geometry (geometry :x "0%"
-                        :y "20px"
-                        :width "90%"
-                        :height "30px"
-                        :anchor "top center")
-    :stacking "fg"
-    :reserve (struts :distance "40px" :side "top")
-    :windowtype "dock"
-    :wm-ignore false
-    (greeter :nhoim "Say Hello"
-        :name "Koi"))
+(deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
+(deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
+(defwidget workspaces []
+    (eventbox :onscroll "bash ~/.config/eww/scripts/change-active-workspace {} ${current_workspace}" :class "workspaces-widget"
+        (box :space-evenly true 
+            (for workspace in workspaces
+                (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}" 
+                    (box :class "workspace-entry ${workspace.id == current_workspace ? "current" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}") 
+                    (label :text "${workspace.id}"))))))
 
-(defvar time-visible false)
-(defpoll time :interval "5s"
-              :initial "initial-value"
-              :run-while time-visible
-    `date +%H:%M`)
 
-(defwidget greeter [nhoim name]
-    (box :orientation "horizontal"
-         :halign "center"
-      (label :text time)
-      (button :onclick "notify-send 'Hello' 'Hello, ${name}'"
-        "Greet")))
+(deflisten window :initial "..." "bash ~/.config/eww/scripts/get-window-title")
+(defwidget window_w []
+    (box
+        (label :text "${window}")))
+
+(defwidget bar []
+    (box :orientation "h"
+        (workspaces) (window_w)))
+
+(defwindow bar
+  :monitor 0
+  :stacking "bottom"
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "90%"
+                      :height "40px"
+                      :anchor "top center")
+  (bar))
+
+;     (greeter :nhoim "Say Hello"
+;              :name "Koi"))
+; (defvar time-visible false)
+; (defpoll time :interval "5s"
+;               :initial "initial-value"
+;               :run-while time-visible
+;     `date +%H:%M`)
+;
+; (defwidget greeter [nhoim name]
+;     (box :orientation "horizontal"
+;          :halign "center"
+;         (label :text time)
+;         (button :onclick "notify-send 'Hello' 'Hello, ${name}'"
+;               "Greet")))
