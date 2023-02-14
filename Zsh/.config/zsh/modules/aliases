@@ -4,73 +4,72 @@ echo "Loading aliases ..."
 local EDITOR="nvim"
 local CONFIG="$HOME/.config"
 
+#temp
+export WM_CONFIG="$HOME/.config/hypr/"
+
 hash -d c="$HOME/.config/"
+hash -d d="$HOME/.dotfiles/"
+hash -d p="$HOME/projects/"
+hash -d v="$CONFIG/nvim/"
+hash -d z="$CONFIG/zsh/"
+hash -d t="/tmp/"
+hash -d b="$HOME/.bin/"
+hash -d w="$WM_CONFIG"
 
-alias hc="nvim $HOME/.config/hypr/hyprland.conf"
-xset r rate 300 30
-
-# Shortcuts
-alias b="bash"
-alias e="ranger ."
-alias {c,cl,cle,clea}="clear"
-alias cdot="cd $HOME/.dotfiles"
-alias vim="nvim"
-
-function editconfig() {
-    if [[ $1 -eq "e" ]]; then
-	$EDITOR $2
-    elif [[ $1 -eq "cd" ]]; then
-	if [[ $# -eq 2 ]]; then
-	    "cd $2 && nvim"
-	else
-	    cd $2 && nvim $3
+# xset r rate 300 30 # Input delay rate
+function a() {
+	if [ "$1" = "mimir" ]; then
+		~b/sleep.sh
 	fi
-    else
-        echo "Invalid number of arguments passed"
-    fi
 }
 
-alias bc="editconfig e $HOME/.bashrc"                    # Bash 
-alias cvim="cd $HOME/.config/nvim && nvim ."
-alias vc="cd $CONFIG/nvim && nvim"
-alias ac="editconfig e $CONFIG/awesome/rc.lua"     # Awesome 
-alias hc="editconfig e $CONFIG/hypr/hyprland.conf" # Hyprland
-alias tc="editconfig e $HOME/.tmux.conf"                 # Tmux
+# shortcuts
+alias b="bash"
+alias r="ranger"
+alias {c,cl,cle,clea}="clear"
+alias cdot="cd $HOME/.dotfiles"
+alias {v,e,vim}="nvim"
 
-# GNU
-alias cp="cp -i" # Confirm before overwriting
-alias mv="mv -i" #      --/--     moving/renaming
-alias rm="rm -i" #      --/--     deleting
+# configs
+alias bc="$EDITOR $HOME/.bashrc"			# Bash config
+alias vc="cd $CONFIG/nvim && $EDITOR"		# Nvim config
+alias wc="$EDITOR $WM_CONFIG"				# Window Manager Config
+alias tc="$EDITOR $HOME/.tmux.conf"			# Tmux config
 
-# ZSH 
+# gnu
+# alias cp="cp -i" # Confirm before overwriting
+# alias mv="mv -i" #      --/--     moving/renaming
+# alias rm="rm -i" #      --/--     deleting
+
+# zsh 
 alias {zr,zsh}="source $HOME/.zshrc"
-alias zc="editconfig cd $CONFIG/zsh $HOME/.zshrc" 	      # Main file
-alias za="editconfig e $CONFIG/zsh/modules/aliases"    # Alises
-alias ze="editconfig e $CONFIG/zsh/modules/exports"    # Exports
+alias zc="$EDITOR $ZDOTDIR"
+alias za="$EDITOR $ZDOTDIR/modules/aliases"    # Alises
+alias ze="$EDITOR $ZDOTDIR/modules/exports"    # Exports
 
-# System commands
-alias logoff="pkill -KILL -u $USER"
+# system commands
+alias log{out,off}="pkill -KILL -u $USER"
 alias sayonara="shutdown -h now"
 alias supersudo="sudo --preserve-env=PATH env"
-alias {au,aupdate}="yay -Syyuu --noconfirm"
+alias {u,aupdate}="yay -Syyuu --noconfirm"
 
-# Tools and applications
-# 
+# tools and applications
 ## exa & bat & zoxide
-alias ls="exa --icons --color=always --color-scale --sort type "
-alias la="ls -@lah"
-alias lt="ls -T"
-alias lta="ls -Ta"
+alias exa="exa --icons --color=always --color-scale --sort type"
 alias cat="bat --style full --theme Dracula"
 
-## Terminals
-#
-### Kitty
-alias kc="$EDITOR $HOME/.config/kitty/kitty.conf"
-### Wezterm
-alias wc="$EDITOR $HOME/.config/wezterm/wezterm.lua"
+alias l"exa -l"      # list files
+alias ls="exa"       # list files in a table
+alias la="l -ah"     # list files hidden
+alias lla="ls -@lah" # list files in a table hidden
+alias lt="ls -T"     # list tree
+alias lta="ls -Ta"   # list tree hidden
 
-# GIT
+## terminals
+### kitty
+alias kc="$EDITOR $HOME/.config/kitty/kitty.conf"
+
+## git
 alias gs="git-st"
 alias gc="git commit -m"
 alias gl="git lg"
@@ -80,14 +79,15 @@ alias lg="lazygit"
 
 alias ip="curl -s https://api.ipify.org; echo"
 
-## Emacs
-alias emacs="emacsclient -c -a 'emacs'"
+## emacs
+alias cemacs="emacsclient -c -a 'emacs'"
 
-## Docker
+## docker
 alias di="docker image"
 alias dv="docker volume"
 alias dc="docker container"
 
 echo "Aliases loaded"
 
+## misc
 alias obs="~/.bin/obs-launcher.sh &"
