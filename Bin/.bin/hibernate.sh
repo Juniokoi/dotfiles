@@ -3,7 +3,7 @@ not_open() {
 }
 
 swaylock -fei ~/Pictures/.wallpapers/miku.jpg
-sleep 100s
+sleep 5
 if not_open; then
 	systemctl suspend
 fi
