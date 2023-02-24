@@ -40,6 +40,7 @@ alias tc="$EDITOR $HOME/.tmux.conf"			# Tmux config
 # alias cp="cp -i" # Confirm before overwriting
 # alias mv="mv -i" #      --/--     moving/renaming
 # alias rm="rm -i" #      --/--     deleting
+alias grep="grep --color=auto"
 
 # zsh 
 alias {zr,zsh}="source $HOME/.zshrc"
@@ -55,13 +56,13 @@ alias {u,aupdate}="yay -Syyuu --noconfirm"
 
 # tools and applications
 ## exa & bat & zoxide
-alias exa="exa --icons --color=always --color-scale --sort type"
+alias exa="exa --time-style=long-iso --git --group-directories-first --icons --no-permissions --no-user"
 alias cat="bat --style full --theme Dracula"
 
-alias l"exa -l"      # list files
+alias l="exa -l"      # list files
 alias ls="exa"       # list files in a table
-alias la="l -ah"     # list files hidden
-alias lla="ls -@lah" # list files in a table hidden
+alias la="ls -ah"     # list files hidden
+alias lla="l -@lah" # list files in a table hidden
 alias lt="ls -T"     # list tree
 alias lta="ls -Ta"   # list tree hidden
 
@@ -69,6 +70,13 @@ alias lta="ls -Ta"   # list tree hidden
 ### kitty
 alias kc="$EDITOR $HOME/.config/kitty/kitty.conf"
 
+## rust
+alias cr="cargo run"
+alias cb="cargo build"
+alias ct="cargo test"
+alias cc="cargo clippy --fix -- -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used"
+alias rs="rustup stable"
+alias rn="rustup nightly"
 ## git
 alias gs="git-st"
 alias gc="git commit -m"
@@ -91,3 +99,10 @@ echo "Aliases loaded"
 
 ## misc
 alias obs="~/.bin/obs-launcher.sh &"
+
+function starship_transient_prompt_func(prompt)
+  return io.popen("starship module character"
+    .." --keymap="..rl.getvariable('keymap')
+  ):read("*a")
+end
+load(io.popen('starship init cmd'):read("*a"))()

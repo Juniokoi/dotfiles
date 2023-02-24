@@ -10,10 +10,10 @@ use "settings"
 use "fzf"
 use "keybindings"
 use "plugins"
-#tmux_init
+use "transient"
+tmux_init
 
 echo "Finished setting up zsh"
+eval "$(direnv hook zsh)"
 clear -x
-
-# Fig post block. Keep at the bottom of this file.
-[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
+export GPG_TTY=$(tty)
