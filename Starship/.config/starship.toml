@@ -1,14 +1,14 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 starship_precmd_user_func=""
 add_newline = true
-command_timeout = 1000
-scan_timeout = 1000
+command_timeout = 5000
+scan_timeout = 5000
 palette = 'foo'
 format = """
-[╭─|](bold lav)\ 
+[╭─┤](bold lav)\ 
 $username$hostname $directory\ 
 $git_branch$git_status$git_state$git_metrics
-[╰──>](bold lav)$jobs$character
+[╰──╼](bold lav)$jobs$character
 """
 right_format = """
 $all$package$cmd_duration$memory_usage$time
@@ -22,21 +22,25 @@ format = '[〚[as $symbol]〛](lav)'
 #"format = "[  ➜](green) "
 success_symbol = "[ I  ➜](bold green) "
 error_symbol = "[ I  ✖](bold red) "
-vimcmd_symbol = "[ N  ❮ ](bold yellow)"
-vimcmd_replace_one_symbol = "[ R  ❮ ](bold purple)"
-vimcmd_replace_symbol = "[ R  ❮ ](bold purple)"
-vimcmd_visual_symbol = "[ V  ❮ ](bold blue)"
+vimcmd_symbol = "[ N  < ](bold yellow)"
+vimcmd_replace_one_symbol = "[ R  < ](bold purple)"
+vimcmd_replace_symbol = "[ R  < ](bold purple)"
+vimcmd_visual_symbol = "[ V  < ](bold blue)"
 
 [username]
 format = '[  ]($style) '
 show_always = true
 
 [directory]
+truncation_length=3
+truncate_to_repo=true
 home_symbol = '~'
 fish_style_pwd_dir_length=3
-truncation_symbol = '…/'
+truncation_symbol = ''
 [directory.substitutions]
-'~/projects/' = 'www'
+'~/projects/' = 'www/'
+'~/.dotfiles/' = '.d/'
+'~/.config/' = '.c/'
 
 [package]
 disabled = false
@@ -58,7 +62,8 @@ format='@ [$ssh_symbol$hostname]($style)'
 
 ## Git
 [git_branch]
-format = '[..](bold lav) [git:](lav)[$branch $symbol]($style)'
+format = '[git:](lav)[$branch $symbol]($style)'
+# format = '[·](bold lav)[git:](lav)[$branch $symbol]($style)'
 
 [git_status]
 format = '[\(](lav)[$all_status$ahead_behind]($style)[\)](lav)'
@@ -77,7 +82,6 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 lav = '#8A83B8'
 
 ## Languages
-
 [aws]
 format = '[〚 [$symbol($profile)(\($region\))( ($duration)]($style)〛](lav)'
 
