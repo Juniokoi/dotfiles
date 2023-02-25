@@ -11,6 +11,21 @@ function update() {
 	rustup update
 }
 
+function tmux_init {
+    # list all tmux sessions
+    sessions=$(tmux list-sessions)
+    # check if there are any sessions
+    if [ -n "$sessions" ]; then
+        # use awk to get the name of the first session
+        session_name=$(echo "$sessions" | awk 'NR==1{print $1}')
+        # initialize the first session
+        tmux attach-session -t "$session_name"
+    else
+        # create a new session if there are no existing sessions
+        tmux
+    fi
+}
+
 function rust_ver() {
 	local ver=$(echo $1)
     rustup default "$ver" && rustup override set "$ver"

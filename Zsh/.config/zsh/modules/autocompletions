@@ -5,6 +5,7 @@ compinit
 
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
+eval "$(rtx complete --shell zsh)"
 
 # Node Version Manager
 export NVM_DIR="$HOME/.nvm"
@@ -17,16 +18,7 @@ zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
 zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
 
 $ZDOTDIR/modules/completions/_cargo
-
-_dotnet_zsh_complete()
-{
-	local dotnetPath=$words[1]
-
-	local completions=("$(dotnet complete "$words")")
-
-	reply=( "${(ps:\n:)completions}" )
-}
-compctl -K _dotnet_zsh_complete dotnet
+$ZDOTDIR/modules/completions/_rtx
 
 # eval "$(jenv init zsh)"
 

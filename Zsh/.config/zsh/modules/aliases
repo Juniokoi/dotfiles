@@ -4,9 +4,6 @@ echo "Loading aliases ..."
 local EDITOR="nvim"
 local CONFIG="$HOME/.config"
 
-#temp
-export WM_CONFIG="$HOME/.config/hypr/"
-
 hash -d c="$HOME/.config/"
 hash -d d="$HOME/.dotfiles/"
 hash -d p="$HOME/projects/"
@@ -16,6 +13,23 @@ hash -d t="/tmp/"
 hash -d b="$HOME/.bin/"
 hash -d w="$WM_CONFIG"
 
+command -v exa  &> /dev/null  && alias _ls="ls"; alias ls="exa --time-style=long-iso --git --group-directories-first --icons --no-permissions --no-user" || alias ls="ls --color=auto --group-directories-first -h"
+command -v bat  &> /dev/null  && alias _cat="cat"; alias cat="bat --style full --theme Dracula"
+command -v fd   &> /dev/null    && alias fd='fd --hidden --follow'                            || alias 
+command -v rg   &> /dev/null    && alias rg='rg --hidden --follow --smart-case 2>/dev/null'   || alias rg='grep --color=auto --exclude-dir=.git -R'
+alias l="ls -l"      # list files
+alias la="ls -ah"     # list files hidden
+alias lla="l -@lah" # list files in a table hidden
+alias lt="ls -T"     # list tree
+alias lta="ls -Ta"   # list tree hidden
+
+command -v curlie    &> /dev/null    && alias curl='curlie'
+command -v dfrs      &> /dev/null    && alias df='dfrs'
+command -v git       &> /dev/null    && alias diff='git diff --no-index'
+command -v trash-put &> /dev/null    && alias rm='trash-put'
+command -v bat       &> /dev/null    && alias cat='bat'                                            || alias cat='cat --paging=always --decorations=always --color=always'
+command -v dog       &> /dev/null    && alias d='dog'                                              || alias d='dig +nocmd +multiline +noall +answer'
+
 # xset r rate 300 30 # Input delay rate
 function a() {
 	if [ "$1" = "mimir" ]; then
@@ -24,17 +38,18 @@ function a() {
 }
 
 # shortcuts
-alias b="bash"
-alias r="ranger"
 alias {c,cl,cle,clea}="clear"
+alias b="bash"
+alias e="joshuto"
+alias t="tmux"
 alias cdot="cd $HOME/.dotfiles"
-alias {v,e,vim}="nvim"
+alias {v,vim}="nvim"
 
 # configs
-alias bc="$EDITOR $HOME/.bashrc"			# Bash config
-alias vc="cd $CONFIG/nvim && $EDITOR"		# Nvim config
-alias wc="$EDITOR $WM_CONFIG"				# Window Manager Config
-alias tc="$EDITOR $HOME/.tmux.conf"			# Tmux config
+alias bc="$EDITOR $HOME/.bashrc"       # Bash config
+alias vc="cd $CONFIG/nvim && $EDITOR"  # Nvim config
+alias wc="$EDITOR $WM_CONFIG"          # Window Manager Config
+alias tc="$EDITOR $HOME/.tmux.conf"    # Tmux config
 
 # gnu
 # alias cp="cp -i" # Confirm before overwriting
@@ -52,19 +67,10 @@ alias ze="$EDITOR $ZDOTDIR/modules/exports"    # Exports
 alias log{out,off}="pkill -KILL -u $USER"
 alias sayonara="shutdown -h now"
 alias supersudo="sudo --preserve-env=PATH env"
-alias {u,aupdate}="yay -Syyuu --noconfirm"
 
 # tools and applications
 ## exa & bat & zoxide
-alias exa="exa --time-style=long-iso --git --group-directories-first --icons --no-permissions --no-user"
-alias cat="bat --style full --theme Dracula"
 
-alias l="exa -l"      # list files
-alias ls="exa"       # list files in a table
-alias la="ls -ah"     # list files hidden
-alias lla="l -@lah" # list files in a table hidden
-alias lt="ls -T"     # list tree
-alias lta="ls -Ta"   # list tree hidden
 
 ## terminals
 ### kitty
@@ -74,9 +80,11 @@ alias kc="$EDITOR $HOME/.config/kitty/kitty.conf"
 alias cr="cargo run"
 alias cb="cargo build"
 alias ct="cargo test"
+alias ci="cargo install"
 alias cc="cargo clippy --fix -- -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used"
 alias rs="rustup stable"
 alias rn="rustup nightly"
+
 ## git
 alias gs="git-st"
 alias gc="git commit -m"
@@ -95,14 +103,5 @@ alias di="docker image"
 alias dv="docker volume"
 alias dc="docker container"
 
-echo "Aliases loaded"
-
 ## misc
 alias obs="~/.bin/obs-launcher.sh &"
-
-function starship_transient_prompt_func(prompt)
-  return io.popen("starship module character"
-    .." --keymap="..rl.getvariable('keymap')
-  ):read("*a")
-end
-load(io.popen('starship init cmd'):read("*a"))()

@@ -1,5 +1,4 @@
 # Fig pre block. Keep at the top of this file.
-[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
 local ZDOTDIR="$HOME/.config/zsh"
 source "$ZDOTDIR/zsh_functions"
 
@@ -11,9 +10,14 @@ use "fzf"
 use "keybindings"
 use "plugins"
 use "transient"
-tmux_init
+
+# tmux_init
 
 echo "Finished setting up zsh"
+
+eval "$(rtx activate zsh)"
 eval "$(direnv hook zsh)"
-clear -x
 export GPG_TTY=$(tty)
+clear -x
+
+source /home/junio/.config/broot/launcher/bash/br
