@@ -203,3 +203,4 @@ alias obs="~/.bin/obs-launcher.sh &"
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
+alias -="cd -"
