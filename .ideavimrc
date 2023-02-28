@@ -1,0 +1,207 @@
+"" Thanks to Towards Data Science (https://towardsdatascience.com/the-essential-ideavim-remaps-291d4cd3971b)
+"" To search commands Actions names, search for "IdeaVim: track action Ids"
+"" You can also type :actionlist <ActionName> for the list of actions available
+"" SETTINGS
+"" References: https://gist.github.com/zchee/9c78f91cc5ad771c1f5d
+"" 
+set clipboard+=unnamedplus
+set clipboard+=ideaput
+set scrolloff=8
+set sidescrolloff=8
+set visualbell
+set incsearch
+set hlsearch
+set ideajoin
+set ignorecase
+set signcolumn="yes"
+set idearefactormode=keep
+set updatetime=50
+set nu
+set relativenumber
+let mapleader=" "
+
+"" PLUGINS
+set surround
+set quickscope
+set commentary
+set easymotion
+set multicursor
+set multiple-cursors
+set nerdtree
+
+
+map ; <plug>(easymotion-prefix)
+
+"" KEYMAPS
+""" Config files
+nnoremap \e :e ~/.ideavimrc<CR>
+nnoremap \a :e ~/.ideavimActionList<CR>
+nnoremap \r :action IdeaVim.ReloadVimRc.reload<CR>
+
+map <C-c> <Esc>
+map <C-u> <C-u>zz
+map <C-d> <C-d>zz
+imap jk <Esc>
+sethandler <F1> a:vim
+map \h :actionlist 
+
+
+nnoremap <Leader>e :action ShowErrorDescription<CR>
+nnoremap <Leader>d :action QuickJavaDoc<CR>
+nnoremap <Leader>i :action QuickImplementations<CR>
+
+""" Distraction Free Mode
+nnoremap <c-z> :action ToggleZenMode<CR>
+
+""" Terminal
+nnoremap <C-,> :action ShowSettings<CR>
+nnoremap <leader>t :action ActivateTerminalToolWindow<CR>
+
+""" Navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+nnoremap <C-w>l :action MoveTabRight<CR>
+nnoremap <C-w>h :action MoveTabLeft<CR>
+nnoremap <C-w>j :action MoveTabDown<CR>
+nnoremap <C-w>k :action MoveTabUp<CR>
+
+nnoremap <C-\> :action SplitVertically<CR>
+nnoremap <C-]> :action SplitHorizontally<CR>
+nnoremap <C-=> :action Unsplit<CR>
+nnoremap <C-m> :action MoveEditorToOppositeTabGroup<CR>
+
+nnoremap <C-S-l> :action StretchSplitToRight<CR>
+nnoremap <C-S-h> :action StretchSplitToLeft<CR>
+nnoremap <C-S-k> :action StretchSplitToTop<CR>
+nnoremap <C-S-j> :action StretchSplitToBottom<CR>
+
+nnoremap <S-l> :action NextTab<CR>
+nnoremap <S-h> :action PreviousTab<CR>
+
+nnoremap <Leader>N :action EditSourceInNewWindow<CR>
+nnoremap <Leader>n :action NextWindow<CR>
+nnoremap <Leader>q :action CloseContent<CR>
+nnoremap <Leader>Q :action CloseAllUnpinnedEditors<CR>
+nnoremap <Leader>K :action CloseAllEditorsButActive<CR>
+nnoremap <leader>x :action HideActiveWindow<CR>
+nnoremap <leader>X :action CloseWindow<CR>
+
+sethandler <C-p> a:vim
+sethandler <C-k> a:vim
+
+""" Editing source code
+nnoremap Q <nop>
+xmap <leader>p '"_dP'
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+nnoremap ;bsb :action ShowBookmarks<CR>
+nnoremap ;ba :action ToggleBookmark<CR>
+nnoremap ;bp :action GotoPreviousBookmark<CR>
+nnoremap ;bn :action GotoNextBookmark<CR>
+nnoremap ;bm :action ToggleBookmarkWithMnemonic<CR>
+nnoremap ;bst :action ShowTypeBookmarks<CR>
+
+vnoremap < <gv
+vnoremap > >gv
+"vnoremap <A-j> :action EditorDown<CR>
+"vnoremap <A-k> :action EditorUp<CR>
+sethandler <C-A-j> a:vim
+sethandler <C-A-k> a:vim
+
+unmap <C-A-j>
+unmap <C-A-k>
+nnoremap <C-A-j> :action MoveLineDown<CR>
+nnoremap <C-A-k> :action MoveLineUp<CR>
+
+nnoremap [[ :action MethodUp<CR>
+nnoremap ]] :action MethodDown<CR>
+
+nnoremap <F2> :action RenameElement<CR>
+
+nnoremap <Leader>zc :action CollapseAllRegions<CR>
+nnoremap <Leader>zo :action ExpandAllRegions<CR>
+vnoremap gc :action CommentByBlockComment<CR>
+nnoremap <A-r> :action Refactorings.QuickListPopupAction<CR>
+nnoremap <Leader>=  :action ReformatCode<CR>
+nnoremap <leader>o :action OptimizeImports<CR>
+nnoremap <Leader>fr :action RecentFiles<CR>
+nnoremap <Leader>ff :action GotoFile<CR>
+nnoremap <Leader>fc :action GotoClass<CR>
+nnoremap <Leader>fa :action GotoAction<CR>
+nnoremap <Leader>fs :action GotoSymbol<CR>
+nnoremap <Leader>l :action RecentLocations<CR>
+nnoremap <Leader>sh :action LocalHistory.ShowHistory<CR>
+:unmap <C-p>
+map <C-p> :action GotoNextError<CR>
+
+
+map <C-n> :action GotoPreviousError<CR>
+nnoremap <C-.> :action ShowIntentionActions<CR>
+nnoremap <Leader>w :write<CR>
+nnoremap <C-s> :write<CR>
+
+""" Searching and Source Code Navigation
+nnoremap <C-/> :action FindInPath<CR>
+nnoremap <C-a> :action GotoAction<CR>
+nnoremap <A-f> :action GotoFile<CR>
+nnoremap <Leader>pv :action ActivateProjectToolWindow<CR>
+nnoremap gr :action GotoRelated<CR>
+nnoremap <Leader>ch :action CallHierarchy<CR>
+nnoremap <Leader>sk :action ShowNavBar<CR>
+nnoremap <Leader>s :action FileStructurePopup<CR>
+nnoremap gu :action FindUsages<CR>
+nnoremap gi :action GotoImplementation<CR>
+nnoremap gd :action GotoDeclaration<CR>
+nnoremap gp :action GotToSuperMethod<CR>
+nnoremap gt :action GotoTest<CR>
+
+nnoremap <BS> :action Back<CR>
+nnoremap <S-BS> :action Forward<CR>
+nnoremap <C-;> :action ShowPopupMenu<CR>
+
+""" Tool windows
+nnoremap <A-x> :action HideAllWindows<CR>
+
+""" Running and Debugging
+nnoremap ,r :action Run<CR>
+nnoremap ,c :action RunClass<CR>
+nnoremap ,f :action ChooseRunConfiguration<CR>
+nnoremap ,t :action ActivateRunToolWindow<CR>
+nnoremap ,u :action Rerun<CR>
+nnoremap ,f :action RerunFailedTests<CR>
+nnoremap ,b :action ToggleLineBreakpoint<CR>
+nnoremap ,d :action ContextDebug<CR>
+nnoremap ,n :action ActivateDebugToolWindow<CR>
+
+map Q gq
+map <ESC> <ESC><ESC>
+
+"""map <S-1> :action GoToTab1<CR>
+"""map <S-2> :action GoToTab2<CR>
+"""map <S-3> :action GoToTab3<CR>
+"""map <S-4> :action GoToTab4<CR>
+"""map <S-5> :action GoToTab5<CR>
+"""map <S-6> :action GoToTab6<CR>
+"""map <S-7> :action GoToTab7<CR>
+"""map <S-8> :action GoToTab8<CR>
+"""map <S-9> :action GoToTab9<CR>
+
+map ;t :action PinActiveEditorTab<CR>
+"" Multiple cursors
+
+""" Quickscope
+set quickscope
+let g:qs_highlight_on_keys = ['F', 'f', 'T', 't']
+map zf :action CollapseSelection<CR>
+map zx :action ExpandRegion<CR>
+nmap <tab> :action ExpandCollapseToggleAction<CR>
+nmap <S-tab> :action CollapseAllRegions<CR>
+map gs :action SurroundWith<CR>
+
+map <A-n> :action SelectNextOccurrence<CR>
+map <C-A-n> :action SelectAllOccurrences<CR>
+map <S-A-n> :action UnselectPreviousOccurrence<CR>
