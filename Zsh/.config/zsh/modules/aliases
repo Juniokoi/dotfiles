@@ -31,7 +31,6 @@ has_alias bat        {cat,bat}='bat --style full --theme base16 --paging=always'
 has_alias rg         {grep,rg}='rg --hidden --follow --smart-case 2>/dev/null'
 has_alias fd         {find,fd}='fd --hidden --follow'
 
-
 alias l="ls -l"      # list table
 alias la="ls -ah"    # list files hidden
 alias lla="l -@lah"  # list table hidden
@@ -200,3 +199,7 @@ alias dc="docker container"
 
 ## misc
 alias obs="~/.bin/obs-launcher.sh &"
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
