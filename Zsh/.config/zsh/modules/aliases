@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-echo "Loading aliases ..."
-
 local EDITOR="nvim"
 local CONFIG="$HOME/.config"
 
@@ -13,49 +11,88 @@ hash -d t="/tmp/"
 hash -d b="$HOME/.bin/"
 hash -d w="$WM_CONFIG"
 
-command -v exa  &> /dev/null  && alias _ls="ls"; alias ls="exa --time-style=long-iso --git --group-directories-first --icons --no-permissions --no-user" || alias ls="ls --color=auto --group-directories-first -h"
-command -v bat  &> /dev/null  && alias _cat="cat"; alias cat="bat --style full --theme Dracula"
-command -v fd   &> /dev/null    && alias fd='fd --hidden --follow'                            || alias 
-command -v rg   &> /dev/null    && alias rg='rg --hidden --follow --smart-case 2>/dev/null'   || alias rg='grep --color=auto --exclude-dir=.git -R'
-alias l="ls -l"      # list files
-alias la="ls -ah"     # list files hidden
-alias lla="l -@lah" # list files in a table hidden
+has() { command -v "$1" &> /dev/null; }
+has_alias() { command -v "$1" &> /dev/null && alias "$2"; }
+
+alias grep='grep --color=auto --exclude-dir=.git -R'
+alias ls="ls --color=auto --group-directories-first -h"
+alias cat="cat --paging=always"
+
+has_alias exa Ls='/bin/ls'
+has_alias bat Cat='/bin/cat'
+has_alias rg  Grep='/bin/grep'
+has_alias fd  Find='/bin/find'
+has_alias sd  Sed='/bin/sed'
+
+has_alias trash-put  rm='trash-put'
+has_alias git        diff='git diff --no-index'
+has_alias exa        {ls,exa}='exa --time-style=long-iso --git --group-directories-first --icons --no-permissions --no-user'
+has_alias bat        {cat,bat}='bat --style full --theme base16 --paging=always'
+has_alias rg         {grep,rg}='rg --hidden --follow --smart-case 2>/dev/null'
+has_alias fd         {find,fd}='fd --hidden --follow'
+
+
+alias l="ls -l"      # list table
+alias la="ls -ah"    # list files hidden
+alias lla="l -@lah"  # list table hidden
 alias lt="ls -T"     # list tree
 alias lta="ls -Ta"   # list tree hidden
 
-command -v curlie    &> /dev/null    && alias curl='curlie'
-command -v dfrs      &> /dev/null    && alias df='dfrs'
-command -v git       &> /dev/null    && alias diff='git diff --no-index'
-command -v trash-put &> /dev/null    && alias rm='trash-put'
-command -v bat       &> /dev/null    && alias cat='bat'                                            || alias cat='cat --paging=always --decorations=always --color=always'
-command -v dog       &> /dev/null    && alias d='dog'                                              || alias d='dig +nocmd +multiline +noall +answer'
-
-# xset r rate 300 30 # Input delay rate
-function a() {
-	if [ "$1" = "mimir" ]; then
-		~b/sleep.sh
-	fi
-}
-
 # shortcuts
+alias cp='cp -r --reflink=auto'
+alias mkdir='mkdir -p'
 alias {c,cl,cle,clea}="clear"
 alias b="bash"
 alias e="joshuto"
 alias t="tmux"
 alias cdot="cd $HOME/.dotfiles"
-alias {v,vim}="nvim"
+alias {v,vi,vim}="nvim"
+
+compdef trash-put=rm
+function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
+compdef _directories md
+
+e64() { [[ $# == 1 ]] && base64 -w0 <<<"$1" || base64 -w0 }
+d64() { [[ $# == 1 ]] && base64 --decode <<<"$1" || base64 --decode }
+qr()  { [[ $# == 1 ]] && qrencode -t utf8 <<<"$1" || qrencode -t utf8 }
+
+tmpd() { cd "$(mktemp -d -t "${1:-tmp}.XXXXXXXXXX")" }
+
+## docker-compose
+alias dc='docker-compose'
+alias dcu='dc up -d'
+alias dcd='dc down'
+alias dcr='dcd; dcu'
+alias dcp='dc pull'
+alias dcl='dc logs -t -f --tail=1000'
+alias dce='dc exec'
+alias dcs='dc ps'
+
+## systemctl
+alias sys='systemctl'
+alias sysu='systemctl --user'
+alias status='sys status'
+alias statusu='sysu status'
+alias start='sys start'
+alias startu='sysu start'
+alias stop='sys stop'
+alias stopu='sysu stop'
+alias restart='sys restart'
+alias restartu='sysu restart'
+alias enable='sys enable'
+alias enableu='sysu enable'
+alias disable='sys disable'
+alias disableu='sysu disable'
+alias reload='sys daemon-reload'
+alias reloadu='sysu daemon-reload'
+alias timers='sys list-timers'
+alias timersu='sysu list-timers'
 
 # configs
 alias bc="$EDITOR $HOME/.bashrc"       # Bash config
 alias vc="cd $CONFIG/nvim && $EDITOR"  # Nvim config
 alias wc="$EDITOR $WM_CONFIG"          # Window Manager Config
 alias tc="$EDITOR $HOME/.tmux.conf"    # Tmux config
-
-# gnu
-# alias cp="cp -i" # Confirm before overwriting
-# alias mv="mv -i" #      --/--     moving/renaming
-# alias rm="rm -i" #      --/--     deleting
-alias grep="grep --color=auto"
 
 # zsh 
 alias {zr,zsh}="source $HOME/.zshrc"
@@ -67,10 +104,6 @@ alias ze="$EDITOR $ZDOTDIR/modules/exports"    # Exports
 alias log{out,off}="pkill -KILL -u $USER"
 alias sayonara="shutdown -h now"
 alias supersudo="sudo --preserve-env=PATH env"
-
-# tools and applications
-## exa & bat & zoxide
-
 
 ## terminals
 ### kitty
@@ -85,13 +118,75 @@ alias cc="cargo clippy --fix -- -W clippy::pedantic -W clippy::nursery -W clippy
 alias rs="rustup stable"
 alias rn="rustup nightly"
 
-## git
-alias gs="git-st"
-alias gc="git commit -m"
-alias gl="git lg"
-alias glo="git log --oneline"
-alias ga="git add"
 alias lg="lazygit"
+## git
+alias g='git'
+alias ga='g add'
+alias gaa='ga --all'
+alias gap='ga -p'
+alias gb='g branch'
+alias gba='g branch --all'
+alias gbd='g branch -D'
+alias gbda='g branch --no-color --merged | command grep -vE "^(\*|\s*(main|master|develop|dev)\s*$)" | command xargs -n 1 g branch -d'
+alias gbo='g branch --set-upstream-to=origin/$(g symbolic-ref --short HEAD) $(g symbolic-ref --short HEAD)'
+alias gbu='g branch --set-upstream-to=upstream/$(g symbolic-ref --short HEAD) $(g symbolic-ref --short HEAD)'
+alias gbsb='g bisect bad'
+alias gbsg='g bisect good'
+alias gbsr='g bisect reset'
+alias gbss='g bisect start'
+alias gc='g commit -v'
+alias gc!='gc --amend'
+alias gac='gaa && gc'
+alias gac!='gaa && gc!'
+alias gacm='gaa && gcm'
+alias gcm='gc -m'
+alias gcf='gc --fixup'
+alias gcfh='gc --fixup HEAD'
+alias gacf='gaa && gc --fixup'
+alias gacfh='gaa && gc --fixup HEAD'
+alias gco='g checkout'
+alias gcom='gco main || gco master'
+alias gcob='gco -b'
+alias gcop='gco -p'
+alias gcp='g cherry-pick'
+alias gcpa='gcp --abort'
+alias gcpc='gcp --continue'
+alias gd='g diff'
+alias gds='gd --cached'
+alias gf='g fetch --tags'
+alias gu='gf origin main:main'
+alias gl='g pull --tags -f --rebase --autostash'
+alias glog="g log --graph --pretty='%Cred%h%Creset%C(yellow)%d%Creset %s %Cgreen(%cr) %C(blue)<%an>%Creset' --abbrev-commit"
+alias gloga="glog --all"
+alias glogp='g log -p'
+alias gm='g merge'
+alias gma='gm --abort'
+alias gp='g push -u'
+alias gp!='g push'
+alias gpf='gp --force-with-lease'
+alias gpf!='gp --force'
+alias gra='g remote add'
+alias grr='g remote remove'
+alias grv='g remote -v'
+alias grba='g rebase --abort'
+alias grbc='g rebase --continue'
+alias grbi='g rebase -i'
+alias grbm='g rebase -i main'
+alias grbom='g rebase -i origin/main'
+alias gr='g reset'
+alias gr!='gr --hard'
+alias grh='gr HEAD'
+alias grh!='gr! HEAD'
+alias garh!='gaa && gr! HEAD'
+alias gs='g show --show-signature'
+alias gst='g stash'
+alias gstp='gst pop'
+alias gstc='gst clear'
+alias gss!='g status'
+alias gss='gss! -sb'
+alias gsa='g submodule add'
+alias gsu='g submodule update --remote'
+alias gsr='g submodule-remove'
 
 alias ip="curl -s https://api.ipify.org; echo"
 
