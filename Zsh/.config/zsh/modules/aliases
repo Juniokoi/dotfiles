@@ -26,7 +26,7 @@ has_alias sd  Sed='/bin/sed'
 
 has_alias trash-put  rm='trash-put'
 has_alias git        diff='git diff --no-index'
-has_alias exa        {ls,exa}='exa --time-style=long-iso --git --group-directories-first --icons --no-permissions --no-user'
+has_alias exa        {ls,exa}='exa --time-style=long-iso --git -@ --group-directories-first --icons --no-permissions --no-user'
 has_alias bat        {cat,bat}='bat --style full --theme base16 --paging=always'
 has_alias rg         {grep,rg}='rg --hidden --follow --smart-case 2>/dev/null'
 has_alias fd         {find,fd}='fd --hidden --follow'
