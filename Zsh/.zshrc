@@ -11,6 +11,8 @@ use "keybindings"
 use "plugins"
 use "transient"
 
+xset r rate 300 30
+
 # tmux_init
 
 echo "Finished setting up zsh"

@@ -16,7 +16,6 @@ has_alias() { command -v "$1" &> /dev/null && alias "$2"; }
 
 alias grep='grep --color=auto --exclude-dir=.git -R'
 alias ls="ls --color=auto --group-directories-first -h"
-alias cat="cat --paging=always"
 
 has_alias exa Ls='/bin/ls'
 has_alias bat Cat='/bin/cat'
