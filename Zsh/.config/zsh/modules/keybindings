@@ -1,7 +1,8 @@
 #!/bin/sh
 
-bindkey -s '^f' 'zi^M'
-bindkey -s '^e' 'nvim^M'
+bindkey -s ^o 'zi\n'
+bindkey -s ^f 'tmux_sessionizer\n'
+bindkey -s ^e 'nvim\n'
 
 bindkey '^l' autosuggest-accept
 
@@ -15,7 +16,7 @@ zle -N history-beginning-search-forward-end history-search-end
 bindkey '\C-\177' backward-kill-word
 bindkey '^?' backward-delete-char
 bindkey '^h' backward-delete-char
-bindkey '^P' history-beginning-search-backward-end
-bindkey '^N' history-beginning-search-forward-end
+bindkey '^K' history-beginning-search-backward-end
+bindkey '^J' history-beginning-search-forward-end
 
 export KEYTIMEOUT=1

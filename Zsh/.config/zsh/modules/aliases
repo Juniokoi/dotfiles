@@ -13,15 +13,11 @@ hash -d w="$WM_CONFIG"
 
 has() { command -v "$1" &> /dev/null; }
 has_alias() { command -v "$1" &> /dev/null && alias "$2"; }
+hasAliaS() { command -v "$1" &> /dev/null && alias "$1"="$2"; }
 
 alias grep='grep --color=auto --exclude-dir=.git -R'
 alias ls="ls --color=auto --group-directories-first -h"
 
-has_alias exa Ls='/bin/ls'
-has_alias bat Cat='/bin/cat'
-has_alias rg  Grep='/bin/grep'
-has_alias fd  Find='/bin/find'
-has_alias sd  Sed='/bin/sed'
 
 has_alias trash-put  rm='trash-put'
 has_alias git        diff='git diff --no-index'
@@ -32,9 +28,11 @@ has_alias fd         {find,fd}='fd --hidden --follow'
 
 alias l="ls -l"      # list table
 alias la="ls -ah"    # list files hidden
-alias lla="l -@lah"  # list table hidden
+alias lla="l -lah"  # list table hidden
 alias lt="ls -T"     # list tree
 alias lta="ls -Ta"   # list tree hidden
+
+hasAliaS sk "sk --reverse --margin 0,4% -i --height 30%"
 
 # shortcuts
 alias cp='cp -r --reflink=auto'
@@ -65,6 +63,8 @@ alias dcp='dc pull'
 alias dcl='dc logs -t -f --tail=1000'
 alias dce='dc exec'
 alias dcs='dc ps'
+#temp
+alias nfu='sudo nixos-rebuild switch --flake ~/.dotfiles/.#junio'
 
 ## systemctl
 alias sys='systemctl'
@@ -93,7 +93,23 @@ alias wc="$EDITOR $WM_CONFIG"          # Window Manager Config
 alias tc="$EDITOR $HOME/.tmux.conf"    # Tmux config
 
 # zsh 
-alias {zr,zsh}="source $HOME/.zshrc"
+reload_zsh() {
+	set_zsh_silent 1
+	source $HOME/.zshrc 2>/dev/null
+	if [ "$1" ]; then
+		clear -x
+	fi
+}
+
+debug_zsh() {
+	set_zsh_silent 0
+	source $HOME/.zshrc
+	set_zsh_silent 1
+}
+
+alias zsh="reload_zsh"
+alias zshc="reload_zsh clear"
+alias zshd="debug_zsh"
 alias zc="$EDITOR $ZDOTDIR"
 alias za="$EDITOR $ZDOTDIR/modules/aliases"    # Alises
 alias ze="$EDITOR $ZDOTDIR/modules/exports"    # Exports
@@ -202,4 +218,3 @@ alias obs="~/.bin/obs-launcher.sh &"
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-alias -="cd -"

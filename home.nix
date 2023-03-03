@@ -20,13 +20,25 @@
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
-	neovim
+	  fd
+	  sd
+	  exa
+	  bat
+	  ripgrep
+	  wiki-tui
+	  skim
+	  broot
+	  alacritty
+	  hyperfine
+	  neovim
 	  brave
 	  lazygit
 	  rustc
 	  cargo
 	  go
+	  tmux
 	  sumneko-lua-language-server
 	  alacritty
+	  bitwarden-cli
   ];
 }

@@ -11,7 +11,8 @@ $git_branch$git_status$git_state$git_metrics
 [╰──╼](bold lav)$jobs$character
 """
 right_format = """
-$all$package$cmd_duration$memory_usage$time
+$aws$c$cmake$docker_context$golang$kubernetes$lua$nix_shell$nodejs$ruby$rust$zig\
+$package$cmd_duration$memory_usage$time
 """
 continuation_prompt = "[▶▶](bold lav)"
 
@@ -85,71 +86,20 @@ lav = '#8A83B8'
 [aws]
 format = '[〚 [$symbol($profile)(\($region\))( ($duration)]($style)〛](lav)'
 
-[bun]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
 [c]
 format = '[〚 [$symbol($version(-$name))]($style) 〛](lav)'
 
 [cmake]
 format = '[〚 [$symbol($version)]($style) 〛](lav)'
 
-[cobol]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[conda]
-format = '[〚 [$symbol$environment]($style) 〛](lav)'
-
-[crystal]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[daml]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[dart]
-format = '[〚 [🎯($version) ]($style) 〛](lav)'
-
-[deno]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
 [docker_context]
 format = '[〚 [$symbol$context]($style) 〛](lav)'
-
-[dotnet]
-format = '[〚 [$symbol($version)(🎯 $tfm)]($style) 〛](lav)'
-
-[elixir]
-format = '[〚 [$symbol($version \(OTP $otp_version\))]($style) 〛](lav)'
-
-[elm]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[erlang]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[gcloud]
-format = '[〚 [$symbol$account(@$domain)(\($region\))]($style) 〛](lav)'
 
 [golang]
 format = '[〚 [$symbol($version)]($style) 〛](lav)'
 
-[haskell]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[helm]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[hg_branch]
-format = '[〚 [$symbol$branch]($style) 〛](lav)'
-
-[java]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[julia]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[kotlin]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
+# [java]
+# format = '[〚 [$symbol($version)]($style) 〛](lav)'
 
 [kubernetes]
 format = '[〚 [$symbol$context( \($namespace\))]($style) 〛](lav)'
@@ -157,68 +107,17 @@ format = '[〚 [$symbol$context( \($namespace\))]($style) 〛](lav)'
 [lua]
 format = '[〚 [ ($version)](bold blue) 〛](lav)'
 
-[memory_usage]
-format = '[〚 $symbol[$ram( | $swap)]($style) 〛](lav)'
-
-[nim]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
 [nix_shell]
 format = '[〚 [$symbol$state( \($name\))]($style) 〛](lav)'
 
 [nodejs]
-format = '[〚 ](lav)[$symbol($version)]($style)[ 〛](lav)'
-
-[ocaml]
-format = '[〚 [$symbol($version)(\($switch_indicator$switch_name\))]($style) 〛](lav)'
-
-[openstack]
-format = '[〚 [$symbol$cloud(\($project\))]($style) 〛](lav)'
-
-[perl]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[php]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[pulumi]
-format = '[〚 [$symbol$stack]($style) 〛](lav)'
-
-[purescript]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[python]
 format = '[〚 [${symbol}${pyenv_prefix}(${version})(\($virtualenv\))]($style) 〛](lav)'
-
-[raku]
-format = '[〚 [$symbol($version-$vm_version)]($style) 〛](lav)'
-
-[red]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
 
 [ruby]
 format = '[〚 [$symbol($version)]($style) 〛](lav)'
 
 [rust]
 format = '[〚](lav) [$symbol($version)]($style) [〛](lav)'
-
-[scala]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[spack]
-format = '[〚 [$symbol$environment]($style) 〛](lav)'
-
-[swift]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[terraform]
-format = '[〚 [$symbol$workspace]($style) 〛](lav)'
-
-[vagrant]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
-
-[vlang]
-format = '[〚 [$symbol($version)]($style) 〛](lav)'
 
 [zig]
 format = '[〚 [$symbol($version)]($style) 〛](lav)'

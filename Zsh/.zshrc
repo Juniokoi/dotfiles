@@ -3,8 +3,8 @@ local ZDOTDIR="$HOME/.config/zsh"
 source "$ZDOTDIR/zsh_functions"
 
 use "autocompletions"
-use "aliases" 
 use "exports"
+use "aliases" 
 use "settings"
 use "fzf"
 use "keybindings"
@@ -15,11 +15,12 @@ xset r rate 300 30
 
 # tmux_init
 
-echo "Finished setting up zsh"
-
 eval "$(rtx activate zsh)"
 eval "$(direnv hook zsh)"
 export GPG_TTY=$(tty)
-clear -x
 
-source /home/junio/.config/broot/launcher/bash/br
+print_stage "Finished setting up zsh"
+
+if [ -z "$ZSH_SILENT" ] || [ "$ZSH_SILENT" -eq 1 ]; then
+	clear -x
+fi
