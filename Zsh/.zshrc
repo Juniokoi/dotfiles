@@ -13,7 +13,7 @@ use "transient"
 
 xset r rate 300 30
 
-# tmux_init
+tmux_init
 
 eval "$(rtx activate zsh)"
 eval "$(direnv hook zsh)"
@@ -21,6 +21,6 @@ export GPG_TTY=$(tty)
 
 print_stage "Finished setting up zsh"
 
-if [ -z "$ZSH_SILENT" ] || [ "$ZSH_SILENT" -eq 1 ]; then
+if [ "$ZSH_SILENT" -eq "1" ]; then
 	clear -x
 fi

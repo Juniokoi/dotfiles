@@ -19,7 +19,7 @@ alias grep='grep --color=auto --exclude-dir=.git -R'
 alias ls="ls --color=auto --group-directories-first -h"
 
 
-has_alias trash-put  rm='trash-put'
+has_alias trash-put  rm='trash-put -r'
 has_alias git        diff='git diff --no-index'
 has_alias exa        {ls,exa}='exa --time-style=long-iso --git -@ --group-directories-first --icons --no-permissions --no-user'
 has_alias bat        {cat,bat}='bat --style full --theme base16 --paging=always'
@@ -27,22 +27,24 @@ has_alias rg         {grep,rg}='rg --hidden --follow --smart-case 2>/dev/null'
 has_alias fd         {find,fd}='fd --hidden --follow'
 
 alias l="ls -l"      # list table
-alias la="ls -ah"    # list files hidden
-alias lla="l -lah"  # list table hidden
+alias la="ls -lah"    # list files hidden
+alias lsa="ls -ah"  # list table hidden
 alias lt="ls -T"     # list tree
 alias lta="ls -Ta"   # list tree hidden
 
 hasAliaS sk "sk --reverse --margin 0,4% -i --height 30%"
 
 # shortcuts
-alias cp='cp -r --reflink=auto'
-alias mkdir='mkdir -p'
 alias {c,cl,cle,clea}="clear"
 alias b="bash"
 alias e="joshuto"
 alias t="tmux"
 alias cdot="cd $HOME/.dotfiles"
 alias {v,vi,vim}="nvim"
+
+alias cp='cp -r --reflink=auto'
+alias mkdir='mkdir -p'
+alias rm="rm -r"
 
 compdef trash-put=rm
 function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
@@ -64,7 +66,6 @@ alias dcl='dc logs -t -f --tail=1000'
 alias dce='dc exec'
 alias dcs='dc ps'
 #temp
-alias nfu='sudo nixos-rebuild switch --flake ~/.dotfiles/.#junio'
 
 ## systemctl
 alias sys='systemctl'
@@ -119,9 +120,19 @@ alias log{out,off}="pkill -KILL -u $USER"
 alias sayonara="shutdown -h now"
 alias supersudo="sudo --preserve-env=PATH env"
 
-## terminals
-### kitty
 alias kc="$EDITOR $HOME/.config/kitty/kitty.conf"
+alias ac="$EDITOR $HOME/.config/alacritty/alacritty.yml"
+
+alias sc="$EDITOR $HOME/.config/sway/config"
+
+alias nu='sudo nixos-rebuild switch --flake ~/.dotfiles/.#junio'
+alias nf="nix flake"
+alias nfd="nix flake develop"
+alias nfc="nix flake check"
+alias nfi="nix flake init"
+alias nfs="nix flake show"
+alias nfu="nix flake update"
+alias nr="nix repl"
 
 ## rust
 alias cr="cargo run"
@@ -218,3 +229,13 @@ alias obs="~/.bin/obs-launcher.sh &"
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
+
+gcl() {
+    git clone --recursive "$@"
+    cd -- "${${${@: -1}##*/}%*.git}"
+}
+
+gcld() {
+    git clone --recursive --depth 1 "$@"
+    cd -- "${${${@: -1}##*/}%*.git}"
+}
