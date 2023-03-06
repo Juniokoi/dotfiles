@@ -1,19 +1,19 @@
 { config, pkgs, ... }:
 
 let 
-  dbus-sway-environment = pkgs.writeTextFile {
-    name = "dbus-sway-environment";
-    destination = "/bin/dbus-sway-environment";
-    executable = true;
+	dbus-sway-environment = pkgs.writeTextFile {
+		name = "dbus-sway-environment";
+		destination = "/bin/dbus-sway-environment";
+		executable = true;
 
-    text = ''
+		text = ''
 
-	exec dbus-daemon --session --address=unix:path=$XDG_RUNTIME_DIR/bus
-	dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
-	systemctl --user stop pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
-	systemctl --user start pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
-	'';
-};
+		exec dbus-daemon --session --address=unix:path=$XDG_RUNTIME_DIR/bus
+		dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+		systemctl --user stop pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
+		systemctl --user start pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
+		'';
+	};
 in
 	{
 		imports =
@@ -25,10 +25,22 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings= {
+	  warn-dirty = false;
+	  http-connections = 50;
+	  auto-optimise-store = true;
 
+	  sandbox = "relaxed";
+	  experimental-features = "nix-command flakes";
+  };
+
+  environment.profileRelativeSessionVariables = rec {
+	  PATH = [
+		  "\${HOME}/node_modules/bin"
+	  ];
+  };
   networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+# networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -79,6 +91,7 @@ in
 		  wf-recorder
 		  showmethekey
 		  kanshi
+		  i3status
 		  wofi
 		  rofi-wayland
 		  eww-wayland
@@ -86,6 +99,12 @@ in
 		  bemenu
 	  ];
   };
+
+# Yeah... I know...
+services.emacs = {
+	install = true;
+	enable = true;
+};
 
 # Configure keymap in X11
 services.xserver = {
@@ -139,6 +158,7 @@ services.xserver = {
 		  git
 		  openssl
 		  gcc
+		  grub2
 		  zoxide
 		  nodejs
 		  python3
@@ -147,12 +167,14 @@ services.xserver = {
 		  unzip
 		  fzf
 		  fd
+		  joshuto
 		  ripgrep
 		  lua
 		  luajit
 		  gnumake
 		  stow
 		  cmake
+		  pavucontrol
 		  gnupg
 		  direnv
 		  htop

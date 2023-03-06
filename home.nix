@@ -20,6 +20,7 @@
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+	  authy
 	  fd
 	  sd
 	  exa
@@ -28,6 +29,7 @@
 	  wiki-tui
 	  skim
 	  broot
+	  sway-contrib.grimshot
 	  alacritty
 	  hyperfine
 	  neovim
@@ -35,6 +37,8 @@
 	  lazygit
 	  rustc
 	  cargo
+	  rust-analyzer
+	  rustfmt
 	  go
 	  tmux
 	  sumneko-lua-language-server
