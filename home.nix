@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
-
+{
+  config,
+  pkgs,
+  ...
+}:
 {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -20,25 +23,25 @@
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
-	  fd
-	  sd
-	  exa
-	  bat
-	  ripgrep
-	  wiki-tui
-	  skim
-	  broot
-	  alacritty
-	  hyperfine
-	  neovim
-	  brave
-	  lazygit
-	  rustc
-	  cargo
-	  go
-	  tmux
-	  sumneko-lua-language-server
-	  alacritty
-	  bitwarden-cli
+    fd
+    sd
+    exa
+    bat
+    ripgrep
+    wiki-tui
+    skim
+    broot
+    alacritty
+    hyperfine
+    neovim
+    brave
+    lazygit
+    rustc
+    cargo
+    go
+    tmux
+    sumneko-lua-language-server
+    alacritty
+    bitwarden-cli
   ];
 }

@@ -1,0 +1,117 @@
+# Function to source files if they exist
+function zsh_add_file() {
+    [ -f "$ZDOTDIR/$1" ] && source "$ZDOTDIR/$1"
+}
+function use() {
+    [ -f "$ZDOTDIR/modules/$1" ] && source "$ZDOTDIR/modules/$1"
+}
+
+function update() {
+	yay -Syyuu --noconfirm
+	rustup update
+}
+
+no_hist_cmd() {
+    "$1"; history -d $(history -2)
+}
+
+print_stage() {
+    if [ -z "$ZSH_SILENT" ]; then
+        export ZSH_SILENT=1
+        return
+    fi
+
+    if [ "$ZSH_SILENT" -eq 1 ]; then
+        return
+    fi
+
+    local bold=$(tput bold)
+    local reset=$(tput sgr0)
+    local green=$(tput setaf 2)
+
+    local prompt_symbol=$'\u00B7'
+    local pre="$bold$green$prompt_symbol$reset"
+    local STAGE="$pre $1"
+
+    echo "$pre"
+    echo "$STAGE"
+    echo "$pre"
+}
+
+set_zsh_silent() {
+    function errormsg {
+        echo "set_zsh_silent() needs one argument: 0 or 1"
+    }
+
+    function validate {
+        if [ -z "$1" ]; then
+            errormsg
+            return
+        fi
+
+        case "$1" in
+            0|1)
+                ;;
+            *)
+                errormsg
+                return
+                ;;
+        esac
+    }
+
+    validate "$1"
+    export ZSH_SILENT="$1"
+}
+
+function tmux_init {
+    # list all tmux sessions
+    sessions=$(tmux list-sessions)
+    # check if there are any sessions
+    if [ -n "$sessions" ]; then
+        # use awk to get the name of the first session
+        session_name=$(echo "$sessions" | awk 'NR==1{print $1}')
+        # initialize the first session
+        tmux attach-session -t "$session_name"
+    else
+        # create a new session if there are no existing sessions
+        tmux
+    fi
+}
+
+function rust_ver() {
+	local ver=$(echo $1)
+    rustup default "$ver" && rustup override set "$ver"
+}
+
+function plugin() {
+    PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
+    if [ -d "$ZDOTDIR/plugins/$PLUGIN_NAME" ]; then 
+        # For plugins
+        zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || \
+        zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.zsh"
+    else
+        git clone "https://github.com/$1.git" "$ZDOTDIR/plugins/$PLUGIN_NAME"
+    fi
+}
+
+function zsh_add_completion() {
+    PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
+    if [ -d "$ZDOTDIR/plugins/$PLUGIN_NAME" ]; then 
+        # For completions
+		completion_file_path=$(ls $ZDOTDIR/plugins/$PLUGIN_NAME/_*)
+		fpath+="$(dirname "${completion_file_path}")"
+        zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh"
+    else
+        git clone "https://github.com/$1.git" "$ZDOTDIR/plugins/$PLUGIN_NAME"
+		fpath+=$(ls $ZDOTDIR/plugins/$PLUGIN_NAME/_*)
+        [ -f $ZDOTDIR/.zccompdump ] && $ZDOTDIR/.zccompdump
+    fi
+	completion_file="$(basename "${completion_file_path}")"
+	if [ "$2" = true ] && compinit "${completion_file:1}"
+}
+
+function mach_java_mode() {
+    #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+    export SDKMAN_DIR="$HOME/.sdkman"
+    [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+}

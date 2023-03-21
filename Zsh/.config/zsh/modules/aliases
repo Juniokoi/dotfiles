@@ -18,7 +18,6 @@ hasAliaS() { command -v "$1" &> /dev/null && alias "$1"="$2"; }
 alias grep='grep --color=auto --exclude-dir=.git -R'
 alias ls="ls --color=auto --group-directories-first -h"
 
-
 has_alias trash-put  rm='trash-put -r'
 has_alias git        diff='git diff --no-index'
 has_alias exa        {ls,exa}='exa --time-style=long-iso --git -@ --group-directories-first --icons --no-permissions --no-user'

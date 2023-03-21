@@ -1,0 +1,14 @@
+eln-cache/
+tmp/
+elpa/
+emms/
+quelpa/
+auto-save-list/
+var/
+amx-items
+ido.last
+**.eld
+transient/
+etc/
+history
+

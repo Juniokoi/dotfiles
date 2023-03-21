@@ -1,5 +1,4 @@
 "$schema" = 'https://starship.rs/config-schema.json'
-starship_precmd_user_func=""
 add_newline = true
 command_timeout = 5000
 scan_timeout = 5000
