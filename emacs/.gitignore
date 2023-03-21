@@ -11,4 +11,5 @@ ido.last
 transient/
 etc/
 history
+.cache/
 
