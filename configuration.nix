@@ -93,14 +93,22 @@
     #   };
     # };
   };
+  hardware.pulseaudio.configFile = pkgs.writeText "default.pa" ''
+    unload-module module-bluetooth-policy
+    unload-module module-bluetooth-discover
+    ## module fails to load with
+    ##   module-bluez5-device.c: Failed to get device path from module arguments
+    ##   module.c: Failed to load module "module-bluez5-device" (argument: ""): initialization failed.
+    # load-module module-bluez5-device
+    # load-module module-bluez5-discover
+  '';
   services.blueman.enable = true;
   # Forces a reset for specified bluetooth usb dongle.
-  systemd.services.fix-generic-usb-bluetooth-dongle = {
-    description = "Fixes for generic USB bluetooth dongle.";
-    wantedBy = [ "post-resume.target" ];
-    after = [ "post-resume.target" ];
-    script = builtins.readFile ./scripts/hack.usb.reset;
-    scriptArgs = "1131:1004"; # Vendor ID and Product ID here
+  systemd.services.fix-bluetooth = {
+    description = "Fixes for bluetooth loading before X11";
+    wantedBy = [ "graphical.target" ];
+    after = [ "graphical.target" ];
+    script = builtins.readFile ./load.bluetooth;
     serviceConfig.Type = "oneshot";
   };
 
