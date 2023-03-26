@@ -1,5 +1,9 @@
 { config, pkgs, ... }:
-
+let
+  unstableTarball =
+    fetchTarball
+      https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
+in
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -81,37 +85,29 @@
   # };
 
   #Bluetooth
-  hardware.pulseaudio = {
+ hardware.pulseaudio = {
      enable = true;
      package = pkgs.pulseaudioFull;
    };
   hardware.bluetooth = {
     enable = true;
-    # settings = {
-    #   General = {
-    #     Enable = "Source,Sink,Media,Socket";
-    #   };
-    # };
+    settings = {
+      General = {
+        Enable = "Source,Sink,Media,Socket";
+      };
+    };
   };
-  hardware.pulseaudio.configFile = pkgs.writeText "default.pa" ''
-    unload-module module-bluetooth-policy
-    unload-module module-bluetooth-discover
-    ## module fails to load with
-    ##   module-bluez5-device.c: Failed to get device path from module arguments
-    ##   module.c: Failed to load module "module-bluez5-device" (argument: ""): initialization failed.
-    # load-module module-bluez5-device
-    # load-module module-bluez5-discover
-  '';
   services.blueman.enable = true;
+
   # Forces a reset for specified bluetooth usb dongle.
-  systemd.services.fix-bluetooth = {
-    description = "Fixes for bluetooth loading before X11";
-    wantedBy = [ "graphical.target" ];
-    after = [ "graphical.target" ];
-    script = builtins.readFile ./load.bluetooth;
+  systemd.services.fix-generic-usb-bluetooth-dongle = {
+    description = "PulseAudio sound server";
+    wantedBy = [ "default.target" ];
+    after = [ "systemd-user-sessions.service" ];
+    type= "simple";
+    execStart = [ "/usr/bin/pulseaudio --daemonize=no --system --realtime --disallow-exit --no-cpu-limit" ];
     serviceConfig.Type = "oneshot";
   };
-
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -131,6 +127,14 @@
   programs.thunar = {
     plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-volman ];
     enable = true;
+  };
+  # Unstable Packages
+  nixpkgs.config = {
+    packageOverrides = pkgs: {
+      unstable = import unstableTarball {
+        config = config.nixpkgs.config;
+      };
+    };
   };
 
   users.users.junio = {
@@ -166,7 +170,9 @@
       vscode
       ubuntu_font_family
 
-      jetbrains.idea-ultimate
+      unstable.jetbrains.idea-ultimate
+      unstable.jetbrains.clion
+      unstable.rustup
       solargraph
 
       vulkan-tools
@@ -174,7 +180,6 @@
       amdvlk
       driversi686Linux.amdvlk
 
-      jetbrains.ruby-mine
       ruby_3_1
       rubyPackages_3_1.rspec-core
       rubyPackages_3_1.openssl
@@ -217,10 +222,10 @@
 
       # Oxidized tools
       hwatch  # watch
-      joshuto # ranger
-      zoxide  # autoload, z
-      fd      # find
-      ripgrep # grep
+      unstable.joshuto # ranger
+      unstable.zoxide  # autoload, z
+      unstable.fd      # find
+      unstable.ripgrep # grep
       gitui   # lazygit
       bottom  # htop
       zellij  # tmux

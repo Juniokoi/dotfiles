@@ -36,8 +36,6 @@
     neovim
     brave
     lazygit
-    rustc
-    cargo
     go
     tmux
     sumneko-lua-language-server
