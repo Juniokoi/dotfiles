@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+item=$(man -k . | sk -p " man: " | awk '{if ($2 == "(1)") print $1}')
+
+if [ ! -n "$item" ]; then
+	read -p "Enter query: " item
+fi
+
+if [ -n "$item" ]; then
+	tmux neww bash -c "man $item | less"
+fi

@@ -1,0 +1,13 @@
+#!/usr/bin/env fash
+
+languages=$(echo "golang c cpp typescript bash javascript java ruby rust lua" | tr " " "\n")
+core_utils=$(echo "find xargs sed awk grep fzf rg fd sd echo nvim vim tmux nix nix-env nix-shell nix-container" | tr " " "\n")
+selected=$(echo -e "$languages\n$core_utils" | sk)
+
+read -p "INSERT QUERY: " query
+
+if echo "$languages" | grep -qs $selected; then
+	tmux neww bash -c "curl cht.sh/$selected/$(echo "$query" | tr " " "+") | less"
+else
+	curl cht.sh/"$selected"~"$query"
+fi

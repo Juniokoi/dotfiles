@@ -58,20 +58,7 @@ in
   # Enable CUPS to print documents.
   services = {
     printing.enable = true;
-    emacs = {
-      enable = true;
-      install = true;
-      package = pkgs.emacsUnstable;
-    };
   };
-
-  nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      url =
-        "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
-      sha256 = "0yikij7r12kspfhp3rqr8lnfw49bzl9jsv021kyimffg518y8ncv";
-    }))
-  ];
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -98,18 +85,6 @@ in
     };
   };
   services.blueman.enable = true;
-
-  # Forces a reset for specified bluetooth usb dongle.
-  systemd.services.fix-generic-usb-bluetooth-dongle = {
-    description = "PulseAudio sound server";
-    wantedBy = [ "default.target" ];
-    after = [ "systemd-user-sessions.service" ];
-    type= "simple";
-    execStart = [ "/usr/bin/pulseaudio --daemonize=no --system --realtime --disallow-exit --no-cpu-limit" ];
-    serviceConfig.Type = "oneshot";
-  };
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   programs.fish.enable = true;
   users.defaultUserShell = pkgs.fish;
@@ -155,38 +130,41 @@ in
       patch
       nodejs
       openssl
-
       redshift
+      neofetch
+
       stylua
 
-      neofetch
       statix
       nixfmt
 
       obs-studio
       xdg-desktop-portal
       xdg-desktop-portal-wlr
-	  xdg-utils
+      xdg-utils
       vscode
       ubuntu_font_family
 
-      unstable.jetbrains.idea-ultimate
-      unstable.jetbrains.clion
-      unstable.rustup
+      libxcrypt
+      # unstable.jetbrains.idea-ultimate
+      # unstable.jetbrains.clion
+      unstable.jetbrains-toolbox
+
+      # Ruby
+      bundix
+      ruby_3_1
       solargraph
+      rubyPackages_3_1.openssl
+      rubyPackages_3_1.rspec-core
+
+      unstable.rustup
 
       vulkan-tools
       vulkan-headers
       amdvlk
       driversi686Linux.amdvlk
 
-      ruby_3_1
-      rubyPackages_3_1.rspec-core
-      rubyPackages_3_1.openssl
-      bundix
-
       notion-app-enhanced
-      libreoffice-qt
       gimp
       opentabletdriver
       python3
@@ -195,6 +173,7 @@ in
       unzip
       fzf
       obsidian
+      libreoffice-qt
 
       authy
 
@@ -257,6 +236,7 @@ in
         i3status
         i3lock
         i3blocks
+        xcolor
         feh
         rofi
         dunst
@@ -269,7 +249,22 @@ in
       ];
     };
   };
-  # Enable automatic login for the user.
+
+  services.picom = {
+    enable = true;
+    vSync = true;
+    fade = false;
+    settings = {
+      wintypes = {
+        # normal = { fade = true; focus = true; shadow = true; };
+        tooltip = { fade = true; shadow = true; opacity = 1; focus = true; full-shadow = false; };
+        dock = { shadow = false; clip-shadow-above = true; };
+        dnd = { shadow = false; };
+        popup_menu = { opacity = 0.8; };
+        dropdown_menu = { opacity = 0.8; };
+      };
+    };
+  };
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
