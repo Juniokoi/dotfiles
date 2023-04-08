@@ -1,6 +1,7 @@
 { lib, ... }:
 
 with lib; rec {
+	imports = [ ./fs ]
   defaultSystems = [
     "aarch64-linux"
     "aarch64-darwin"

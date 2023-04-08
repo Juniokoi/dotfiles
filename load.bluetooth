@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-/run/current-system/sw/bin/pactl load-module module-bluetooth-discover
-/run/current-system/sw/bin/pactl load-module module-bluetooth-policy
-/run/current-system/sw/bin/pactl load-module module-switch-on-connect
