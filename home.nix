@@ -3,9 +3,11 @@
   pkgs,
   ...
 }:
+let
+in
 {
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
+# Home Manager needs a bit of information about you and the
+# paths it should manage.
   home.username = "junio";
   home.homeDirectory = "/home/junio";
 
@@ -22,24 +24,6 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  home.packages = with pkgs; [
-    fd
-    sd
-    exa
-    bat
-    ripgrep
-    wiki-tui
-    skim
-    broot
-    alacritty
-    hyperfine
-    neovim
-    brave
-    lazygit
-    go
-    tmux
-    sumneko-lua-language-server
-    alacritty
-    bitwarden-cli
+  home.packages = [
   ];
 }

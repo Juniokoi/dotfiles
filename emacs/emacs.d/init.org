@@ -4,8 +4,7 @@
 * hi!
 
 * Package System setup
-
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (require 'package)
 
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -40,8 +39,8 @@
 
   (setq inhibit-startup-message t)
 
-  (tool-bar-mode -1)
-  (scroll-bar-mode)
+  ;; (tool-bar-mode -1)
+  ;; (scroll-bar-mode)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
   (tooltip-mode -1)
@@ -629,7 +628,7 @@
 
 ** Dashboard
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
 
   (use-package page-break-lines ;; Required for fancy lines
@@ -654,73 +653,73 @@
 
 #+end_src
 
-** Text
-*** Hide markup elements /(i.e. /*,/,=,~ ...)
-/default: on/
-#+BEGIN_SRC emacs-lisp :tangle yes
-(with-eval-after-load 'org
-  (setq org-hide-emphasis-markers t)
-  (defun org-toggle-emphasis ()
-    "Toggle hiding/showing of org emphasize markers."
-    (interactive)
-    (if org-hide-emphasis-markers
-        (set-variable 'org-hide-emphasis-markers nil)
-      (set-variable 'org-hide-emphasis-markers t))
-    (org-mode-restart))
-  (bind-key (kbd "C-c e") 'org-toggle-emphasis org-mode-map))
-#+END_SRC
+# ** COMMENT Text
+# *** Hide markup elements /(i.e. /*,/,=,~ ...)
+# /default: on/
+# #+BEGIN_SRC emacs-lisp :tangle yes
+# (with-eval-after-load 'org
+#   (setq org-hide-emphasis-markers t)
+#   (defun org-toggle-emphasis ()
+#     "Toggle hiding/showing of org emphasize markers."
+#     (interactive)
+#     (if org-hide-emphasis-markers
+#         (set-variable 'org-hide-emphasis-markers nil)
+#       (set-variable 'org-hide-emphasis-markers t))
+#     (org-mode-restart))
+#   (bind-key (kbd "C-c e") 'org-toggle-emphasis org-mode-map))
+# #+END_SRC
 
-*** Markdown header sizes
-#+begin_src emacs-lisp :tangle yes
-(custom-set-faces
- '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
- '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.5))))
- '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.4))))
- '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.3))))
- '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.2))))
- '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.0))))
- '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.0)))))
-#+end_src
+# *** Markdown header sizes
+# #+begin_src emacs-lisp :tangle yes
+# (custom-set-faces
+#  '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
+#  '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.5))))
+#  '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.4))))
+#  '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.3))))
+#  '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.2))))
+#  '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.0))))
+#  '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.0)))))
+# #+end_src
 
-#+begin_src emacs-lisp
-  (setq org-fontify-whole-heading-line t
-        ;; I've included these to maximize compatibility with doom-themes in general
-        org-fontify-done-headline t
-        org-fontify-quote-and-verse-blocks t)
-  (defun jk/org-colors-catppuccin ()
-    "Enable Catppuccin colors for Org headers."
-    (interactive)
-    (dolist
-        (face
-         '((org-level-1 1.4 "#fab387" "#241E29" ultra-bold);;Peach
-           (org-level-2 1.3 "#f38ba8" "#29222F" normal)    ;;Red
-           (org-level-3 1.2 "#cba6f7" "#332B3B" normal)    ;;Mauve
-           (org-level-4 1.1 "#89b4fa" "#2B313B" normal)    ;;Blue
-           (org-level-5 1.0 "#74c7ec" "#2B363B" normal)    ;;Sapphire
-           (org-level-6 1.0 "#a6e3a1" "#2D3B2B" normal)    ;;Green
-           (org-level-7 1.0 "#f9e2af" "#3B362B" normal)    ;;Yellow
-           (org-level-8 1.0 "#fab387" "#3B312B" normal)))  ;;Pearh
-      (set-face-attribute (nth 0 face) nil :font variable-pitch-font :weight (nth 4 face) :height (nth 1 face) :foreground (nth 2 face) :background (nth 3 face)))
-    (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-table nil :font main-font :weight 'normal :height 1.0 :foreground "#bac2de"))
-#+end_src
+# #+begin_src emacs-lisp
+#   (setq org-fontify-whole-heading-line t
+#         ;; I've included these to maximize compatibility with doom-themes in general
+#         org-fontify-done-headline t
+#         org-fontify-quote-and-verse-blocks t)
+#   (defun jk/org-colors-catppuccin ()
+#     "Enable Catppuccin colors for Org headers."
+#     (interactive)
+#     (dolist
+#         (face
+#          '((org-level-1 1.4 "#fab387" "#241E29" ultra-bold);;Peach
+#            (org-level-2 1.3 "#f38ba8" "#29222F" normal)    ;;Red
+#            (org-level-3 1.2 "#cba6f7" "#332B3B" normal)    ;;Mauve
+#            (org-level-4 1.1 "#89b4fa" "#2B313B" normal)    ;;Blue
+#            (org-level-5 1.0 "#74c7ec" "#2B363B" normal)    ;;Sapphire
+#            (org-level-6 1.0 "#a6e3a1" "#2D3B2B" normal)    ;;Green
+#            (org-level-7 1.0 "#f9e2af" "#3B362B" normal)    ;;Yellow
+#            (org-level-8 1.0 "#fab387" "#3B312B" normal)))  ;;Pearh
+#       (set-face-attribute (nth 0 face) nil :font variable-pitch-font :weight (nth 4 face) :height (nth 1 face) :foreground (nth 2 face) :background (nth 3 face)))
+#     (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
+#     (set-face-attribute 'org-table nil :font main-font :weight 'normal :height 1.0 :foreground "#bac2de"))
+# #+end_src
 
-** Fonts
-*Default:*
-#+begin_src emacs-lisp :tangle yes
-(setq main-font (font-spec :family "Iosevkoi" :size 16))
-#+end_src
+# ** Fonts
+# *Default:*
+# #+begin_src emacs-lisp :tangle yes
+# (setq main-font (font-spec :family "Iosevkoi" :size 16))
+# #+end_src
 
-*Pitch font:*
-/Useful for reading docs and /common text/
-#+begin_src emacs-lisp :tangle yes
-(setq variable-pitch-font (font-spec :family "Ubuntu mono"))
-#+end_src
+# *Pitch font:*
+# /Useful for reading docs and /common text/
+# #+begin_src emacs-lisp :tangle yes
+# (setq variable-pitch-font (font-spec :family "Ubuntu mono"))
+# #+end_src
 
-*Big font:*
-/Used on Org title and other things/
-#+begin_src emacs-lisp :tangle yes
-(setq big-font (font-spec :family "Iosevkoi" :size 20))
-;; Serif
-(setq serif-font (font-spec :family "Noto Serif"))
-#+end_src
+# *Big font:*
+# /Used on Org title and other things/
+# #+begin_src emacs-lisp :tangle yes
+# (setq big-font (font-spec :family "Iosevkoi" :size 20))
+# ;; Serif
+# (setq serif-font (font-spec :family "Noto Serif"))
+# #+end_src

@@ -1,37 +1,63 @@
+
 {
-  description = "A very basic flake";
+  description = "junio's system configuration";
+
   inputs = {
-    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.unstable.follows = "nixpkgs";
-    };
+    unstable.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url  = "nixpkgs/nixos-22.11";
+
+    systems.url = "file://./systems";
   };
-  outputs = {
-    unstable,
-    home-manager,
-    ...
-  }: let
-    system = "x86_64-linux";
-    pkgs = unstable.legacyPackages.${system};
-    lib = unstable.lib;
-  in {
-    nixosConfigurations = {
-      junio = lib.nixosSystem {
-        inherit system;
-        modules = [
-          ./configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.junio = {imports = [./home.nix];};
-            # Optionally, use home-manager.extraSpecialArgs to pass
-            # arguments to home.nix
-          }
-        ];
+
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      systems,
+      ...
+    }:
+
+    with builtins;
+
+    let
+      lib = import ./lib;
+      localpkgs = import ./pkgs;
+      extralib = self: super: import ./lib/extrafn.nix { pkgs = super; };
+
+      allPkgs = lib.mkPkgs {
+        inherit nixpkgs;
+        cfg = { allowUnfree = true; };
+        overlays = [ localpkgs extralib ];
       };
-    };
+    in
+
+    {
+      devShell = lib.withDefaultSystems (sys:
+        let
+          pkgs = allPkgs."${sys}";
+        in
+          import ./shell.nix { inherit pkgs; });
+
+      packages = lib.mkSearchablePackages allPkgs;
+
+      overlays = [
+        (final: prev: {
+          nixosConfigurations = prev.nixosConfigurations // {};
+
+          # Função para criar os perfis `nix develop` para cada sistema
+          systemsProfiles =
+            systems.inputs // {} // import systems.url { inherit systems; };
+          nixosConfigurations.${systemName} =
+            systemsProfiles.${systemName} // {};
+
+          # Função para obter o caminho completo do perfil `nix develop`
+          profilePath = system: profile: {
+            localPath = "${./systems}/${system}/${profile}";
+            absolutePath = builtins.toPath localPath;
+          };
+        })
+      ];
+
   };
 }
 #eol

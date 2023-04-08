@@ -1,4 +1,5 @@
-{ config, pkgs, ... }:
+1 config, pkgs, ... }:
+
 let
   unstableTarball =
     fetchTarball
@@ -24,6 +25,7 @@ in
     LC_TIME = "pt_BR.UTF-8";
   };
 
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -48,11 +50,13 @@ in
     XDG_CONFIG_HOME = "\${HOME}/.config";
     XDG_BIN_HOME    = "\${HOME}/.local/bin";
     XDG_DATA_HOME   = "\${HOME}/.local/share";
-	XCURSOR_SIZE = "16";
+    XCURSOR_SIZE = "16";
 
-	PATH = [
-		"\${HOME}/.bin"
-	];
+    PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
+    PATH = [
+      "\${HOME}/bin"
+    ];
+
   };
 
   # Enable CUPS to print documents.
@@ -71,20 +75,6 @@ in
   #   #jack.enable = true;
   # };
 
-  #Bluetooth
- hardware.pulseaudio = {
-     enable = true;
-     package = pkgs.pulseaudioFull;
-   };
-  hardware.bluetooth = {
-    enable = true;
-    settings = {
-      General = {
-        Enable = "Source,Sink,Media,Socket";
-      };
-    };
-  };
-  services.blueman.enable = true;
 
   programs.fish.enable = true;
   users.defaultUserShell = pkgs.fish;
@@ -112,6 +102,13 @@ in
     };
   };
 
+  services.emacs = {
+    enable= true;
+  };
+
+  # haskell
+  services.hoogle.enable = true;
+
   users.users.junio = {
     isNormalUser = true;
 
@@ -132,30 +129,61 @@ in
       openssl
       redshift
       neofetch
+      microsoft-edge
 
+      pkgconfig
+
+      # linters
+      shfmt
+      shellcheck
+      html-tidy
+      nodePackages.stylelint
+      nodePackages.js-beautify
+      editorconfig-core-c
+      mu
+      gopls
+      sqlite
       stylua
-
       statix
       nixfmt
+      offlineimap
+      imagemagick
+      emacsPackages.markdown-preview-mode
+      haskell-language-server
+      cabal-install
+
+      # libs
+      jq
+      zip
+      unzip
+      gnugrep
+      grip-search
+      fzf
+
 
       obs-studio
       xdg-desktop-portal
       xdg-desktop-portal-wlr
       xdg-utils
-      vscode
+      unstable.vscode
       ubuntu_font_family
 
       libxcrypt
       # unstable.jetbrains.idea-ultimate
       # unstable.jetbrains.clion
       unstable.jetbrains-toolbox
+      neovide
 
-      # Ruby
-      bundix
-      ruby_3_1
-      solargraph
-      rubyPackages_3_1.openssl
-      rubyPackages_3_1.rspec-core
+      alacritty
+      neovim
+      go
+      lazygit
+      tmux
+      sumneko-lua-language-server
+      alacritty
+      bitwarden
+      trilium-desktop
+      unstable.helix
 
       unstable.rustup
 
@@ -169,9 +197,9 @@ in
       opentabletdriver
       python3
       starship
-      zip
-      unzip
-      fzf
+
+      ## Software
+      calibre
       obsidian
       libreoffice-qt
 
@@ -184,7 +212,6 @@ in
       pciutils
       toybox
 
-      pavucontrol
       lua
       luajit
       sumneko-lua-language-server
@@ -196,21 +223,12 @@ in
       gnupg
       direnv
       spotify
+      stremio
       discord
       htop
 
-      # Oxidized tools
-      hwatch  # watch
-      unstable.joshuto # ranger
-      unstable.zoxide  # autoload, z
-      unstable.fd      # find
-      unstable.ripgrep # grep
-      gitui   # lazygit
-      bottom  # htop
-      zellij  # tmux
-      delta   # diff
-      du-dust # du
-    ];
+# Oxidized tools
+      ];
   };
 
   services.xserver = {
@@ -218,10 +236,12 @@ in
     layout = "us";
     xkbVariant = "";
     digimend.enable = true; # Set Huion, XP-Pen, etc. tablets
-    desktopManager = {
-      xterm.enable = false;
-      gnome.enable = true;
-    };
+      desktopManager = {
+        xterm.enable = false;
+        gnome.enable = true;
+
+
+      };
     displayManager = {
       autoLogin = {
         enable = true;
@@ -234,18 +254,18 @@ in
       enable = true;
       extraPackages = with pkgs; [
         i3status
-        i3lock
-        i3blocks
-        xcolor
-        feh
-        rofi
-        dunst
-        xorg.xmodmap
-        xorg.xwininfo
-        xidlehook
-        xclip
-        flameshot
-        lxappearance
+          i3lock
+          i3blocks
+          xcolor
+          feh
+          rofi
+          dunst
+          xorg.xmodmap
+          xorg.xwininfo
+          xidlehook
+          xclip
+          flameshot
+          lxappearance
       ];
     };
   };
@@ -256,7 +276,7 @@ in
     fade = false;
     settings = {
       wintypes = {
-        # normal = { fade = true; focus = true; shadow = true; };
+# normal = { fade = true; focus = true; shadow = true; };
         tooltip = { fade = true; shadow = true; opacity = 1; focus = true; full-shadow = false; };
         dock = { shadow = false; clip-shadow-above = true; };
         dnd = { shadow = false; };
@@ -266,21 +286,27 @@ in
     };
   };
 
-  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
+# Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
-  # Allow unfree packages
+  services.trilium-server = {
+    enable= true;
+    noAuthentication = true;
+    port = 5454;
+  };
+
+# Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+# List packages installed in system profile. To search, run:
+# $ nix search wget
 
   environment.systemPackages = with pkgs; [
     vim
-    wget
-    firefox
-    (wrapOBS { plugins = with pkgs.obs-studio-plugins; [ wlrobs ]; })
+      wget
+      firefox
+      (wrapOBS { plugins = with pkgs.obs-studio-plugins; [ wlrobs ]; })
   ];
 
   programs.gnupg.agent = {
@@ -288,42 +314,42 @@ in
     enableSSHSupport = true;
   };
 
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+# Enable the OpenSSH daemon.
+# services.openssh.enable = true;
   networking = {
     defaultGateway = "192.168.0.1";
     nameservers = [ "1.1.1.1" ];
-    # firewall = {
-    # allowedTCPPorts = [ ... ];
-    # allowedUDPPorts = [ ... ];
-    # enable = false;
-    # }
+# firewall = {
+# allowedTCPPorts = [ ... ];
+# allowedUDPPorts = [ ... ];
+# enable = false;
+# }
   };
 
-  #nixpkgs.overlays = [
-  #(self: super: {
-  #discord = super.discord.overrideAttrs (
-  #_: { src = builtins.fetchTarball {
-  #url = "https://discord.com/api/download?platform=linux&format=tar.gz";
-  #sha256 = "0000000000000000000000000000000000000000000000000";
-  #}; }
-  #);
-  #})
-  #];
+#nixpkgs.overlays = [
+#(self: super: {
+#discord = super.discord.overrideAttrs (
+#_: { src = builtins.fetchTarball {
+#url = "https://discord.com/api/download?platform=linux&format=tar.gz";
+#sha256 = "0000000000000000000000000000000000000000000000000";
+#}; }
+#);
+#})
+#];
 
   system.stateVersion = "22.11"; # Change only if necessary
 
-  ## OBS packages
-  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+## OBS packages
+    boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
 
-  ## Graphic card
+## Graphic card
   boot.initrd.kernelModules = [ "amdgpu" ];
   services.xserver.videoDrivers = [ "amdgpu" ];
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
   hardware.opengl.extraPackages = with pkgs; [
     rocm-opencl-icd
-    rocm-opencl-runtime
+      rocm-opencl-runtime
   ];
   environment.variables.VK_ICD_FILENAMES =
     "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";

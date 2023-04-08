@@ -10,12 +10,13 @@ end
 
 set -g EDITOR nvim
 
+alias tmux tmux-init
+
 #-a==--add
 #functionnvim_edit;echo nvim .; end
 #abbr-av --position anywhere --function nvim_edit
 abbr -a v nvim;
 abbr -a vi nvim;
-abbr -a vim nvim;
 abbr -a lg lazygit
 
 alias logout "pkill -KILL -u $USER"
@@ -45,7 +46,7 @@ bind -M default \er 'resource'
 bind -M insert \er 'resource'
 
 #C-v: open current folder with neovim
-function _edit_nvim;nvim ; end
+function _edit_nvim;nvim; end
 bind -M default \cf '_edit_nvim'
 bind -M insert \cf '_edit_nvim'
 
@@ -99,9 +100,9 @@ function tmux_init
 	end
 end
 
-if test ! -n "$JETBRAINS_TERMINAL" -o "$JETBRAINS_TERMINAL" -ne 1
-	tmux_init
-end
+#if test ! -n "$JETBRAINS_TERMINAL" -o "$JETBRAINS_TERMINAL" -ne 1
+	#tmux_init
+#end
 
 function va -d 'Check if has arguments'
 	if test (count $argv) -eq 0

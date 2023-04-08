@@ -24,7 +24,7 @@
        :completion
        company         ; the ultimate code completion backend
        (ivy +fuzzy +prescient +icons); a search engine for love and life
-       (vertico +icons); the search engine of the future
+       ;(vertico +icons); the search engine of the future
 
        :ui
        deft              ; notational velocity for Emacs
@@ -39,7 +39,7 @@
                 +fira
                 +extra)         ; ligatures and symbols to make your code pretty again
        minimap           ; show a map of the code on the side
-       modeline          ; snazzy, Atom-inspired modeline, plus API
+       ( modeline +light); snazzy, Atom-inspired modeline, plus API
        nav-flash         ; blink cursor line after big motions
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
@@ -66,7 +66,7 @@
        word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       (dired +ranger +icons); making dired pretty [functional]
+       (dired +icons); making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        (ibuffer +icons); interactive buffer management
        (undo +tree); persistent, smarter undo for your inevitable mistakes
@@ -87,7 +87,7 @@
        (eval +overlay)     ; run code, run (also, repls)
        gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
-       (lsp +peek +eglot)               ; M-x vscode
+       (lsp +peek)               ; M-x vscode
        (magit +forge)             ; a git porcelain for Emacs
        pass              ; password manager for nerds
        rgb               ; creating color strings
@@ -109,18 +109,10 @@
        javascript        ; all(hope(abandon(ye(who(enter(here))))))
        lua               ; one-based indices? one-based indices
        (markdown +grip); writing docs for people to ignore
+       (nix +tree-sitter)
        (org
-        +attatch
         +journal
-        +export
-        +babel
-        +present
-        +pretty
-        +pomodoro
-        +present
-        +hugo
-        +brain
-        +noter)
+        +pomodoro)
        rest              ; Emacs as a REST client
        (ruby +rails +lsp +rvm +rbenv)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        (rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
@@ -139,7 +131,6 @@
        everywhere        ; *leave* Emacs!? You must be joking
        irc               ; how neckbeards socialize
        (rss +org)        ; emacs as an RSS reader
-       twitter           ; twitter client https://twitter.com/vnought
 
        :config
        (default +bindings +smartparens)
