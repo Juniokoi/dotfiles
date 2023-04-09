@@ -1,8 +1,9 @@
-# This file is built on top of Snowfall-lib.
-# https://github.com/snowfallorg/lib
-{ pkgs
-, config
-, lib
+# This file is built on top of flake-libs (https://github.com/snowfallorg/lib)
+# A project by Jake Hamilton (https://github.com/jakehamilton/)
+
+{ core-inputs
+, user-inputs
+, flake-libs
 }:
 
 let
@@ -84,7 +85,7 @@ in
             get-files-recursive path'
           else
             path';
-        files = snowfall-lib.attrs.map-concat-attrs-to-list
+        files = flake-libs.attrs.map-concat-attrs-to-list
           map-file
           filtered-entries;
       in
@@ -96,7 +97,7 @@ in
     #   result: [ "./something/a.nix" ]
     get-nix-files = path:
       builtins.filter
-        (snowfall-lib.path.has-file-extension "nix")
+        (flake-libs.path.has-file-extension "nix")
         (get-files path);
 
     # Get nix files at a given path, traversing any directories within.
@@ -105,7 +106,7 @@ in
     #   result: [ "./something/a.nix" ]
     get-nix-files-recursive = path:
       builtins.filter
-        (snowfall-lib.path.has-file-extension "nix")
+        (flake-libs.path.has-file-extension "nix")
         (get-files-recursive path);
 
     # Get nix files at a given path named "default.nix".
@@ -133,7 +134,7 @@ in
     get-non-default-nix-files = path:
       builtins.filter
         (name:
-          (snowfall-lib.path.has-file-extension "nix" name)
+          (flake-libs.path.has-file-extension "nix" name)
           && (builtins.baseNameOf name != "default.nix")
         )
         (get-files path);
@@ -146,7 +147,7 @@ in
     get-non-default-nix-files-recursive = path:
       builtins.filter
       (name:
-        (snowfall-lib.path.has-file-extension "nix" name)
+        (flake-libs.path.has-file-extension "nix" name)
         && (builtins.baseNameOf name != "default.nix")
       )
       (get-files-recursive path);

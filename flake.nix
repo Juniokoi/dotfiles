@@ -1,79 +1,59 @@
+{	description = "junio's system configuration";
+	inputs = {
+	  	nixpkgs.url  = "nixpkgs/nixos-22.11";
+	  	unstable.url = "nixpkgs/nixos-unstable";
 
-{
-  description = "junio's system configuration";
+	  	home-manager = {
+	  		url = "github:nix-community/home-manager/release-22.11";
+	  		inputs.nixpkgs.follows = "nixpkgs";
+	  	};
 
-  inputs = rec {
-		nixpkgs.url  = "nixpkgs/nixos-22.11";
-		unstable.url = "nixpkgs/nixos-unstable";
+	  	# Run unpatched dynamically compiled binaries
+	  	nix-ld = {
+	  		url = "github:Mic92/nix-ld";
+	  		inputs.nixpkgs.follows = "unstable";
+	  	};
 
-		home-manager = {
-		    url = "github:nix-community/home-manager/release-22.11";
-		    inputs.nixpkgs.follows = "nixpkgs";
-		};
+	  	flake-compact = {
+	  	  url = "./misc/flake-compact.nix";
+	  	  flake = false;
+	  	};
 
-		# Run unpatched dynamically compiled binaries
-		nix-ld = {
-			url = "github:Mic92/nix-ld";
-			inputs.nixpkgs.follows = "unstable";
-		};
+	  	systems = {
+	  		url = "./systems/default.nix";
+	  		flake = false;
+	  	};
+	};
 
-		flake-compat = {
-		  url = "./misc/flake-compat";
-		  flake = false;
-		};
-
-		systems = {
-			url = "./systems";
-			flake = false;
-		};
-  };
-
-  outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      systems,
-      ...
-    }:
-
-    with builtins;
-
+	outputs = inputs@{ self, nixpkgs, systems, ... }:
 	let
-		lib = import [ ./lib ];
-		localpkgs = import ./pkgs;
-		extralib = self: super: import ./lib/extrafn.nix { pkgs = super; };
-		allPkgs = lib.mkPkgs {
-			inherit nixpkgs;
-			overlays = [ localpkgs extralib ];
-		};
-		user = "junio";
+		core-inputs =
+			inputs // { src = ./.; };
+
+		mkLib = import ./lib core-inputs;
+
+		mkFlake = flake-and-lib-options@{ inputs, src, ... }:
+			let
+				lib = mkLib {
+					inherit inputs src;
+				};
+				flake-options =
+					builtins.removeAttrs flake-and-lib-options [ "inputs" "src" ];
+			in
+				lib.mkFlake flake-options;
     in
     {
-      devShell = lib.withDefaultSystems (sys:
-        let
-          pkgs = allPkgs."${sys}";
-        in
-	  import ./shell.nix { inherit pkgs; });
+		inherit mkLib mkFlake;
 
-	  # mkFlake { inherit inputs, src = ./. }
+		mkLib { inherit inputs; src = ./.; }
+		mkFlake {
+			package-namespace = "settings";
 
-	  packages = lib.mkSearchablePackages allPkgs;
-	  overlays = [
-		(final: prev: {
-		  nixosConfigurations = prev.nixosConfigurations // {};
-
-		  # Função para criar os perfis `nix develop` para cada sistema
-		  systemsProfiles =
-			systems.inputs // {} // import systems.url { inherit systems; };
-
-		  # Função para obter o caminho completo do perfil `nix develop`
-		  profilePath = system: profile: {
-			localPath = "${./systems}/${system}/${profile}";
-			absolutePath = builtins.toPath localPath;
-		  };
-		})
-	  ];
-
-  };
+			systems.modules = with inputs; [
+				home-manager.nixosModules.home-manager
+				nix-ld.nixosModules.nix-ld
+			];
+		};
+	};
 }
 #eol

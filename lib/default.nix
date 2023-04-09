@@ -1,165 +1,94 @@
-{ lib, ... }:
+# This file is built on top of Snowfall-lib (https://github.com/snowfallorg/lib)
+# A project by Jake Hamilton (https://github.com/jakehamilton/)
 
-with lib; rec {
-	imports = [ ./fs ]
-  defaultSystems = [
-    "aarch64-linux"
-    "aarch64-darwin"
-    "i686-linux"
-    "x86_64-darwin"
-    "x86_64-linux"
+core-inputs: user-options:
+
+let
+  user-inputs = user-options.inputs // { src = user-options.src; };
+
+  inherit (core-inputs.nixpkgs.lib)
+    assertMsg fix filterAttrs mergeAttrs fold recursiveUpdate;
+
+  # Recursively merge a list of attribute sets.
+  # Type: [Attrs] -> Attrs
+  # Usage: merge-deep [{ x = 1; } { x = 2; }]
+  #   result: { x = 2; }
+  merge-deep = fold recursiveUpdate { };
+
+  # Merge the root of a list of attribute sets.
+  # Type: [Attrs] -> Attrs
+  # Usage: merge-shallow [{ x = 1; } { x = 2; }]
+  #   result: { x = 2; }
+  merge-shallow = fold mergeAttrs { };
+
+  # Transform an attribute set of inputs into an attribute set where
+  # the values are the inputs' `lib` attribute. Entries without a `lib`
+  # attribute are removed.
+  # Type: Attrs -> Attrs
+  # Usage: get-libs{ x = nixpkgs; y = {}; }
+  #   result: { x = nixpkgs.lib; }
+  get-libs = attrs:
+    let
+      # @PERF(jakehamilton): Replace filter+map with a fold.
+      attrs-with-libs =
+        filterAttrs (name: value: builtins.isAttrs (value.lib or null)) attrs;
+      libs = builtins.mapAttrs (name: input: input.lib) attrs-with-libs;
+    in libs;
+
+  # Remove the `self` attribute from an attribute set.
+  # Type: Attrs -> Attrs
+  # Usage: without-self { self = {}; x = true; }
+  #   result: { x = true; }
+  without-self = attrs: builtins.removeAttrs attrs [ "self" ];
+
+  core-inputs-libs = get-libs (without-self core-inputs);
+  user-inputs-libs = get-libs (without-self user-inputs);
+
+	flake-libs-root = "${core-inputs.src}/lib/flake-libs";
+	flake-libs-dirs =
+		let
+			files = builtins.readDir flake-libs-root;
+			dirs  = filterAttrs (name: kind: kind == "directory") files;
+			names = builtins.attrNames dirs;
+		in names;
+
+	flake-libs = fix (flake-libs:
+		let
+      attrs = { inherit flake-libs core-inputs user-inputs; };
+      libs = builtins.map (dir: import "${flake-libs-root}/${dir}" attrs)
+        flake-libs-dirs;
+    in merge-deep libs);
+
+  flake-top-level-libs=
+    filterAttrs (name: value: !builtins.isAttrs value) flake-libs
+
+  base-libs= merge-shallow [
+    core-inputs.nixpkgs.lib
+    core-inputs-libs
+    user-inputs-libs
+    flake-top-level-lib
+    { flake = snowfall-libs }
   ];
 
-  settings = {
-    name = mkDefault "nixos";
-  };
+  user-libs-root = "${user-inputs.src}/lib";
+  user-libs-modules =
+		flake-libs.get-default-nix-files-recursive user-lib-root;
 
-  device_name_list = [ pc note ];
-
-  mkFlake = src_input: channels-config:
-    src_input + "/systems" + device_name_list
-    channels-config = mkOption {
-      type = types.attrs;
-      default = { };
-      description = "Channel configuration";
-    };
-
-
-  mkOpt = type: default: description:
-    mkOption { inherit type default description; };
-
-  mkOpt' = type: default: mkOpt type default null;
-
-  mkBoolOpt = mkOpt types.bool;
-
-  mkBoolOpt' = mkOpt' types.bool;
-
-  enabled = { enable = true; };
-
-  disabled = { enable = false; };
-
-  # Package names to exclude from search
-  # Use to exclude packages that cause errors during search.
-  searchBlackList = [ "hyper-haskell-server-with-packages" ];
-
-  # Taken from flake-utils
-  # List of all systems defined in nixpkgs
-  # Keep in sync with nixpkgs wit the following command:
-  # $ nix-instantiate --json --eval --expr "with import <nixpkgs> {}; lib.platforms.all" | jq
-  allSystems = [
-    "aarch64-linux"
-    "armv5tel-linux"
-    "armv6l-linux"
-    "armv7a-linux"
-    "armv7l-linux"
-    "mipsel-linux"
-    "i686-cygwin"
-    "i686-freebsd"
-    "i686-linux"
-    "i686-netbsd"
-    "i686-openbsd"
-    "x86_64-cygwin"
-    "x86_64-freebsd"
-    "x86_64-linux"
-    "x86_64-netbsd"
-    "x86_64-openbsd"
-    "x86_64-solaris"
-    "x86_64-darwin"
-    "i686-darwin"
-    "aarch64-darwin"
-    "armv7a-darwin"
-    "x86_64-windows"
-    "i686-windows"
-    "wasm64-wasi"
-    "wasm32-wasi"
-    "x86_64-redox"
-    "powerpc64le-linux"
-    "riscv32-linux"
-    "riscv64-linux"
-    "arm-none"
-    "armv6l-none"
-    "aarch64-none"
-    "avr-none"
-    "i686-none"
-    "x86_64-none"
-    "powerpc-none"
-    "msp430-none"
-    "riscv64-none"
-    "riscv32-none"
-    "vc4-none"
-    "js-ghcjs"
-    "aarch64-genode"
-    "x86_64-genode"
-  ];
-
-  evalMods = { allPkgs, systems ? defaultSystems, modules, args ? { } }:
-    withSystems systems (sys:
-      let pkgs = allPkgs."${sys}";
-      in pkgs.lib.evalModules {
-        inherit modules;
-        specialArgs = { inherit pkgs; } // args;
-      });
-
-  mkPkgs = { nixpkgs, systems ? defaultSystems, cfg ? { }, overlays ? [ ] }:
-    withSystems systems (sys:
-      import nixpkgs {
-        system = sys;
-        config = cfg;
-        overlays = overlays;
-      });
-
-  mkOverlays = { allPkgs, systems ? defaultSystems, overlayFunc }:
-    withSystems systems
-    (sys: let pkgs = allPkgs."${sys}"; in overlayFunc sys pkgs);
-
-  withDefaultSystems = withSystems defaultSystems;
-  withSystems = systems: f:
-    foldl' (cur: nxt: let ret = { "${nxt}" = f nxt; }; in cur // ret) { }
-    systems;
-
-  mkNixOSConfig = {
-        name,
-        nixpkgs ? import <nixpkgs> {},
-        allPkgs,
-        system,
-        modules ? [ ../modules ],
-        cfg ? { },
-        ...
-    }:
-
+  user-libs = fix (user-libs:
     let
-      pkgs = allPkgs."${system}";
-      secrets = LoadRepoSecrets ../.secrets;
-    in
+      attrs = {
+        inherit (user-options) inputs;
+        flake-inputs = core-inputs;
+        lib = merge-shallow [ base-libs-user-lib ];
+      };
+      libs = builtins.map (path: import path attrs) user-libs-modules;
+    in merge-deep libs);
 
-    nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [
-        cfg {
-          imports = modules;
-          sys.security.secrets = secrets;
-          nixpkgs.pkgs = pkgs;
-          system.stateVersion = "22.11";
-          networking.hostName = "${name}";
-        }
-      ];
-    };
+  lib = merge-deep [ base-libs-user-lib ];
 
-  LoadRepoSecrets = path:
-    let data = tryEval (import path);
-    in if data.success then data.value else { };
-
-  mkSearchablePackages = allPkgs:
-    let
-      filterBadPkgs = pkgs:
-        let
-          badList = filter (a:
-            let
-              res = tryEval (getAttr a pkgs);
-              data = if res.success then pkgs."${a}" else { };
-            in (res.success == false)) (attrNames pkgs) ++ searchBlackList;
-        in removeAttrs pkgs badList;
-    in foldl'
-    (l: r: let ret = { "${r}" = (filterBadPkgs allPkgs."${r}"); }; in l // ret)
-    { } (attrNames allPkgs);
-}
+  user-inputs-has-self = builtins.elem "self" (builtins.attrNames user-inputs);
+  user-inputs-has-src = builtins.elem "src" (builtins.attrNames user-inputs);
+in assert (assertMsg (user-inputs-has-self)
+  "Missing attribute `self` for mkLib.");
+assert (assertMsg (user-inputs-has-src) "Missing attribute `src` for mkLib.");
+lib

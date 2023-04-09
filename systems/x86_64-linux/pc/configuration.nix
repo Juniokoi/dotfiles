@@ -1,31 +1,8 @@
-1 config, pkgs, ... }:
+{ config, pkgs, ... }:
 
-let
-  unstableTarball =
-    fetchTarball
-      https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
-in
 {
   networking.
   imports = [ ./hardware-configuration.nix ];
-
-  time.timeZone = "America/Sao_Paulo";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "pt_BR.UTF-8";
-    LC_IDENTIFICATION = "pt_BR.UTF-8";
-    LC_MEASUREMENT = "pt_BR.UTF-8";
-    LC_MONETARY = "pt_BR.UTF-8";
-    LC_NAME = "pt_BR.UTF-8";
-    LC_NUMERIC = "pt_BR.UTF-8";
-    LC_PAPER = "pt_BR.UTF-8";
-    LC_TELEPHONE = "pt_BR.UTF-8";
-    LC_TIME = "pt_BR.UTF-8";
-  };
-
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -44,55 +21,17 @@ in
   services.teamviewer.enable = true;
 
   # Configure keymap in X11
-  environment.pathsToLink = [ "/libexec" ];
-  environment.sessionVariables = rec {
-    XDG_CACHE_HOME  = "\${HOME}/.cache";
-    XDG_CONFIG_HOME = "\${HOME}/.config";
-    XDG_BIN_HOME    = "\${HOME}/.local/bin";
-    XDG_DATA_HOME   = "\${HOME}/.local/share";
-    XCURSOR_SIZE = "16";
-
-    PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
-    PATH = [
-      "\${HOME}/bin"
-    ];
-
-  };
 
   # Enable CUPS to print documents.
   services = {
     printing.enable = true;
   };
 
-  # Enable sound with pipewire.
-  sound.enable = true;
-  security.rtkit.enable = true;
-  # services.pipewire = {
-  #   enable = true;
-  #   alsa.enable = true;
-  #   alsa.support32Bit = true;
-  #   pulse.enable = true;
-  #   #jack.enable = true;
-  # };
-
-
   programs.fish.enable = true;
   users.defaultUserShell = pkgs.fish;
   users.users.junio.shell = pkgs.fish;
   environment.shells = with pkgs; [ fish ];
 
-  fonts.fonts = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    fira-code
-    (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" "FiraCode" ]; })
-  ];
-
-  programs.thunar = {
-    plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-volman ];
-    enable = true;
-  };
   # Unstable Packages
   nixpkgs.config = {
     packageOverrides = pkgs: {
@@ -236,10 +175,7 @@ in
     xkbVariant = "";
     digimend.enable = true; # Set Huion, XP-Pen, etc. tablets
       desktopManager = {
-        xterm.enable = false;
         gnome.enable = true;
-
-
       };
     displayManager = {
       autoLogin = {
@@ -312,31 +248,6 @@ in
     enable = true;
     enableSSHSupport = true;
   };
-
-# Enable the OpenSSH daemon.
-# services.openssh.enable = true;
-  networking = {
-    defaultGateway = "192.168.0.1";
-    nameservers = [ "1.1.1.1" ];
-# firewall = {
-# allowedTCPPorts = [ ... ];
-# allowedUDPPorts = [ ... ];
-# enable = false;
-# }
-  };
-
-#nixpkgs.overlays = [
-#(self: super: {
-#discord = super.discord.overrideAttrs (
-#_: { src = builtins.fetchTarball {
-#url = "https://discord.com/api/download?platform=linux&format=tar.gz";
-#sha256 = "0000000000000000000000000000000000000000000000000";
-#}; }
-#);
-#})
-#];
-
-  system.stateVersion = "22.11"; # Change only if necessary
 
 ## OBS packages
     boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];

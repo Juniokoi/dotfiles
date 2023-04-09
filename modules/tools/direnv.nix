@@ -5,7 +5,7 @@ with lib.internal;
 let cfg = config.settings.tools.direnv;
 in
 {
-  options.plusultra.tools.direnv = with types; {
+  options.settings.tools.direnv = with types; {
     enable = mkBoolOpt false "Whether or not to enable direnv.";
   };
 
