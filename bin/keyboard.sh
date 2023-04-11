@@ -9,7 +9,7 @@
 # Reset keyboard to default
 setxkbmap -option
 # Make both control act as Capslock, lctrl and super as compose
-setxkbmap -option
+setxkbmap -option "caps:ctrl_modifier,compose:lctrl"
 
 # 66 = capslock, force capslock to act as Ctrl_L
 xmodmap -e "clear lock" -e "keycode 66 = Control_L"

@@ -71,7 +71,7 @@ bind -M default \e- '_get_back_back'
 bind -M insert \e- '_get_back_back'
 
 #A-h: Get back back
-function _get_back_back; zi; end
+function _get_back_back; zi && commandline -f repaint; end
 bind -M default \co '_get_back_back'
 bind -M insert \co '_get_back_back'
 
