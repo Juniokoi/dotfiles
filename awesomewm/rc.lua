@@ -2,41 +2,27 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing. pcall(require, "luarocks.loader") Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
-require("awful.autofocus")
--- Widget and layout library
-local wibox = require("wibox"
-)
--- Theme handling library
+local wibox = require("wibox")
 local beautiful = require("beautiful")
--- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
--- Enable hotkeys help widget for VIM and other apps
--- when client with a matching name is opened:
-require("awful.hotkeys_popup.keys")
 
--- {{{ Error handling
--- Check if awesome encountered an error during startup and fell back to
--- another config (This code will only ever execute for the fallback config)
+require("awful.hotkeys_popup.keys")
+require("awful.autofocus")
+
 if awesome.startup_errors then
   naughty.notify({ preset = naughty.config.presets.critical,
     title = "Oops, there were errors during startup!",
     text = awesome.startup_errors })
 end
--- }}}
 
-
-awful.spawn.with_shell("~/.config/awesome/autorun.sh")
 awful.spawn.with_shell(
   'if (xrdb -query | grep -q "^awesome\\.started:\\s*true$"); then exit; fi;' ..
   'xrdb -merge <<< "awesome.started:true";' ..
-  -- list each of your autostart commands, followed by ; inside single quotes, followed by ..
-  'dex --environment Awesome --autostart --search-paths "$XDG_CONFIG_DIRS/autostart:$XDG_CONFIG_HOME/autostart"'-- https://github.com/jceb/dex
+  'dex --environment Awesome --autostart --search-paths "$XDG_CONFIG_DIRS/autostart:$XDG_CONFIG_HOME/autostart"'
 )
 
--- {{{
--- Handle runtime errors after startup
 do
   local in_error = false
   awesome.connect_signal("debug::error", function(err)
@@ -50,47 +36,22 @@ do
     in_error = false
   end)
 end
--- }}}
 
--- {{{ Variable definitions
--- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-local terminal = "kitty"
+local terminal = os.getenv("TERMINAL") or "alacritty"
 local editor = os.getenv("EDITOR") or "nvim"
 local editor_cmd = terminal .. " -e " .. editor
 
--- Default modkey.
--- Usually, Mod4 is the key with a logo between Control and Alt.
--- If you do not like this or do not have such a key,
--- I suggest you to remap Mod4 to another key using xmodmap or other tools.
--- However, you can use another modifier like Mod1, but it may interact with others.
 local modkey = "Mod4"
-
--- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
-  awful.layout.suit.tile,
-  -- awful.layout.suit.floating,
-  -- awful.layout.suit.tile.left,
-  -- awful.layout.suit.tile.bottom,
-  -- awful.layout.suit.tile.top,
-  -- awful.layout.suit.fair,
-  -- awful.layout.suit.fair.horizontal,
-  -- awful.layout.suit.spiral,
-  -- awful.layout.suit.spiral.dwindle,
-  -- awful.layout.suit.max,
-  -- awful.layout.suit.max.fullscreen,
-  -- awful.layout.suit.magnifier,
-  -- awful.layout.suit.corner.nw,
-  -- awful.layout.suit.corner.ne,
-  -- awful.layout.suit.corner.sw,
-  -- awful.layout.suit.corner.se,
+	awful.layout.suit.spiral.dwindle,
+	awful.layout.suit.floating,
+	awful.layout.suit.magnifier,
 }
--- }}}
 
--- {{{ Menu
--- Create a launcher widget and a main menu
+
 local myawesomemenu = {
   { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
   { "manual", terminal .. " -e man awesome" },
@@ -107,11 +68,8 @@ local mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.
 local mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
   menu = mymainmenu })
 
--- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
--- }}}
 
--- Keyboard map indicator and switcher
 local mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
@@ -157,21 +115,6 @@ local tasklist_buttons = gears.table.join(
   awful.button({}, 5, function()
     awful.client.focus.byidx(-1)
   end))
-
--- function set_wallpaper(s)
---   -- Wallpaper
---   if beautiful.wallpaper then
---     local wallpaper = beautiful.wallpaper
---     -- If wallpaper is a function, call it with the screen
---     if type(wallpaper) == "function" then
---       wallpaper = wallpaper(s)
---     end
---     gears.wallpaper.maximized(wallpaper, s, true)
---   end
--- end
-
--- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
--- screen.connect_signal("property::geometry", set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
   -- Wallpaper
@@ -226,15 +169,6 @@ awful.screen.connect_for_each_screen(function(s)
     },
   }
 end)
--- }}}
-
--- {{{ Mouse bindings
-root.buttons(gears.table.join(
-  awful.button({}, 3, function() mymainmenu:toggle() end),
-  awful.button({}, 4, awful.tag.viewnext),
-  awful.button({}, 5, awful.tag.viewprev)
-))
--- }}}
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
@@ -271,8 +205,6 @@ globalkeys = gears.table.join(
     { description = "Print the whole Screen", group = "launcher" }),
 
 
-  -- 
-  ---- Thunar
   awful.key({ modkey, },"e",  function() awful.util.spawn("thunar") end,
     { description = "Thunar files", group = "launcher" }),
 
@@ -335,8 +267,8 @@ globalkeys = gears.table.join(
     { description = "restore minimized", group = "client" }),
 
   -- Prompt
-  --  awful.key({ modkey }, "r", function() awful.screen.focused().mypromptbox:run() end,
-  --    { description = "run prompt", group = "launcher" }),
+    awful.key({ modkey }, "r", function() awful.screen.focused().mypromptbox:run() end,
+      { description = "run prompt", group = "launcher" }),
 
   --  awful.key({metakey}, 'r', function() awful.util.spawn('rofi -show drun') end,
   --    {description='run rofi', group='launcher'}),
@@ -471,7 +403,7 @@ clientbuttons = gears.table.join(
 -- Set keys
 root.keys(globalkeys)
 -- }}}
-beautiful.border_width = 0
+beautiful.border_width = 2
 beautiful.border_normal = "#44475a"
 beautiful.border_focus = "#ff79c6"
 -- {{{ Rules
@@ -538,7 +470,7 @@ awful.rules.rules = {
 client.connect_signal("manage", function(c)
   -- Set the windows at the slave,
   -- i.e. put it at the end of others instead of setting it master.
-  -- if not awesome.startup then awful.client.setslave(c) end
+  if not awesome.startup then awful.client.setslave(c) end
 
   if awesome.startup
       and not c.size_hints.user_position
@@ -591,7 +523,7 @@ end)
 -- Windows round corner
 client.connect_signal("manage", function(c)
   c.shape = function(cr, w, h)
-    gears.shape.rounded_rect(cr, w, h, 0)
+    gears.shape.rounded_rect(cr, w, h, 10)
   end
 end)
 --
@@ -604,7 +536,7 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
 -- Function to execute files inside $HOME/.config/awesome/autorun.sh
-function run_once(cmd)
+local function run_once(cmd)
 		local findme = cmd
 		local firstspace = cmd:find(" ")
 		if firstspace then
@@ -612,10 +544,9 @@ function run_once(cmd)
 		end
 		awful.spawn.with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
 end
-
 run_once("numlockx on")
 run_once("xrandr --output HDMI-A-0 --primary --mode 2560x1080 --pos 0x0 --output DisplayPort-0 --mode 1920x1080 --pos 0x1080")
-run_once("$HOME/.bin/keyboard.sh")
+run_once("$HOME/bin/keyboard.sh")
 run_once("/usr/lib/polkit-kde-authentication-agent-1")
 run_once("picom --config $HOME/.config/picom.conf --experimental-backends")
 run_once("feh --randomize --bg-fill $HOME/Pictures/.wallpapers/*")
