@@ -2,24 +2,22 @@ if status is-interactive
 	set fish_greeting
 	starship init fish | source
 	zoxide init fish | source
-	rtx activate fish | source
-	rtx complete --shell fish | source
 	set fish_color_error red --bold --italic
 	enable_transience
 end
 
-set -g EDITOR nvim
-
-alias tmux tmux-init
+set -g EDITOR vim
 
 #-a==--add
 #functionnvim_edit;echo nvim .; end
 #abbr-av --position anywhere --function nvim_edit
-abbr -a v nvim;
-abbr -a vi nvim;
+abbr -a v vim;
+abbr -a vi vim;
 abbr -a lg lazygit
 
 alias logout "pkill -KILL -u $USER"
+
+set WINIT_X11_SCALE_FACTOR 1.66 alacritty
 
 ##Vim
 #vikeybindings are the best
@@ -46,9 +44,9 @@ bind -M default \er 'resource'
 bind -M insert \er 'resource'
 
 #C-v: open current folder with neovim
-function _edit_nvim;nvim; end
-bind -M default \cf '_edit_nvim'
-bind -M insert \cf '_edit_nvim'
+function _editor;$EDITOR; end
+bind -M default \cf '_editor'
+bind -M insert \cf '_editor'
 
 #C-e
 function _explorer; joshuto 2> /dev/null; end
