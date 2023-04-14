@@ -8,51 +8,51 @@
 (setq gc-cons-threshold (* 50 1000 1000))
 
 (defun koi/display-startup-time ()
-  (message "Emacs loaded in %s with %d garbage collections."
-           (format "%.2f seconds"
-                   (float-time
-                    (time-subtract after-init-time before-init-time)))
-           gcs-done))
+      (message "Emacs loaded in %s with %d garbage collections."
+		       (format "%.2f seconds"
+				       (float-time
+					(time-subtract after-init-time before-init-time)))
+		       gcs-done))
 (add-hook 'emacs-startup-hook #'koi/display-startup-time)
 
 (require 'package)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
+						 ("org" . "https://orgmode.org/elpa/")
+						 ("elpa" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
 (unless package-archive-contents
-  (package-refresh-contents))
+      (package-refresh-contents))
 
 (unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+      (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t)
 
 ;; Update regularly
 (use-package auto-package-update
-  :custom
-  (auto-package-update-interval 7)
-  (auto-package-update-prompt-before-update t)
-  (auto-package-update-hide-results t)
-  :config
-  (auto-package-update-maybe)
-  (auto-package-update-at-time "09:00"))
+      :custom
+      (auto-package-update-interval 7)
+      (auto-package-update-prompt-before-update t)
+      (auto-package-update-hide-results t)
+      :config
+      (auto-package-update-maybe)
+      (auto-package-update-at-time "09:00"))
 
 (use-package restart-emacs)
 
-(defun koi/reload()
-  (interactive)
-  (org-babel-tangle-file '"~/.emacs.d/init.org")
-  (org-reload)
-  (load-file user-init-file))
+(defun koi/reload-config-file()
+      (interactive)
+      (org-babel-tangle-file '"~/.emacs.d/init.org")
+      (org-reload)
+      (load-file user-init-file))
 
-(defun koi/restart()
-  (interactive)
-  (koi/reload)
-  (restart-emacs))
+(defun koi/restart-emacs()
+      (interactive)
+      (koi/reload-config-file)
+      (restart-emacs))
 
 (setq inhibit-startup-message t)
 
@@ -138,23 +138,23 @@
 
 (setq history-length 300   ; Default is 30
 
-      kill-ring-max 5000   ; Truncate kill ring after 5000 entries
-      mark-ring-max 5000)  ; Truncate mark ring after 5000 entries
+	      kill-ring-max 5000   ; Truncate kill ring after 5000 entries
+	      mark-ring-max 5000)  ; Truncate mark ring after 5000 entries
 
 (savehist-mode 1)
 (use-package no-littering)
 
 (setq auto-save-file-name-transforms
-      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))
-                               auto-save-file-name-transforms `((".*", temporary-file-directory t))
-                               savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+	      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))
+	      auto-save-file-name-transforms `((".*", temporary-file-directory t))
+	      savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
 
 (use-package recentf
-  :init
-  (recentf-mode 1)
-  :config
-  (setq recentf-max-saved-items 500)
-  (setq recentf-max-menu-items 60))
+      :init
+      (recentf-mode 1)
+      :config
+      (setq recentf-max-saved-items 500)
+      (setq recentf-max-menu-items 60))
 
 ;; folding
 (use-package origami)
@@ -163,513 +163,722 @@
 (setq show-paren-delay 0) ; show immediately
 
 (use-package paredit
-  :config (paredit-mode t))
+      :config (paredit-mode t))
 
 (use-package rainbow-mode)
 (use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
+      :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package key-chord)
+
+(defun recenter-line (&rest _)
+	      (evil-scroll-line-to-center nil))
+
+(defun reselect-last-region ()
+	      (interactive)
+	      (let ((start (mark t))
+	(end (point)))
+	(goto-char start)
+	(call-interactively' set-mark-command)
+	(goto-char end)))
+
+(defun shift-and-reselect ()
+	      (evil-shift-right)
+	      (reselect-last-region))
 
 (use-package evil
-  :init
-  (setq evil-want-fine-undo nil)
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  (setq evil-want-C-i-jump nil)
-  :config
-  (evil-mode 1)
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+	      :init
+	      (setq evil-want-fine-undo nil)
+	      (setq evil-want-integration t)
+	      (setq evil-want-keybinding nil)
+	      (setq evil-want-C-u-scroll t)
+	      (setq evil-want-C-i-jump t)
+	      (setq evil-undo-system 'undo-redo)
 
-  ;; Use visual line motions even outside of visual-line-mode buffers
-  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+	      :config
+	      (evil-mode 1)
+	      (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 
-  (evil-set-initial-state 'messages-buffer-mode 'normal)
-  (evil-set-initial-state 'dashboard-mode 'normal))
+	      (advice-add 'evil-search-next :after #'recenter-line)
+	      (advice-add 'evil-search-previous :after #'recenter-line)
 
+	      (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+	      (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+
+	      (key-chord-define evil-normal-state-map "'j" 'counsel-bookmark)
+	      (key-chord-define evil-normal-state-map "'s" 'bookmark-set)
+	      ;; Use visual line motions even outside of visual-line-mode buffers
+	      (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+	      (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+	      (evil-define-key 'normal 'global
+	;; select the previously pasted text
+	"gp" "`[v`]")
+	      (evil-set-initial-state 'messages-buffer-mode 'normal)
+	      (evil-set-initial-state 'dashboard-mode 'normal))
 (setq evilnc-comment-text-object "c")
+
 (use-package evil-nerd-commenter
-  :after evil
-  :bind ("M-;" . evilnc-comment-or-uncomment-lines))
+	      :after evil
+	      :bind ("M-;" . evilnc-comment-or-uncomment-lines))
 
 ;; (setq evilnc-comment-text-object "c")
 (define-key evil-inner-text-objects-map evilnc-comment-text-object 'evilnc-inner-commenter)
 (define-key evil-outer-text-objects-map evilnc-comment-text-object 'evilnc-outer-commenter)
 
+
 (use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
+	      :after evil
+	      :config
+	      (evil-collection-init))
 
 (use-package general
-  :after evil
-  :config
-  (general-create-definer koi/leader-keys
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-c")
+		      :after evil
+		      :config
+		      (general-create-definer koi/leader-keys
+	:states '(normal insert visual emacs)
+	:prefix "SPC"
+	:global-prefix "C-c"))
 
-  (koi/leader-keys
-    "t" '(:ignore t :which-key "Toggles")
-    "ts" '(hydra-text-scale/body :which-key "Scale text")
-    "tt" '(counsel-load-theme :which-key "Choose theme")))
+(koi/leader-keys
+		      "." '(project-find-file :which-key "Find local file in project")
 
-(use-package which-key
-  :defer 0
-  :diminish which-key-mode
-  :config
-  (which-key-mode)
-  (setq which-key-idle-delay 0.3))
+		      "t" '(:ignore t :which-key "Toggles")
+		      "ts" '(hydra-text-scale/body :which-key "Scale text")
+		      "tt" '(counsel-load-theme :which-key "Choose theme")
 
-(use-package beacon
-  :config
-  (beacon-mode 1))
+		      "p" '(:ignore t :which-key "Projects")
+		      "pa" '(projectile-add-known-project :which-key "Add new project")
+		      "po" '(project-search :which-key "Open project")
+		      "pd" '(project-find-dir :which-key "Directories in project")
 
-(use-package ivy
-  :diminish
-  :bind (("C-s" . swiper)
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
-  :config
-  (ivy-mode 1))
+		      "f" '(:ignore t :which-key "File")
+		      "fr" '(counsel-recentf :which-key "Load recent files")
+		      "ff" '(counsel-find-file :which-key "Find files")
+		      "fz" '(counsel-fzf :which-key "Find files")
+		      "fg" '(counsel-git :which-key "Find [git] files")
+		      "fw" '(counsel-rg :which-key "Find words")
 
-(use-package ivy-rich
-  :after ivy
-  :init (ivy-rich-mode 1))
+		      "g" '(:ignore t :which-key "Git")
+		      "gg" '(magit :which-key "magit")
 
-(use-package counsel
-  :bind (("C-M-j" . 'counsel-switch-buffer)
-         :map minibuffer-local-map
-         ("C-r" . 'counsel-minibuffer-history))
+		      "b" '(:ignore t :which-key "Buffer")
+		      "bi" '(ibuffer :which-key "ibuffer")
+		      "bi" '(ibuffer :which-key "Buffer")
 
-  :custom
-  (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-  :config
-  (counsel-mode 1))
+		      ";" '(:ignore t :which-key "Bookmark")
+		      ";s" '(bookmark-set :which-key "Set new bookmark")
+		      ";j" '(counsel-bookmark :which-key "Search")
+		      ";l" '(bookmark-load :which-key "Load list of bookmarks")
+		      ";e" '(bookmark-edit :which-key "Edit list")
+		      )
 
-(use-package ivy-prescient
-  :after counsel
-  :custom
-  (ivy-prescient-enable-filtering nil)
-  :config
-  ;; Uncomment the following line to have sorting remembered across sessions!
-  (prescient-persist-mode 1)
-  (ivy-prescient-mode 1))
+(general-define-key
+ :keymaps 'normal
+ :prefix "s"
+ "" nil
+ "l" 'evil-window-right
+ "j" 'evil-window-down
+ "k" 'evil-window-up
+ "h" 'evil-window-left
+ )
+
+(general-define-key
+ :keymaps 'normal
+ :prefix "f"
+ "d" 'save-buffer
+ )
 
 (use-package hydra
-  :defer t)
+      :defer t)
 
 (defhydra hydra-text-scale (:timeout 4)
-  "scale text"
-  ("j" text-scale-increase "in")
-  ("k" text-scale-decrease "out")
-  ("f" nil "finished" :exit t))
+      "scale text"
+      ("j" text-scale-increase "in")
+      ("k" text-scale-decrease "out")
+      ("f" nil "finished" :exit t))
 
 (use-package helpful
-  :commands (helpful-callable helpful-variable helpful-command helpful-key)
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key))
+      :commands (helpful-callable helpful-variable helpful-command helpful-key)
+      :custom
+      (counsel-describe-function-function #'helpful-callable)
+      (counsel-describe-variable-function #'helpful-variable)
+      :bind
+      ([remap describe-function] . counsel-describe-function)
+      ([remap describe-command] . helpful-command)
+      ([remap describe-variable] . counsel-describe-variable)
+      ([remap describe-key] . helpful-key))
 
-(use-package vimish-fold)
-(use-package nix-mode)
+(koi/leader-keys
+      "h" '(:ignore t :which-key "Help")
+      "hf" '(helpful-function :which-key "Functions")
+      "hv" '(helpful-variable :which-key "Variables")
+      "hx" '(helpful-command :which-key "Command")
+      "hm" '(helpful-macro :which-key "Macro")
+      "hk" '(helpful-key :which-key "Keybindings")
+      "hs" '(helpful-symbol :which-key "Symbol (anything)")
+      "hp" '(helpful-at-point :which-key "Cursor help")
+      )
+
+(use-package which-key
+      :defer 0
+      :diminish which-key-mode
+      :init
+      (setq which-key-show-early-on-C-h t)
+      (setq which-key-idle-delay 0.3)
+      :config
+      (which-key-mode))
 
 (use-package projectile
-  :diminish projectile-mode
-  :config (projectile-mode)
-  :commands (projectile-project-root
-             projectile-project-name
-             projectile-project-p
-             projectile-locate-dominating-file
-             projectile-relevant-known-projects)
-  :init
-  (setq projectile-cache-file (concat cache-dir "projectile.cache")
-        ;; Auto-discovery is slow to do by default. Better to update the list
-        ;; when you need to (`projectile-discover-projects-in-search-path').
-        projectile-auto-discover nil
-        projectile-enable-caching (not noninteractive)
-        projectile-globally-ignored-files '(".DS_Store" "TAGS")
-        projectile-globally-ignored-file-suffixes '(".elc" ".pyc")))
+      :diminish projectile-mode
+      :config (projectile-mode)
+      :commands (projectile-project-root
+		 projectile-project-name
+		 projectile-project-p
+		 projectile-locate-dominating-file
+		 projectile-relevant-known-projects)
+      :init
+      (setq projectile-cache-file "~/.config/emacs/tmp/projectile.cache"
+	;; Auto-discovery is slow to do by default. Better to update the list
+	;; when you need to (`projectile-discover-projects-in-search-path').
+	projectile-auto-discover nil
+	projectile-enable-caching (not noninteractive)
+	projectile-globally-ignored-files '(".DS_Store" "TAGS")
+	projectile-globally-ignored-file-suffixes '(".elc" ".pyc")))
 
 (setq projectile-project-root-files-bottom-up
-      (append '(".projectile"  ; projectile's root marker
-                ".project"     ; doom project marker
-                ".git")        ; Git VCS root dir
-              (when (executable-find "hg")
-                '(".hg"))      ; Mercurial VCS root dir
-              (when (executable-find "bzr")
-                '(".bzr")))    ; Bazaar VCS root dir
-      ;; This will be filled by other modules. We build this list manually so
-      ;; projectile doesn't perform so many file checks every time it resolves
-      ;; a project's root -- particularly when a file has no project.
-      projectile-project-root-files '()
-      projectile-project-root-files-top-down-recurring '("Makefile"))
+	      (append '(".projectile"  ; projectile's root marker
+		".project"     ; doom project marker
+		".git")        ; Git VCS root dir
+		      (when (executable-find "hg")
+		'(".hg"))      ; Mercurial VCS root dir
+		      (when (executable-find "bzr")
+		'(".bzr")))    ; Bazaar VCS root dir
+	      ;; This will be filled by other modules. We build this list manually so
+	      ;; projectile doesn't perform so many file checks every time it resolves
+	      ;; a project's root -- particularly when a file has no project.
+	      projectile-project-root-files '()
+	      projectile-project-root-files-top-down-recurring '("Makefile"))
 
 (use-package counsel-projectile
-  :config (counsel-projectile-mode))
+      :config (counsel-projectile-mode))
 
 (use-package magit)
 (use-package forge)
 
-(defun koi/lsp-mode-setup ()
-  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-  (lsp-headerline-breadcrumb-mode))
-
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-  :commands (lsp lsp-deferred)
-  :hook ((lsp-mode . koi/lsp-mode-setup)
-         (lsp-mode . lsp-enable-which-key-integration)))
-
-(use-package lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
-  :custom
-  (lsp-ui-doc-position 'bottom)
-  :config
-  (setq lsp-ui-sideline-enable t)
-  (setq lsp-ui-sideline-show-hover t))
-(use-package lsp-treemacs :after lsp)
-(use-package lsp-ivy)
-
-(use-package company
-  :after lsp-mode
-  :hook (lsp-mode . company-mode)
-  :bind (:map company-active-map
-              ("<tab>" . company-complete-selection))
-  (:map lsp-mode-map
-        ("<tab>" . company-indent-or-complete-common))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0))
-
-(add-hook 'after-init-hook 'global-company-mode)
-
-(use-package company-box
-  :hook (company-mode . company-box-mode))
-(use-package company-quickhelp
-  :config
-  (company-quickhelp-mode 1))
-
-(use-package tree-sitter
-  :config
-  (global-tree-sitter-mode))
-
 (use-package dired
-  :ensure nil
-  :commands (dired dired-jump)
-  :bind (("C-x C-j" . dired-jump))
-  :custom ((dired-listing-switches "-agho --group-directories-first"))
-  :config
-  (evil-collection-define-key 'normal 'dired-mode-map
-    "h" 'dired-single-up-directory
-    "l" 'dired-single-buffer))
+      :ensure nil
+      :commands (dired dired-jump)
+      :bind (("C-x C-j" . dired-jump))
+      :custom ((dired-listing-switches "-agho --group-directories-first"))
+      :config
+      (evil-collection-define-key 'normal 'dired-mode-map
+	"h" 'dired-single-up-directory
+	"l" 'dired-single-buffer))
 
 (use-package dired-single)
 
 (use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
+      :hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package dired-open
-  :config
-  ;; Doesn't work as expected!
-  ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
-  (setq dired-open-extensions '(("png" . "feh")
-                                ("mkv" . "mpv"))))
+      :config
+      ;; Doesn't work as expected!
+      ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
+      (setq dired-open-extensions '(("png" . "feh")
+				("mkv" . "mpv"))))
 
 (use-package dired-hide-dotfiles
-  :hook (dired-mode . dired-hide-dotfiles-mode)
-  :config
-  (evil-collection-define-key 'normal 'dired-mode-map
-    "H" 'dired-hide-dotfiles-mode))
+      :hook (dired-mode . dired-hide-dotfiles-mode)
+      :config
+      (evil-collection-define-key 'normal 'dired-mode-map
+	"H" 'dired-hide-dotfiles-mode))
 
 (use-package ranger)
 
 (use-package vterm
-  :commands vterm
-  :config
-  (setq vterm-shell "fish")                       ;; Set this to customize the shell to launch
-  (setq vterm-max-scrollback 10000))
+      :commands vterm
+      :config
+      (setq vterm-shell "fish")                       ;; Set this to customize the shell to launch
+      (setq vterm-max-scrollback 10000))
 
 
 (defun koi/configure-eshell ()
-  ;; Save command history when commands are entered
-  (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
+      ;; Save command history when commands are entered
+      (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
 
-  ;; Truncate buffer for performance
-  (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
+      ;; Truncate buffer for performance
+      (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
 
-  ;; Bind some useful keys for evil-mode
-  (setq eshell-history-size         10000
-        eshell-buffer-maximum-lines 10000
-        eshell-hist-ignoredups t
-        eshell-scroll-to-bottom-on-input t))
+      ;; Bind some useful keys for evil-mode
+      (setq eshell-history-size         10000
+	eshell-buffer-maximum-lines 10000
+	eshell-hist-ignoredups t
+	eshell-scroll-to-bottom-on-input t))
 
 (use-package eshell
-  :hook (eshell-first-time-mode . koi/configure-eshell)
-  :config
-  (setq eshell-rc-script "~/.dotfiles/emacs/eshell/profile"
-        eshell-aliases-file "~/.dotfiles/emacs/eshell/aliases"
-        eshell-history-size 5000
-        eshell-buffer-maximum-lines 5000
-        eshell-hist-ignoredups t
-        eshell-scroll-to-bottom-on-input t
-        eshell-destroy-buffer-when-process-dies t
-        eshell-visual-commands'("bash" "fish" "htop" "ssh" "top" "zsh")))
+      :hook (eshell-first-time-mode . koi/configure-eshell)
+      :config
+      (setq eshell-rc-script "~/.dotfiles/emacs/eshell/profile"
+	eshell-aliases-file "~/.dotfiles/emacs/eshell/aliases"
+	eshell-history-size 5000
+	eshell-buffer-maximum-lines 5000
+	eshell-hist-ignoredups t
+	eshell-scroll-to-bottom-on-input t
+	eshell-destroy-buffer-when-process-dies t
+	eshell-visual-commands'("bash" "fish" "htop" "ssh" "top" "zsh")))
 (use-package eshell-git-prompt)
 
+(use-package ivy
+      :diminish
+      :bind (("C-s" . swiper)
+	 :map ivy-minibuffer-map
+	 ("TAB" . ivy-alt-done)
+	 ("C-l" . ivy-alt-done)
+	 ("C-j" . ivy-next-line)
+	 ("C-k" . ivy-previous-line)
+	 :map ivy-switch-buffer-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-l" . ivy-done)
+	 ("C-d" . ivy-switch-buffer-kill)
+	 :map ivy-reverse-i-search-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-d" . ivy-reverse-i-search-kill))
+      :config
+      (ivy-mode 1)
+      :init
+      (setq ivy-use-virtual-buffers t))
+
+(use-package ivy-rich
+      :after counsel
+      :init
+      (progn
+	(setq ivy-rich-path-style 'abbrev
+	      ivy-virtual-abbreviate 'full))
+      :config
+      (progn
+	(ivy-rich-mode)
+	(ivy-rich-project-root-cache-mode)))
+
+(use-package all-the-icons-ivy
+      :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
+
+(use-package counsel
+      :bind (("C-M-j" . 'counsel-switch-buffer)
+	 :map minibuffer-local-map
+	 ("C-r" . 'counsel-minibuffer-history))
+      :init
+      :custom
+      (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+      :config
+      (counsel-mode 1))
+
+(use-package ivy-prescient
+      :after counsel
+      :custom
+      (ivy-prescient-enable-filtering nil)
+      :config
+      ;; Uncomment the following line to have sorting remembered across sessions!
+      (prescient-persist-mode 1)
+      (ivy-prescient-mode 1))
+
+(use-package company
+      :after lsp-mode
+      :hook (lsp-mode . company-mode)
+      :bind (:map company-mode-map
+		      ("<tab>" . tab-indent-or-complete ))
+      (:map lsp-mode-map
+	("<tab>" . tab-indent-or-complete))
+      :custom
+      (company-minimum-prefix-length 1)
+      (company-begin-commands nil) ;; uncomment to disable popup
+      (company-idle-delay 0.5))
+
+(defun company-yasnippet-or-completion ()
+      (interactive)
+      (or (do-yas-expand)
+	      (company-complete-common)))
+
+(defun check-expansion ()
+      (save-excursion
+	(if (looking-at "\\_>") t
+	      (backward-char 1)
+	      (if (looking-at "\\.") t
+	(backward-char 1)
+	(if (looking-at "::") t nil)))))
+
+(defun do-yas-expand ()
+      (let ((yas/fallback-behavior 'return-nil))
+	(yas/expand)))
+
+(defun tab-indent-or-complete ()
+      (interactive)
+      (if (minibufferp)
+	      (minibuffer-complete)
+	(if (or (not yas/minor-mode)
+		(null (do-yas-expand)))
+	(if (check-expansion)
+		(company-complete-common)
+	      (indent-for-tab-command)))))
+
+(add-hook 'after-init-hook 'global-company-mode)
+
+(use-package company-box
+      :hook (company-mode . company-box-mode))
+
+(use-package company-quickhelp
+      :config
+      (company-quickhelp-mode 1))
+
+(use-package yasnippet
+      :ensure
+      :ghook ('(text-mode-hook prog-mode-hook) #'yas-minor-mode)
+      :config
+      (yas-reload-all))
+
+(use-package tree-sitter
+      :config
+      (global-tree-sitter-mode))
+
+(defun koi/lsp-mode-setup ()
+      (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+      (lsp-headerline-breadcrumb-mode))
+
+(use-package lsp-mode
+      :init
+      ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+      (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+      :commands (lsp lsp-deferred)
+      :hook ((lsp-mode . koi/lsp-mode-setup)
+	 (lsp-mode . lsp-enable-which-key-integration))
+      :custom
+      (lsp-rust-analyzer-cargo-watch-command "clippy")
+      (lsp-eldoc-render-all t)
+      (lsp-idle-delay 0.6)
+      ;; enable / disable the hints as you prefer:
+      (lsp-rust-analyzer-server-display-inlay-hints t)
+      (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+      (lsp-rust-analyzer-display-chaining-hints t)
+      (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
+      (lsp-rust-analyzer-display-closure-return-type-hints t)
+      (lsp-rust-analyzer-display-parameter-hints nil)
+      (lsp-rust-analyzer-display-reborrow-hints nil)
+      :config
+      (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+(use-package lsp-ui
+      :commands lsp-ui-mode
+      :custom
+      (lsp-ui-doc-position 'bottom)
+      (lsp-ui-peek-always-show t)
+      (lsp-ui-sideline-enable t)
+      (lsp-ui-sideline-show-hover t))
+
+(use-package lsp-treemacs :after lsp)
+(use-package lsp-ivy)
+
+(use-package flycheck)
+(use-package alert)
+
+(use-package cargo
+      :defer t)
+
+(use-package flycheck-rust
+      :defer t
+      :init (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
+(use-package toml-mode
+      :mode "/\\(Cargo.lock\\|\\.cargo/config\\)\\'")
+
+(use-package ron-mode
+      :mode ("\\.ron\\'" . ron-mode)
+      :defer t)
+
+(use-package rustic
+      :ensure
+      :bind (:map rustic-mode-map
+		      ("M-j" . lsp-ui-imenu)
+		      ("M-?" . lsp-find-references)
+		      ("C-c C-c l" . flycheck-list-errors)
+		      ("C-c C-c a" . lsp-execute-code-action)
+		      ("C-c C-c r" . lsp-rename)
+		      ("C-c C-c q" . lsp-workspace-restart)
+		      ("C-c C-c Q" . lsp-workspace-shutdown)
+		      ("C-c C-c s" . lsp-rust-analyzer-status))
+      :config
+      ;; uncomment for less flashiness
+      ;; (setq lsp-eldoc-hook nil)
+      ;; (setq lsp-enable-symbol-highlighting nil)
+      ;; (setq lsp-signature-auto-activate nil)
+
+      ;; comment to disable rustfmt on save
+      (setq rustic-format-on-save t)
+      (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+
+(defun rk/rustic-mode-hook ()
+      (when buffer-file-name
+	(setq-local buffer-save-without-query t))
+      (add-hook 'before-save-hook 'lsp-format-buffer nil t))
+
+(use-package exec-path-from-shell
+      :ensure
+      :init (exec-path-from-shell-initialize))
+
+(use-package dap-mode
+      :ensure
+      :config
+      (dap-ui-mode)
+      (dap-ui-controls-mode 1)
+
+      (require 'dap-lldb)
+      (require 'dap-gdb-lldb)
+      ;; installs .extension/vscode
+      (dap-gdb-lldb-setup)
+      (dap-register-debug-template
+       "Rust::LLDB Run Configuration"
+       (list :type "lldb"
+	 :request "launch"
+	 :name "LLDB::Run"
+	 :gdbpath "rust-lldb"
+	 :target nil
+	 :cwd nil)))
+
 (use-package doom-themes
-  :init (load-theme 'doom-moonlight t))
+      :init (load-theme 'doom-moonlight t))
 
 (use-package all-the-icons
-  :after 'dashboard-mode)
+      :after 'dashboard-mode)
 
 (column-number-mode)
 
 (use-package doom-modeline
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 15)))
+      :init (doom-modeline-mode 1)
+      :custom ((doom-modeline-height 15)))
 
 (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
 
 (use-package page-break-lines ;; Required for fancy lines
-  :after ('dashboard-mode)
-  :init (global-page-break-lines-mode 1))
-
+      :after ('dashboard-mode)
+      :init
+      (global-page-break-lines-mode 1))
 (use-package dashboard
-  :config (dashboard-setup-startup-hook)
-  :custom
-  (setq dashboard-startup-banner "~/Pictures/.wallpapers/eicon.png"
-        dashboard-set-heading-icons t
-        dashboard-set-file-icons t
-        dashboard-center-content t
-        dashboard-banner-logo-title nil
-        dashboard-set-init-info t
-        dashboard-set-footer t
-        dashboard-footer-messages '("Dashboard is pretty cool!")
-        dashboard-footer-icon '(all-the-icons-octicon "dashboard"
-                                                      :height 1.1
-                                                      :v-adjust -0.05
-                                                      :face 'font-lock-keyword-face)))
+      :config (dashboard-setup-startup-hook)
+      :custom
+      (setq dashboard-startup-banner "~/Pictures/.wallpapers/eicon.png"
+	dashboard-set-heading-icons t
+	dashboard-set-file-icons t
+	dashboard-center-content t
+	dashboard-banner-logo-title nil
+	dashboard-set-init-info t
+	dashboard-set-footer t
+	dashboard-footer-messages '("Dashboard is pretty cool!")
+	dashboard-footer-icon '(all-the-icons-octicon "dashboard"
+							      :height 1.1
+							      :v-adjust -0.05
+							      :face 'font-lock-keyword-face)))
 
 (set-face-attribute 'default nil :font koi/default-font :height koi/default-font-size)
 (set-face-attribute 'fixed-pitch nil :font koi/default-font :height koi/default-font-size)
 (set-face-attribute 'variable-pitch nil :font koi/default-font :height koi/variable-pitch-font-size :weight 'regular)
 
 (defun jk/org-colors-catppuccin ()
-  "Enable Catppuccin colors for Org headers."
-  (interactive)
-  (dolist
-      (face
-       '((org-level-1 1.4 "#fab387" "#241E29" ultra-bold);;Peach
-         (org-level-2 1.3 "#f38ba8" "#29222F" normal)    ;;Red
-         (org-level-3 1.2 "#cba6f7" "#332B3B" normal)    ;;Mauve
-         (org-level-4 1.1 "#89b4fa" "#2B313B" normal)    ;;Blue
-         (org-level-5 1.0 "#74c7ec" "#2B363B" normal)    ;;Sapphire
-         (org-level-6 1.0 "#a6e3a1" "#2D3B2B" normal)    ;;Green
-         (org-level-7 1.0 "#f9e2af" "#3B362B" normal)    ;;Yellow
-         (org-level-8 1.0 "#fab387" "#3B312B" normal)))  ;;Pearh
-    (set-face-attribute (nth 0 face) nil :font koi/variable-pitch-font :weight (nth 4 face) :height (nth 1 face) :foreground (nth 2 face) :background (nth 3 face)))
-  (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch) :font koi/default-font :weight 'normal :height 1.0 :foreground "#bac2de")
-  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
+      "Enable Catppuccin colors for Org headers."
+      (interactive)
+      (dolist
+	      (face
+	       '((org-level-1 1.4 "#fab387" "#241E29" ultra-bold);;Peach
+	 (org-level-2 1.3 "#f38ba8" "#29222F" normal)    ;;Red
+	 (org-level-3 1.2 "#cba6f7" "#332B3B" normal)    ;;Mauve
+	 (org-level-4 1.1 "#89b4fa" "#2B313B" normal)    ;;Blue
+	 (org-level-5 1.0 "#74c7ec" "#2B363B" normal)    ;;Sapphire
+	 (org-level-6 1.0 "#a6e3a1" "#2D3B2B" normal)    ;;Green
+	 (org-level-7 1.0 "#f9e2af" "#3B362B" normal)    ;;Yellow
+	 (org-level-8 1.0 "#fab387" "#3B312B" normal)))  ;;Pearh
+	(set-face-attribute (nth 0 face) nil :font koi/variable-pitch-font :weight (nth 4 face) :height (nth 1 face) :foreground (nth 2 face) :background (nth 3 face)))
+      (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
+      (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch) :font koi/default-font :weight 'normal :height 1.0 :foreground "#bac2de")
+      ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+      (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+      (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+      (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+      (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+      (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+      (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
 
 (defun koi/org-mode-setup ()
-  (org-indent-mode)
-  (variable-pitch-mode 1)
-  (visual-line-mode 1))
+      (org-indent-mode)
+      (variable-pitch-mode 1)
+      (visual-line-mode 1))
 
 (defun koi/org-mode-visual-fill ()
-  (setq visual-fill-column-width 120
-        visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
+      (setq visual-fill-column-width 120
+	visual-fill-column-center-text t)
+      (visual-fill-column-mode 1))
 
 (use-package org
-  :hook (org-mode . koi/org-mode-setup)
-  :config
-  (setq org-ellipsis " ▾")
-  (setq org-hide-emphasis-markers t)
+      :hook (org-mode . koi/org-mode-setup)
+      :config
+      (setq org-ellipsis " ▾")
+      (setq org-hide-emphasis-markers t)
+      (setq org-startup-folded t)
+      (setq org-agenda-start-with-log-mode t)
 
-  (setq org-agenda-start-with-log-mode t)
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t)
+      (setq org-log-done 'time)
+      (setq org-log-into-drawer t)
 
-  (setq org-agenda-files
-        '("~/personal/todo.org"))
+      (setq org-agenda-files
+	'("~/personal/todo.org"))
 
-  (require 'org-habit)
-  (add-to-list 'org-modules 'org-habit)
-  (setq org-habit-graph-column 60)
+      (require 'org-habit)
+      (add-to-list 'org-modules 'org-habit)
+      (setq org-habit-graph-column 60)
 
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-          (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+      (setq org-todo-keywords
+	'((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+	      (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
-  (setq org-refile-targets
-        '(("Archive.org" :maxlevel . 1)
-          ("Tasks.org" :maxlevel . 1)))
+      (setq org-refile-targets
+	'(("Archive.org" :maxlevel . 1)
+	      ("Tasks.org" :maxlevel . 1)))
 
-  ;; Save Org buffers after refiling!
-  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+      ;; Save Org buffers after refiling!
+      (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
-  (setq org-tag-alist
-        '((:startgroup)
-                                        ; Put mutually exclusive tags here
-          (:endgroup)
-          ("@errand" . ?E)
-          ("@home" . ?H)
-          ("@work" . ?W)
-          ("agenda" . ?a)
-          ("planning" . ?p)
-          ("publish" . ?P)
-          ("batch" . ?b)
-          ("note" . ?n)
-          ("idea" . ?i)))
+      (setq org-tag-alist
+	'((:startgroup)
+					; Put mutually exclusive tags here
+	      (:endgroup)
+	      ("@errand" . ?E)
+	      ("@home" . ?H)
+	      ("@work" . ?W)
+	      ("agenda" . ?a)
+	      ("planning" . ?p)
+	      ("publish" . ?P)
+	      ("batch" . ?b)
+	      ("note" . ?n)
+	      ("idea" . ?i)))
 
-  ;; Configure custom agenda views
-  (setq org-agenda-custom-commands
-        '(("d" "Dashboard"
-           ((agenda "" ((org-deadline-warning-days 7)))
-            (todo "NEXT"
-                  ((org-agenda-overriding-header "Next Tasks")))
-            (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+      ;; Configure custom agenda views
+      (setq org-agenda-custom-commands
+	'(("d" "Dashboard"
+	       ((agenda "" ((org-deadline-warning-days 7)))
+		(todo "NEXT"
+		      ((org-agenda-overriding-header "Next Tasks")))
+		(tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
 
-          ("n" "Next Tasks"
-           ((todo "NEXT"
-                  ((org-agenda-overriding-header "Next Tasks")))))
+	      ("n" "Next Tasks"
+	       ((todo "NEXT"
+		      ((org-agenda-overriding-header "Next Tasks")))))
 
-          ("W" "Work Tasks" tags-todo "+work-email")
+	      ("W" "Work Tasks" tags-todo "+work-email")
 
-          ;; Low-effort next actions
-          ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-           ((org-agenda-overriding-header "Low Effort Tasks")
-            (org-agenda-max-todos 20)
-            (org-agenda-files org-agenda-files)))
+	      ;; Low-effort next actions
+	      ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+	       ((org-agenda-overriding-header "Low Effort Tasks")
+		(org-agenda-max-todos 20)
+		(org-agenda-files org-agenda-files)))
 
-          ("w" "Workflow Status"
-           ((todo "WAIT"
-                  ((org-agenda-overriding-header "Waiting on External")
-                   (org-agenda-files org-agenda-files)))
-            (todo "REVIEW"
-                  ((org-agenda-overriding-header "In Review")
-                   (org-agenda-files org-agenda-files)))
-            (todo "PLAN"
-                  ((org-agenda-overriding-header "In Planning")
-                   (org-agenda-todo-list-sublevels nil)
-                   (org-agenda-files org-agenda-files)))
-            (todo "BACKLOG"
-                  ((org-agenda-overriding-header "Project Backlog")
-                   (org-agenda-todo-list-sublevels nil)
-                   (org-agenda-files org-agenda-files)))
-            (todo "READY"
-                  ((org-agenda-overriding-header "Ready for Work")
-                   (org-agenda-files org-agenda-files)))
-            (todo "ACTIVE"
-                  ((org-agenda-overriding-header "Active Projects")
-                   (org-agenda-files org-agenda-files)))
-            (todo "COMPLETED"
-                  ((org-agenda-overriding-header "Completed Projects")
-                   (org-agenda-files org-agenda-files)))
-            (todo "CANC"
-                  ((org-agenda-overriding-header "Cancelled Projects")
-                   (org-agenda-files org-agenda-files)))))))
+	      ("w" "Workflow Status"
+	       ((todo "WAIT"
+		      ((org-agenda-overriding-header "Waiting on External")
+		       (org-agenda-files org-agenda-files)))
+		(todo "REVIEW"
+		      ((org-agenda-overriding-header "In Review")
+		       (org-agenda-files org-agenda-files)))
+		(todo "PLAN"
+		      ((org-agenda-overriding-header "In Planning")
+		       (org-agenda-todo-list-sublevels nil)
+		       (org-agenda-files org-agenda-files)))
+		(todo "BACKLOG"
+		      ((org-agenda-overriding-header "Project Backlog")
+		       (org-agenda-todo-list-sublevels nil)
+		       (org-agenda-files org-agenda-files)))
+		(todo "READY"
+		      ((org-agenda-overriding-header "Ready for Work")
+		       (org-agenda-files org-agenda-files)))
+		(todo "ACTIVE"
+		      ((org-agenda-overriding-header "Active Projects")
+		       (org-agenda-files org-agenda-files)))
+		(todo "COMPLETED"
+		      ((org-agenda-overriding-header "Completed Projects")
+		       (org-agenda-files org-agenda-files)))
+		(todo "CANC"
+		      ((org-agenda-overriding-header "Cancelled Projects")
+		       (org-agenda-files org-agenda-files)))))))
 
-  (setq org-capture-templates
-        `(("t" "Tasks / Projects")
-          ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
-           "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+      (setq org-capture-templates
+	`(("t" "Tasks / Projects")
+	      ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
+	       "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
-          ("j" "Journal Entries")
-          ("jj" "Journal" entry
-           (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-           "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-           ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
-           :clock-in :clock-resume
-           :empty-lines 1)
-          ("jm" "Meeting" entry
-           (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-           "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-           :clock-in :clock-resume
-           :empty-lines 1)
+	      ("j" "Journal Entries")
+	      ("jj" "Journal" entry
+	       (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+	       "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+	       ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
+	       :clock-in :clock-resume
+	       :empty-lines 1)
+	      ("jm" "Meeting" entry
+	       (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+	       "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+	       :clock-in :clock-resume
+	       :empty-lines 1)
 
-          ("w" "Workflows")
-          ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-           "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+	      ("w" "Workflows")
+	      ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+	       "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
-          ("m" "Metrics Capture")
-          ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
-           "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+	      ("m" "Metrics Capture")
+	      ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
+	       "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
-  (define-key global-map (kbd "C-c j")
-    (lambda () (interactive) (org-capture nil "jj")))
+      (define-key global-map (kbd "C-c j")
+	(lambda () (interactive) (org-capture nil "jj")))
 
-  (jk/org-colors-catppuccin))
+      (jk/org-colors-catppuccin))
 
 
 (use-package org-superstar
-  :after org
-  :config
-  (setq
-   org-ellipsis " ⋯ "
-   org-superstar-headline-bullets-list '("" "◉" "●" "○" "•") ;;⁖  if 1. dont work
-   org-superstar-item-bullet-alist '((?+ . ?➤) (?- . ?✦))) ; changes +/- symbols in item lists
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-  :custom
-  ((set-face-attribute 'org-superstar-item nil :height 1.0)
-   (set-face-attribute 'org-superstar-header-bullet nil :height 0.8)
-   (set-face-attribute 'org-superstar-leading nil :height 1.3)))
+      :after org
+      :config
+      (setq
+       org-ellipsis " ⋯ "
+       org-superstar-headline-bullets-list '("" "◉" "●" "○" "•") ;;⁖  if 1. dont work
+       org-superstar-item-bullet-alist '((?+ . ?➤) (?- . ?✦))) ; changes +/- symbols in item lists
+      (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+      :custom
+      ((set-face-attribute 'org-superstar-item nil :height 1.0)
+       (set-face-attribute 'org-superstar-header-bullet nil :height 0.8)
+       (set-face-attribute 'org-superstar-leading nil :height 1.3)))
 
 
 (use-package visual-fill-column
-  :hook (org-mode . koi/org-mode-visual-fill))
+      :hook (org-mode . koi/org-mode-visual-fill))
 
 (with-eval-after-load 'org
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (python . t)))
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((emacs-lisp . t)
+	 (python . t)))
 
-  (push '("conf-unix" . conf-unix) org-src-lang-modes))
+      (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
 (with-eval-after-load 'org
-  ;; This is needed as of Org 9.2
-  (require 'org-tempo)
+      ;; This is needed as of Org 9.2
+      (require 'org-tempo)
 
-  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python")))
+      (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+      (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+      (add-to-list 'org-structure-template-alist '("py" . "src python")))
 
 ;; Automatically tangle our Emacs.org config file when we save it
 (defun koi/org-babel-tangle-config ()
-  (when (string-equal (file-name-directory (buffer-file-name))
-                      (expand-file-name user-emacs-directory))
-    ;; Dynamic scoping to the rescue
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
+      (when (string-equal (file-name-directory (buffer-file-name))
+			      (expand-file-name user-emacs-directory))
+	;; Dynamic scoping to the rescue
+	(let ((org-confirm-babel-evaluate nil))
+	      (org-babel-tangle))))
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'koi/org-babel-tangle-config)))
 
@@ -683,5 +892,5 @@
  '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.0)))))
 
 (setq org-fontify-whole-heading-line t
-      org-fontify-done-headline t
-      org-fontify-quote-and-verse-blocks t)
+	      org-fontify-done-headline t
+	      org-fontify-quote-and-verse-blocks t)

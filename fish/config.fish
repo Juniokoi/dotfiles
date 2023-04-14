@@ -179,5 +179,9 @@ overlay grep rg
 overlay find fd
 overlay rm trash-put
 
-alias cc="cargo clippy --fix --\
+alias clippy="cargo clippy --fix --\
  -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used"
+
+alias clippyd="cargo clippy --fix --\
+ -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used \
+ -D warnings"
