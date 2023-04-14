@@ -585,6 +585,14 @@
 #+end_src
 
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 61c6fb3 (Emacs Enhancements and Rust Clippy alias for fish shell)
+=======
+>>>>>>> 61c6fb3 (Emacs Enhancements and Rust Clippy alias for fish shell)
 * Completion
 ** Completion
 *** Ivy
@@ -883,6 +891,8 @@
   (set-face-attribute 'fixed-pitch nil :font koi/default-font :height koi/default-font-size)
   (set-face-attribute 'variable-pitch nil :font koi/default-font :height koi/variable-pitch-font-size :weight 'regular)
 #+end_src
+<<<<<<< HEAD
+=======
 
 
 * Org Mode
@@ -1112,3 +1122,4 @@
 		org-fontify-done-headline t
 		org-fontify-quote-and-verse-blocks t)
 #+end_src
+>>>>>>> 61c6fb3 (Emacs Enhancements and Rust Clippy alias for fish shell)
