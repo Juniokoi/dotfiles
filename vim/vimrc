@@ -1,7 +1,6 @@
 source ~/.vim/settings.vim
 source ~/.vim/plugins.vim
 
-let g:airline_theme='angr'
 set background=dark
 colorscheme hybrid
 

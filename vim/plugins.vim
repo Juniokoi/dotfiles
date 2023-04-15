@@ -20,7 +20,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'mhinz/vim-startify'
 
 	Plug 'mhinz/vim-signify'
-	Plug 'neoclide/coc.nvim'
+	Plug 'neoclide/coc.nvim', { 'branch': 'master', 'do': 'yarn install --frozen-lockfile' }
 	Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 	Plug 'preservim/nerdtree'
 	Plug 'tpope/vim-fireplace'
