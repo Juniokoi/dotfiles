@@ -7,4 +7,5 @@ Zsh/.config/zsh/plugins/
 
 
 
+**/*.un\~
 NeoVim/.config/nvim/plugin
