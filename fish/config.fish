@@ -6,13 +6,16 @@ if status is-interactive
 	enable_transience
 end
 
-set -g EDITOR vim
+fish_add_path $HOME/node_modules/yarn/bin/
+set -gx EDITOR nvim
+set -gx GPG_TTY (tty)
 
 #-a==--add
 #functionnvim_edit;echo nvim .; end
 #abbr-av --position anywhere --function nvim_edit
-abbr -a v vim;
-abbr -a vi vim;
+abbr -a v $EDITOR;
+abbr -a vi $EDITOR;
+abbr -a vim $EDITOR;
 abbr -a lg lazygit
 
 alias logout "pkill -KILL -u $USER"

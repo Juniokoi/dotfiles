@@ -1,7 +1,9 @@
 [user]
 	email = 53125029+Juniokoi@users.noreply.github.com
-	name = Junio Koi
-	signingkey = 7835BC6AE5B4C659
+	name = Junni Koi
+	signingkey = 748A2C8A15B027FD
+[core]
+	editor = nvim
 [init]
 	defaultBranch = main
 [color]
