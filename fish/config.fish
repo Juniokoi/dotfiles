@@ -9,6 +9,9 @@ end
 fish_add_path $HOME/node_modules/yarn/bin/
 set -gx EDITOR nvim
 set -gx GPG_TTY (tty)
+set -gx GOPATH $HOME/.local/go
+
+fish_add_path $GOPATH/bin
 
 #-a==--add
 #functionnvim_edit;echo nvim .; end
@@ -20,7 +23,7 @@ abbr -a lg lazygit
 
 alias logout "pkill -KILL -u $USER"
 
-set WINIT_X11_SCALE_FACTOR 1.66 alacritty
+set WINIT_X11_SCALE_FACTOR "1.0 alacritty"
 
 ##Vim
 #vikeybindings are the best
