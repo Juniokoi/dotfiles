@@ -1,8 +1,8 @@
-(defvar koi/default-font "Iosevkoi")
-(defvar koi/variable-pitch-font "Iosevkoi")
+(defvar koi/default-font "Iosevka")
+(defvar koi/variable-pitch-font "Iosevka")
 (defvar koi/default-font-size 140)
 (defvar koi/variable-pitch-font-size 140)
-(defvar koi/frame-transparency '(90 . 90))
+(defvar koi/frame-transparency '(100 . 100))
 (defvar koi/scroll-step 8)
 
 (setq gc-cons-threshold (* 50 1000 1000))
@@ -411,7 +411,7 @@
       (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
 
       ;; Bind some useful keys for evil-mode
-      (setq eshell-history-size         10000
+      (setq eshell-history-size     10000
 	eshell-buffer-maximum-lines 10000
 	eshell-hist-ignoredups t
 	eshell-scroll-to-bottom-on-input t))
@@ -810,19 +810,6 @@
 	`(("t" "Tasks / Projects")
 	      ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
 	       "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-
-	      ("j" "Journal Entries")
-	      ("jj" "Journal" entry
-	       (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-	       "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-	       ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
-	       :clock-in :clock-resume
-	       :empty-lines 1)
-	      ("jm" "Meeting" entry
-	       (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-	       "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-	       :clock-in :clock-resume
-	       :empty-lines 1)
 
 	      ("w" "Workflows")
 	      ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
