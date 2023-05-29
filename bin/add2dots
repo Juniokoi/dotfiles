@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+
+ARGS=()
+
+options_available() {
+	echo -e "Options available:\n\
+ -c or --customname\n\
+ -d or --dotfilespath\n\
+ -h or --help"
+}
+
+# get flagships first, anything else is passed as arguments
+while [[ $# -gt 0 ]]; do
+	case $1 in
+		-c|--customname)
+			CUSTOMNAME="$2"
+			shift # past argument
+			shift # past value
+			;;
+		-d|--dotfilespath)
+			export DOTFILES_CONFIG_DIR="$2"
+			shift
+			shift
+			;;
+		-h|--help)
+			options_available
+			exit 0
+			;;
+		-*|--*)
+			echo "Unknown option $1"
+			options_available
+			exit 1
+			;;
+		*)
+			ARGS+=("$1")
+			shift
+		;;
+	esac
+done
+
+# restore positional parameters
+set -- "${ARGS[@]}"
+
+PATHNAME="${ARGS[0]}" # get only the first argument
+
+# test if indeed exists
+if [[ -z $PATHNAME ]]; then
+		echo -e "ERROR: Is necessary a file"
+		exit 1
+fi
+
+# test dotfile folder location
+if [[ -z $DOTFILES_CONFIG_DIR ]]; then
+		echo -e "ERROR: inexistent enviroment variable \$DOTFILES_CONFIG_DIR"
+		echo -e "you can set it with the flag `-d`"
+		exit 1
+fi
+
+# test path existence
+if [[ ! -e "$PATHNAME" ]]; then
+	PATH_WITH_HOME="$HOME/$PATHNAME"
+
+	if [[ ! -e "$PATH_WITH_HOME" ]]; then
+		echo -e "ERROR: $PATHNAME does not exist"
+		exit 1
+	fi
+	PATHNAME="$PATH_WITH_HOME"
+fi
+
+# set variables
+FILENAME=$(basename "$PATHNAME" | tr -d .) # get just the filename
+DOTFILES_DIR="$DOTFILES_CONFIG_DIR/$FILENAME"
+
+remove_folder() {
+	TRASHFOLDER=()
+
+	# test trash folder existence
+	if [[ -e "$HOME/.trash" ]]; then
+		TRASHFOLDER="$HOME/.trash"
+	fi
+	if [[ -e "$HOME/trash" ]]; then
+		TRASHFOLDER="$HOME/trash"
+	fi
+
+	# if user has any trash folder, throw it there
+	if [[ -n "$TRASHFOLDER" ]]; then
+		if [[ -e "$TRASHFOLDER/$FILENAME" ]]; then
+			rm -r "$TRASHFOLDER/$FILENAME"
+		fi
+		mv "$DOTFILES_DIR" "$TRASHFOLDER"
+	else
+		# otherwise perma delete it
+		rm -rf "$DOTFILES_DIR"
+	fi
+}
+
+if [[ -e $DOTFILES_DIR ]]; then
+	echo -e "WARNING: $FILENAME already exists in your dotfiles"
+	read -r -p "Do you want to overwrite it? [Y/n] " -i "Y" answer
+
+	case $answer in
+		Y|y|yes)
+			remove_folder
+			;;
+		*)
+			exit 0
+			;;
+	esac
+fi
+
+# move original folder inside dotfile
+mv "$PATHNAME" "$DOTFILES_DIR"
+
+if [[ -n $CUSTOMNAME ]]; then
+	# rename the file for the custom one
+	mv "$DOTFILES_DIR" "$DOTFILES_CONFIG_DIR/$CUSTOMNAME"
+	# add a symbolic link to it
+	ln -s "$DOTFILES_CONFIG_DIR/$CUSTOMNAME" "$PATHNAME"
+	exit 0
+fi
+
+# replace old file with a symbolic link on the dotfiles
+ln -s "$DOTFILES_DIR" "$PATHNAME"
