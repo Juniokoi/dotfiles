@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
+"~/.dotfiles/tmux"
+SCRIPT_DIR="~/.dotfiles/tmux"
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd) && cd "$SCRIPT_DIR" || return 1
-
-ln -s "$SCRIPT_DIR/tmux.conf" ~/.tmux.conf
+if [ ! -e ~/.tmux.conf ]; then
+	ln -s "$SCRIPT_DIR/tmux.conf" "~/.tmux.conf"
+fi
 
 function install_tmux_plugin() {
 	local plugin_name="$1"
