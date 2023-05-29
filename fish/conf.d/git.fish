@@ -70,7 +70,9 @@ abbr -a gr!     'git reset --hard'
 abbr -a grh     'git reset HEAD'
 abbr -a grh!    'git reset --hard HEAD'
 
-#-- idk
+#-- misc
+abbr -a gcl     'git clone --depth 1'
+
 abbr -a gbsb    'git bisect bad'
 abbr -a gbsg    'git bisect good'
 abbr -a gbsr    'git bisect reset'
